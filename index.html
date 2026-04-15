@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MBTI 性格测试</title>
+  <title>暴躁打工人性格测试</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     * { font-family: 'Noto Sans SC', sans-serif; }
     .gradient-bg {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
     }
     .card-hover:hover {
       transform: translateY(-4px);
@@ -22,7 +22,7 @@
       transform: scale(1.02);
     }
     .option-btn.selected {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
       color: white;
       border-color: transparent;
     }
@@ -49,224 +49,292 @@
 
   <script>
     const questions = [
-      // E/I 维度 (外向/内向)
-      { id: 1, dimension: 'EI', text: '在社交聚会中，你通常会？', options: [
-        { text: '主动与很多人交谈，包括陌生人', value: 'E' },
-        { text: '只与少数认识的人交谈', value: 'I' }
+      // A/B 维度：爆发型 / 忍耐型 (Anger expression)
+      { id: 1, dimension: 'AB', text: '晚上10点刚下班，老板发消息让你处理一个明天才要的问题，你会？', options: [
+        { text: '直接装死不回，明天再说，下班时间就是我的', value: 'A' },
+        { text: '咬着牙回复"好的收到"，然后默默打开电脑', value: 'B' }
       ]},
-      { id: 2, dimension: 'EI', text: '经过一周忙碌的工作后，你更倾向于？', options: [
-        { text: '和朋友出去聚会放松', value: 'E' },
-        { text: '在家安静休息，做自己喜欢的事', value: 'I' }
+      { id: 2, dimension: 'AB', text: '同事把他的活儿甩给你，说"你比较擅长这个"，你会？', options: [
+        { text: '"不好意思，这不是我的工作范围"，直接怼回去', value: 'A' },
+        { text: '心里骂了一万遍但还是帮他做了，怕得罪人', value: 'B' }
       ]},
-      { id: 3, dimension: 'EI', text: '在团队讨论中，你通常？', options: [
-        { text: '积极发言，喜欢表达自己的想法', value: 'E' },
-        { text: '先倾听他人，思考后再发言', value: 'I' }
+      { id: 3, dimension: 'AB', text: '开会时你的方案被一个啥都不懂的人否了，你会？', options: [
+        { text: '当场据理力争，不怼不爽', value: 'A' },
+        { text: '表面微笑说"好的我再想想"，内心已经气炸', value: 'B' }
       ]},
-      { id: 4, dimension: 'EI', text: '你更喜欢哪种工作方式？', options: [
-        { text: '开放式办公室，随时可以和同事交流', value: 'E' },
-        { text: '独立办公室或远程工作，减少干扰', value: 'I' }
+      { id: 4, dimension: 'AB', text: '连续加班一周，结果领导说"年轻人多锻炼是好事"，你会？', options: [
+        { text: '"领导，我觉得需要聊聊工作量的问题"', value: 'A' },
+        { text: '"好的领导，我会努力的"，回家后崩溃大哭', value: 'B' }
       ]},
-      { id: 5, dimension: 'EI', text: '当你有一个新想法时，你会？', options: [
-        { text: '立即找人讨论，通过交流完善想法', value: 'E' },
-        { text: '先自己思考清楚，再选择性分享', value: 'I' }
-      ]},
-
-      // S/N 维度 (感觉/直觉)
-      { id: 6, dimension: 'SN', text: '学习新事物时，你更喜欢？', options: [
-        { text: '具体的实例和实际操作', value: 'S' },
-        { text: '理论框架和概念模型', value: 'N' }
-      ]},
-      { id: 7, dimension: 'SN', text: '你更擅长？', options: [
-        { text: '关注细节和事实', value: 'S' },
-        { text: '把握整体趋势和可能性', value: 'N' }
-      ]},
-      { id: 8, dimension: 'SN', text: '在阅读或看电影时，你更关注？', options: [
-        { text: '具体的情节和人物行为', value: 'S' },
-        { text: '隐含的主题和象征意义', value: 'N' }
-      ]},
-      { id: 9, dimension: 'SN', text: '做计划时，你更倾向于？', options: [
-        { text: '制定具体、可执行的步骤', value: 'S' },
-        { text: '确定大方向，保留灵活调整的空间', value: 'N' }
-      ]},
-      { id: 10, dimension: 'SN', text: '别人通常认为你？', options: [
-        { text: '务实、脚踏实地', value: 'S' },
-        { text: '有想象力、富有创造力', value: 'N' }
+      { id: 5, dimension: 'AB', text: '客户第8次修改需求，但预算一分不加，你会？', options: [
+        { text: '直接告诉客户修改次数已超过约定范围，需要加钱', value: 'A' },
+        { text: '一边吐槽一边改，指望下次合作能好点', value: 'B' }
       ]},
 
-      // T/F 维度 (思考/情感)
-      { id: 11, dimension: 'TF', text: '朋友向你诉苦时，你通常会？', options: [
-        { text: '帮他们分析问题，提供解决方案', value: 'T' },
-        { text: '先给予情感支持和安慰', value: 'F' }
+      // S/C 维度：社交牛人 / 社恐达人 (Social style)
+      { id: 6, dimension: 'SC', text: '公司团建要表演节目，你的第一反应是？', options: [
+        { text: '好啊好啊，终于有机会展示自己了', value: 'S' },
+        { text: '救命，装病请假行不行', value: 'C' }
       ]},
-      { id: 12, dimension: 'TF', text: '做重要决定时，你更依赖？', options: [
-        { text: '逻辑分析和客观数据', value: 'T' },
-        { text: '个人价值观和对他人的影响', value: 'F' }
+      { id: 7, dimension: 'SC', text: '新来了一个同事坐你旁边，你会？', options: [
+        { text: '主动搭话，中午约着一起吃饭', value: 'S' },
+        { text: '点个头打个招呼，然后各干各的', value: 'C' }
       ]},
-      { id: 13, dimension: 'TF', text: '在团队中发生分歧时，你更看重？', options: [
-        { text: '哪个方案更有效、更合理', value: 'T' },
-        { text: '如何维持团队和谐，让大家都舒服', value: 'F' }
+      { id: 8, dimension: 'SC', text: '跨部门开会，一圈都是不认识的人，你会？', options: [
+        { text: '积极发言，让大家注意到我', value: 'S' },
+        { text: '坐在角落默默记笔记，能不说话就不说话', value: 'C' }
       ]},
-      { id: 14, dimension: 'TF', text: '评价一项工作时，你更注重？', options: [
-        { text: '成果质量和效率', value: 'T' },
-        { text: '团队成员的感受和成长', value: 'F' }
+      { id: 9, dimension: 'SC', text: '公司大群里有人在讨论一个问题，你会？', options: [
+        { text: '积极参与讨论，发表自己的看法', value: 'S' },
+        { text: '默默围观，除非被@否则绝不发言', value: 'C' }
       ]},
-      { id: 15, dimension: 'TF', text: '你更希望别人认为你？', options: [
-        { text: '能力强、思维清晰', value: 'T' },
-        { text: '善解人意、温暖可靠', value: 'F' }
+      { id: 10, dimension: 'SC', text: '午休时间，同事叫你一起去吃饭，你会？', options: [
+        { text: '好啊，叫上更多人一起热闹', value: 'S' },
+        { text: '今天想一个人静静，"你们去吧我带饭了"', value: 'C' }
       ]},
 
-      // J/P 维度 (判断/知觉)
-      { id: 16, dimension: 'JP', text: '你的日常生活通常是？', options: [
-        { text: '有规律的、按计划进行', value: 'J' },
-        { text: '随性的、根据心情调整', value: 'P' }
+      // P/R 维度：摆烂型 / 卷王型 (Work attitude)
+      { id: 11, dimension: 'PR', text: '周五下午5点，有个不是很急的任务，你会？', options: [
+        { text: '周一再说吧，周末不能浪费在工作上', value: 'P' },
+        { text: '趁今天做完，周末安心休息', value: 'R' }
       ]},
-      { id: 17, dimension: 'JP', text: '面对截止日期，你通常？', options: [
-        { text: '提前完成，不喜欢临时赶工', value: 'J' },
-        { text: '在压力下效率更高，经常最后时刻完成', value: 'P' }
+      { id: 12, dimension: 'PR', text: '看到同事每天主动加班到10点，你的想法是？', options: [
+        { text: '有毛病吧，又在搞内卷', value: 'P' },
+        { text: '看来我也要更努力了，不能落后', value: 'R' }
       ]},
-      { id: 18, dimension: 'JP', text: '旅行时，你更喜欢？', options: [
-        { text: '提前规划好行程和住宿', value: 'J' },
-        { text: '到了目的地再随机应变', value: 'P' }
+      { id: 13, dimension: 'PR', text: '领导给了一个超出你能力范围的项目，你会？', options: [
+        { text: '"这个我不太擅长"，建议交给合适的人', value: 'P' },
+        { text: '接！连夜查资料学习，死磕到底', value: 'R' }
       ]},
-      { id: 19, dimension: 'JP', text: '你的工作空间通常是？', options: [
-        { text: '整洁有序，物品各归其位', value: 'J' },
-        { text: '看似杂乱但自己知道东西在哪', value: 'P' }
+      { id: 14, dimension: 'PR', text: '你的工作已经达标了，但还有时间，你会？', options: [
+        { text: '摸鱼！看看新闻逛逛淘宝熬到下班', value: 'P' },
+        { text: '主动找更多事情做，提前推进下一步', value: 'R' }
       ]},
-      { id: 20, dimension: 'JP', text: '面对新机会时，你更倾向于？', options: [
-        { text: '评估利弊后做出决定并坚持', value: 'J' },
-        { text: '保持开放，随时准备调整方向', value: 'P' }
+      { id: 15, dimension: 'PR', text: '公司有个晋升机会，但竞争很激烈，你会？', options: [
+        { text: '随缘吧，命里有时终须有', value: 'P' },
+        { text: '必须拿下！精心准备材料全力以赴', value: 'R' }
+      ]},
+
+      // D/F 维度：理性输出 / 情感输出 (Communication style)
+      { id: 16, dimension: 'DF', text: '项目失败了，复盘会上你会？', options: [
+        { text: '客观分析哪里出了问题，下次怎么改进', value: 'D' },
+        { text: '先安慰大家的情绪，"没关系我们尽力了"', value: 'F' }
+      ]},
+      { id: 17, dimension: 'DF', text: '同事因为个人原因工作出了问题，你会？', options: [
+        { text: '"问题出在哪，我们一起解决"', value: 'D' },
+        { text: '"没事没事，谁都有困难的时候"', value: 'F' }
+      ]},
+      { id: 18, dimension: 'DF', text: '下属/实习生交上来的东西一塌糊涂，你会？', options: [
+        { text: '直接指出问题，告诉他怎么改', value: 'D' },
+        { text: '先夸一下做得好的部分，再委婉地说需要改进的地方', value: 'F' }
+      ]},
+      { id: 19, dimension: 'DF', text: '朋友跟你吐槽他的老板，你会？', options: [
+        { text: '帮他分析要不要跳槽，列出利弊', value: 'D' },
+        { text: '"太过分了！你老板真是离谱"，跟他一起骂', value: 'F' }
+      ]},
+      { id: 20, dimension: 'DF', text: '你被领导当众批评了，但其实不是你的锅，你会？', options: [
+        { text: '会后拿着证据去找领导说明情况', value: 'D' },
+        { text: '觉得委屈但不好意思当面说，找朋友倾诉', value: 'F' }
       ]}
     ];
 
-    const mbtiDescriptions = {
-      'ISTJ': {
-        name: '物流师',
-        emoji: '📋',
-        color: 'from-blue-500 to-blue-700',
-        description: '安静、严肃，通过全面性和可靠性获得成功。注重实际、实事求是、追求现实，负责任。决定做什么事情时，会坚定不移地去做，不受干扰和反对。',
-        strengths: ['诚实可靠', '意志坚强', '非常负责任', '冷静务实'],
-        careers: ['会计师', '审计师', '项目经理', '数据分析师', '军人/警察']
+    // 20 种打工人性格类型
+    const workerTypes = {
+      'ASPD': {
+        name: '职场战神',
+        emoji: '⚔️',
+        color: 'from-red-500 to-orange-600',
+        description: '你是职场中最硬核的存在。敢于表达自己的不满，社交能力max，工作认真负责，处理问题理性果断。老板怕你、同事服你、客户敬你。你是真正的职场战神。',
+        motto: '我的底线，不容触碰',
+        survival: '硬实力就是你的底气'
       },
-      'ISFJ': {
-        name: '守卫者',
-        emoji: '🛡️',
-        color: 'from-green-500 to-green-700',
-        description: '安静、友好、负责任、有良心。坚定地致力于完成任务。注重细节，关心他人的感受，努力创造和谐的环境。',
-        strengths: ['支持他人', '可靠体贴', '观察力强', '忠诚热心'],
-        careers: ['护士', '社工', '教师', '人力资源', '行政管理']
+      'ASPF': {
+        name: '暴躁老哥',
+        emoji: '🔥',
+        color: 'from-orange-500 to-red-500',
+        description: '你是公司里的"敢说担当"。不爽就说不喜欢就拒绝，社交场上游刃有余，虽然爱摆烂但关键时刻理性清晰。你的暴躁反而让人觉得你真实可爱。',
+        motto: '我脾气不好但我很真诚',
+        survival: '真诚是永远的必杀技'
       },
-      'INFJ': {
-        name: '提倡者',
-        emoji: '🌟',
-        color: 'from-purple-500 to-purple-700',
-        description: '寻求思想、关系、物质等之间的意义和联系。想知道什么能激励人，对人有很强的洞察力。有责任心，坚持自己的价值观。',
-        strengths: ['富有创意', '洞察力敏锐', '有原则', '充满激情'],
-        careers: ['心理咨询师', '作家', '人力资源总监', '教授', '社会企业家']
-      },
-      'INTJ': {
-        name: '建筑师',
-        emoji: '🏗️',
-        color: 'from-indigo-500 to-indigo-700',
-        description: '有独创性和强烈的内驱力去实现自己的想法和目标。能够很快看到外部事件的模式，并能构思想法去合理解释。',
-        strengths: ['战略思维', '独立自主', '意志坚定', '求知欲强'],
-        careers: ['科学家', '投资银行家', '系统架构师', '法律顾问', '企业战略顾问']
-      },
-      'ISTP': {
-        name: '鉴赏家',
-        emoji: '🔧',
-        color: 'from-orange-500 to-orange-700',
-        description: '灵活、忍耐力强，是个安静的观察者直到有问题发生，就会马上行动，找到实用的解决方法。分析事物运作的原理。',
-        strengths: ['乐观有活力', '创造力强', '实用主义', '临危不乱'],
-        careers: ['工程师', '飞行员', '程序员', '法医', '机械师']
-      },
-      'ISFP': {
-        name: '探险家',
-        emoji: '🎨',
-        color: 'from-pink-500 to-pink-700',
-        description: '安静、友好、敏感、和善。享受当前。喜欢有自己的空间，按自己的时间表工作。忠于自己的价值观。',
-        strengths: ['审美敏锐', '善解人意', '适应力强', '好奇心强'],
-        careers: ['设计师', '艺术家', '兽医', '厨师', '物理治疗师']
-      },
-      'INFP': {
-        name: '调停者',
-        emoji: '🌈',
-        color: 'from-teal-500 to-teal-700',
-        description: '理想主义，对自己认为有价值的人或事忠心。希望外在的生活与内在的价值观相统一。好奇，很快能看到事情的可能性。',
-        strengths: ['富有同情心', '创意无限', '追求和谐', '善于沟通'],
-        careers: ['作家', '心理学家', '社会工作者', '编辑', '用户体验设计师']
-      },
-      'INTP': {
-        name: '逻辑学家',
-        emoji: '🔬',
-        color: 'from-cyan-500 to-cyan-700',
-        description: '对感兴趣的事物寻求合理解释。喜欢理论和抽象的事情。安静、内向、独立。 sceptical，有时挑剔。',
-        strengths: ['分析能力强', '思维开放', '好奇心旺盛', '客观公正'],
-        careers: ['软件工程师', '数学家', '研究员', '哲学家', '数据科学家']
-      },
-      'ESTP': {
-        name: '企业家',
-        emoji: '🚀',
-        color: 'from-red-500 to-red-700',
-        description: '灵活、忍耐力强，以实际的方法解决问题。喜欢与他人共事。享受当下的生活，不喜欢被理论束缚。',
-        strengths: ['大胆直接', '理性务实', '社交能力强', '感知敏锐'],
-        careers: ['销售代表', '创业者', '消防员', '运动员', '项目经理']
-      },
-      'ESFP': {
-        name: '表演者',
-        emoji: '🎭',
-        color: 'from-yellow-500 to-yellow-700',
-        description: '外向、友好、包容。热爱生活、人类和物质上的享受。喜欢与他人共事，带来欢乐和温暖。',
-        strengths: ['大胆原创', '审美天赋', '实践能力强', '观察力敏锐'],
-        careers: ['演员', '活动策划', '公关经理', '旅游顾问', '健身教练']
-      },
-      'ENFP': {
-        name: '竞选者',
-        emoji: '✨',
-        color: 'from-violet-500 to-violet-700',
-        description: '热情洋溢，富有想象力。认为生活充满可能性。能很快地将事情和信息联系起来，然后很自信地根据自己的模式解决问题。',
-        strengths: ['好奇心强', '洞察力敏锐', '精力充沛', '善于交际'],
-        careers: ['记者', '创意总监', '心理咨询师', '培训师', '市场营销']
-      },
-      'ENTP': {
-        name: '辩论家',
-        emoji: '⚡',
-        color: 'from-amber-500 to-amber-700',
-        description: '反应快、睿智，喜欢解决新的、有挑战性的问题。讨厌例行公事。擅长言辞，能巧妙而机智地应对他人。',
-        strengths: ['知识渊博', '思维敏捷', '原创性强', '魅力四射'],
-        careers: ['律师', '创业者', '政治顾问', '创意总监', '风险投资人']
-      },
-      'ESTJ': {
-        name: '总经理',
-        emoji: '👔',
-        color: 'from-slate-500 to-slate-700',
-        description: '务实、注重事实。果断，能迅速做出实施决策。善于组织项目和人员来完成目标。重视效率和结果。',
-        strengths: ['组织能力强', '果断坚定', '高效务实', '责任感强'],
-        careers: ['企业高管', '法官', '财务总监', '学校校长', '军官']
-      },
-      'ESFJ': {
-        name: '执政官',
-        emoji: '🤝',
-        color: 'from-emerald-500 to-emerald-700',
-        description: '热心肠、有责任心、合作。希望周边的环境温馨而和谐，并为此果断地执行。喜欢和他人共事。',
-        strengths: ['实用主义者', '忠诚可靠', '敏感温暖', '善于交际'],
-        careers: ['医疗工作者', '教育管理者', '活动统筹', '客户关系经理', '人力资源']
-      },
-      'ENFJ': {
-        name: '主人公',
+      'ASRD': {
+        name: '卷王之王',
         emoji: '👑',
-        color: 'from-rose-500 to-rose-700',
-        description: '温暖、有同理心、反应灵敏、负责任。高度关注他人的情绪和需求。善于发现他人的潜能。天生的领导者。',
-        strengths: ['宽容体贴', '可靠负责', '魅力天成', '天然领导者'],
-        careers: ['培训师', '人力资源总监', '公关经理', '非营利组织负责人', '政治家']
+        color: 'from-yellow-500 to-amber-600',
+        description: '你敢于表达、善于社交、疯狂内卷、理性分析。你是领导眼中的人才，但同事可能觉得你太拼了。你在职场如鱼得水，但也别忘了给自己放个假。',
+        motto: '卷不死我的都会让我更强',
+        survival: '适度内卷，量力而行'
       },
-      'ENTJ': {
-        name: '指挥官',
-        emoji: '🎯',
-        color: 'from-gray-600 to-gray-800',
-        description: '坦诚、果断，是天生的领导者。能迅速看到不合逻辑和效率低下的程序和政策。善于制定综合性系统来解决问题。',
-        strengths: ['高效务实', '意志坚强', '战略思维', '知识渊博'],
-        careers: ['CEO', '管理顾问', '律师', '大学教授', '创业公司创始人']
+      'ASRF': {
+        name: '社交悍匪',
+        emoji: '🎭',
+        color: 'from-pink-500 to-rose-600',
+        description: '你是公司的人气王。敢说敢做、社交天花板、拼命三郎还特别会照顾人。有你在的群永远不会冷场，有你的项目永远不会无聊。你就是团队的灵魂。',
+        motto: '工作要拼朋友更要交',
+        survival: '人脉是你最大的财富'
+      },
+      'ACPD': {
+        name: '冷面杀手',
+        emoji: '🗡️',
+        color: 'from-slate-600 to-gray-800',
+        description: '你表面忍耐内心翻涌，社恐但理性。你不会当面爆发但会在心里记小本本。做事冷静有条理，是你这种人在幕后掌控全局。别惹老实人。',
+        motto: '我不说不代表我不知道',
+        survival: '沉默是你的保护色'
+      },
+      'ACPF': {
+        name: '委屈小可怜',
+        emoji: '😢',
+        color: 'from-blue-400 to-indigo-500',
+        description: '你是公司里最让人心疼的存在。心里有无数句MMP嘴上却说好的收到。社恐摆烂还容易心软。你总是委屈自己成全别人，但请记得对自己好一点。',
+        motto: '我没关系（其实很有关系）',
+        survival: '学会说"不"是必修课'
+      },
+      'ACRD': {
+        name: '暗黑卷王',
+        emoji: '🌑',
+        color: 'from-purple-600 to-indigo-800',
+        description: '你表面不声不响内心野心勃勃。社恐但疯狂努力做事，理性分析每一步棋。你是那种不显山露水但最后晋升最快的人。狠起来连自己都卷。',
+        motto: '你们吵的时候我已经做完了',
+        survival: '实力是最好的反击'
+      },
+      'ACRF': {
+        name: '佛系小天使',
+        emoji: '😇',
+        color: 'from-green-400 to-emerald-600',
+        description: '你是公司里最温暖的存在。默默忍耐社恐但努力工作，还特别会照顾别人的感受。你虽然不爱说话但你的行动力让人感动。你是团队的隐形守护者。',
+        motto: '大家都开心就好',
+        survival: '善良需要带点锋芒'
+      },
+      'BSPD': {
+        name: '双面打工人',
+        emoji: '🎪',
+        color: 'from-teal-500 to-cyan-600',
+        description: '你表面乖巧内心暴躁。社交达人但爱摆烂，处理问题理性客观。你是那种当面说"好的"背后翻白眼的高手。职场双面人，演得一手好戏。',
+        motto: '表面笑嘻嘻心里MMP',
+        survival: '演技也是职场技能'
+      },
+      'BSPF': {
+        name: '气氛组组长',
+        emoji: '🎉',
+        color: 'from-yellow-400 to-orange-500',
+        description: '你表面忍耐但社交能力一流。爱摆烂但特别会照顾人。你是团队的气氛组担当，虽然心里吐槽但总能把大家哄开心。有你在的地方就有笑声。',
+        motto: '开心是一天不开心也是一天',
+        survival: '快乐是你最大的武器'
+      },
+      'BSRD': {
+        name: '隐忍实干家',
+        emoji: '💪',
+        color: 'from-blue-600 to-indigo-700',
+        description: '你表面乖巧实则拼命三郎。社交不错做事更拼，理性分析是你的强项。你是那种被领导夸"踏实可靠"的人。你的忍耐和执行力是你最大的优势。',
+        motto: '做就做到最好',
+        survival: '执行力决定你的上限'
+      },
+      'BSRF': {
+        name: '职场暖男/暖女',
+        emoji: '☀️',
+        color: 'from-amber-400 to-yellow-600',
+        description: '你表面忍耐但社交能力在线，努力工作还特别体贴。你是团队里最受欢迎的存在。虽然不会拒绝别人让人心疼，但你的善良感染了身边的每一个人。',
+        motto: '温暖他人也别忘了温暖自己',
+        survival: '你的善良自带光芒'
+      },
+      'BCPD': {
+        name: '内心戏之王',
+        emoji: '🎬',
+        color: 'from-violet-500 to-purple-700',
+        description: '你表面乖巧社恐爱摆烂但内心理性分析一切。你每天在心里上演八百集职场连续剧。虽然不说但你看得比谁都清楚。你是被低估的聪明人。',
+        motto: '我心里跟明镜似的',
+        survival: '看透不说透也是一种智慧'
+      },
+      'BCPF': {
+        name: '小透明打工人',
+        emoji: '🫥',
+        color: 'from-gray-400 to-gray-600',
+        description: '你是公司里最没有存在感的老实人。忍耐社恐摆烂还心软。你总是被忽略被忽视，但你的默默付出其实很重要。请相信自己，你比你想象的更有价值。',
+        motto: '我只是不爱说话不是没想法',
+        survival: '存在感需要主动刷'
+      },
+      'BCRD': {
+        name: '低调实力派',
+        emoji: '🏆',
+        color: 'from-emerald-500 to-teal-700',
+        description: '你表面乖巧社恐但暗自努力，理性分析能力强。你是那种不声不响就做出成绩的人。不张扬但有实力，不张扬但有追求。你用行动证明一切。',
+        motto: '实力会替我说话',
+        survival: '低调但有底线'
+      },
+      'BCRF': {
+        name: '忍辱负重者',
+        emoji: '🐢',
+        color: 'from-cyan-500 to-blue-600',
+        description: '你是公司里最能忍的人。乖巧社恐努力做事还照顾别人感受。你把所有委屈都吞进肚子里，但正是你的忍耐和善良支撑着整个团队。你辛苦了。',
+        motto: '忍一时风平浪静',
+        survival: '委屈自己要有度'
+      },
+      // Additional 4 types for more variety
+      'ASPF2': {
+        name: '耿直打工人',
+        emoji: '💬',
+        color: 'from-red-400 to-pink-600',
+        description: '你心直口快，社交能力强但有自己的节奏。感性而真实，摆烂但有底线。你是团队里最真实的聲音，有什么说什么，从不藏着掖着。',
+        motto: '有话直说不憋着',
+        survival: '直率但要注意方式'
+      },
+      'BCPD2': {
+        name: '摸鱼哲学家',
+        emoji: '🐟',
+        color: 'from-blue-400 to-teal-600',
+        description: '你表面乖巧内心有自己的小世界。社恐但理性，善于摸鱼但不误事。你是职场里的生活家，知道工作与生活的平衡之道。',
+        motto: '摸鱼也是一门艺术',
+        survival: '摸鱼不误砍柴工'
+      },
+      'BSRD2': {
+        name: '靠谱工具人',
+        emoji: '🔨',
+        color: 'from-orange-500 to-red-500',
+        description: '你乖巧能忍，社交适中，疯狂输出理性分析。你是领导最好用的工具人，什么事交给你都放心。但请记得，工具人也需要被珍惜。',
+        motto: '交给我你放心',
+        survival: '靠谱但不卑微'
+      },
+      'ACPF2': {
+        name: '心软打工人',
+        emoji: '💔',
+        color: 'from-rose-400 to-pink-600',
+        description: '你内心暴躁但表面忍耐，社恐感性摆烂。你最大的弱点就是心太软，别人一说好话你就答应了。请学会保护自己，你的善良很珍贵。',
+        motto: '我不是好欺负我只是善良',
+        survival: '善良要有锋芒'
       }
+    };
+
+    // Fix: remap keys for the extra 4 types
+    // We use a scoring system that maps to these 20 types
+    const typeKeys = [
+      'ASPD', 'ASPF', 'ASRD', 'ASRF',
+      'ACPD', 'ACPF', 'ACRD', 'ACRF',
+      'BSPD', 'BSPF', 'BSRD', 'BSRF',
+      'BCPD', 'BCPF', 'BCRD', 'BCRF',
+      'BSPF2', 'BCPD2', 'BSRD2', 'ACPF2'
+    ];
+
+    // Map each key to the correct type data
+    const typeDataMap = {
+      'ASPD': workerTypes['ASPD'],
+      'ASPF': workerTypes['ASPF'],
+      'ASRD': workerTypes['ASRD'],
+      'ASRF': workerTypes['ASRF'],
+      'ACPD': workerTypes['ACPD'],
+      'ACPF': workerTypes['ACPF'],
+      'ACRD': workerTypes['ACRD'],
+      'ACRF': workerTypes['ACRF'],
+      'BSPD': workerTypes['BSPD'],
+      'BSPF': workerTypes['BSPF'],
+      'BSRD': workerTypes['BSRD'],
+      'BSRF': workerTypes['BSRF'],
+      'BCPD': workerTypes['BCPD'],
+      'BCPF': workerTypes['BCPF'],
+      'BCRD': workerTypes['BCRD'],
+      'BCRF': workerTypes['BCRF'],
+      'BSPF2': workerTypes['BSPF2'],
+      'BCPD2': workerTypes['BCPD2'],
+      'BSRD2': workerTypes['BSRD2'],
+      'ACPF2': workerTypes['ACPF2']
     };
 
     let currentQuestion = 0;
@@ -289,22 +357,22 @@
         <div class="gradient-bg min-h-screen flex items-center justify-center px-4">
           <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-2xl w-full fade-in">
             <div class="text-center">
-              <div class="text-6xl mb-6">🧠</div>
-              <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">MBTI 性格测试</h1>
+              <div class="text-6xl mb-6">😤</div>
+              <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">暴躁打工人性格测试</h1>
               <p class="text-gray-600 text-lg mb-8">
-                探索你的性格类型，了解自己的思维方式和行为偏好
+                测测你是哪种打工人格？20种暴躁人格，总有一款是你
               </p>
               <div class="bg-gray-50 rounded-xl p-6 mb-8 text-left">
                 <h3 class="font-semibold text-gray-800 mb-3">测试说明：</h3>
                 <ul class="text-gray-600 space-y-2">
-                  <li>• 共 20 道题目，预计用时 3-5 分钟</li>
-                  <li>• 每题有两个选项，请选择最符合你的那个</li>
-                  <li>• 没有对错之分，请根据第一直觉作答</li>
-                  <li>• 测试完成后会生成你的性格类型报告</li>
+                  <li>• 共 20 道职场灵魂拷问，预计用时 3-5 分钟</li>
+                  <li>• 每题有两个选项，请选择你最真实的反应</li>
+                  <li>• 没有对错，请放下伪装，诚实面对自己</li>
+                  <li>• 测完别打人，大家都是这样的</li>
                 </ul>
               </div>
               <button onclick="startTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
-                开始测试 →
+                开始受测 →
               </button>
             </div>
           </div>
@@ -320,7 +388,6 @@
       return `
         <div class="min-h-screen bg-gray-50 py-8 px-4">
           <div class="max-w-2xl mx-auto">
-            <!-- 进度条 -->
             <div class="bg-white rounded-full h-3 mb-8 shadow-sm">
               <div class="progress-bar gradient-bg h-3 rounded-full" style="width: ${progress}%"></div>
             </div>
@@ -335,7 +402,7 @@
                 ${q.options.map((opt, idx) => `
                   <button
                     onclick="selectAnswer(${q.id}, '${opt.value}')"
-                    class="option-btn w-full p-5 border-2 rounded-xl text-left text-lg ${selectedAnswer === opt.value ? 'selected' : 'border-gray-200 hover:border-purple-400'}"
+                    class="option-btn w-full p-5 border-2 rounded-xl text-left text-lg ${selectedAnswer === opt.value ? 'selected' : 'border-gray-200 hover:border-orange-400'}"
                   >
                     <div class="flex items-center">
                       <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center mr-4 ${selectedAnswer === opt.value ? 'border-white bg-white bg-opacity-20' : 'border-gray-300'}">
@@ -359,7 +426,7 @@
                   class="px-8 py-3 rounded-lg gradient-bg text-white font-semibold hover:opacity-90 transition-opacity ${!selectedAnswer ? 'opacity-50 cursor-not-allowed' : ''}"
                   ${!selectedAnswer ? 'disabled' : ''}
                 >
-                  ${currentQuestion === questions.length - 1 ? '查看结果' : '下一题 →'}
+                  ${currentQuestion === questions.length - 1 ? '查看我是什么打工人' : '下一题 →'}
                 </button>
               </div>
             </div>
@@ -370,60 +437,78 @@
 
     function renderResult() {
       const result = calculateResult();
-      const mbti = mbtiDescriptions[result.type];
+      const type = typeDataMap[result.typeKey];
       
       return `
         <div class="min-h-screen bg-gray-50 py-8 px-4">
           <div class="max-w-4xl mx-auto">
-            <!-- 结果头部 -->
             <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
               <div class="text-center mb-8">
-                <div class="text-7xl mb-4">${mbti.emoji}</div>
-                <h1 class="text-5xl font-bold bg-gradient-to-r ${mbti.color} bg-clip-text text-transparent mb-2">
-                  ${result.type}
+                <div class="text-7xl mb-4">${type.emoji}</div>
+                <h1 class="text-5xl font-bold bg-gradient-to-r ${type.color} bg-clip-text text-transparent mb-2">
+                  ${result.typeKey}
                 </h1>
-                <p class="text-2xl text-gray-700 font-medium">${mbti.name}</p>
+                <p class="text-2xl text-gray-700 font-medium">${type.name}</p>
               </div>
               
-              <p class="text-gray-600 text-lg leading-relaxed mb-8">${mbti.description}</p>
+              <div class="bg-gray-50 rounded-xl p-6 mb-6 text-center">
+                <p class="text-lg font-medium text-gray-700">"${type.motto}"</p>
+              </div>
               
-              <!-- 四维度分析 -->
+              <p class="text-gray-600 text-lg leading-relaxed mb-8">${type.description}</p>
+              
               <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                ${renderDimension('E', 'I', result.E, result.I, '外向', '内向', 'from-yellow-400 to-orange-500', 'from-blue-400 to-indigo-500')}
-                ${renderDimension('S', 'N', result.S, result.N, '感觉', '直觉', 'from-green-400 to-emerald-500', 'from-purple-400 to-violet-500')}
-                ${renderDimension('T', 'F', result.T, result.F, '思考', '情感', 'from-cyan-400 to-blue-500', 'from-pink-400 to-rose-500')}
-                ${renderDimension('J', 'P', result.J, result.P, '判断', '知觉', 'from-indigo-400 to-purple-500', 'from-yellow-400 to-orange-500')}
+                ${renderDimension('A', 'B', result.A, result.B, '爆发型', '忍耐型', 'from-red-400 to-red-600', 'from-blue-400 to-blue-600')}
+                ${renderDimension('S', 'C', result.S, result.C, '社交牛人', '社恐达人', 'from-yellow-400 to-orange-500', 'from-indigo-400 to-indigo-600')}
+                ${renderDimension('P', 'R', result.P, result.R, '摆烂型', '卷王型', 'from-green-400 to-green-600', 'from-amber-400 to-amber-600')}
+                ${renderDimension('D', 'F', result.D, result.F, '理性输出', '情感输出', 'from-cyan-400 to-blue-500', 'from-pink-400 to-rose-500')}
               </div>
             </div>
             
-            <!-- 优势 -->
             <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
-              <h2 class="text-2xl font-bold text-gray-800 mb-6">💪 核心优势</h2>
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                ${mbti.strengths.map(s => `
-                  <div class="bg-gradient-to-br ${mbti.color} text-white rounded-xl p-4 text-center">
-                    <p class="font-semibold">${s}</p>
+              <h2 class="text-2xl font-bold text-gray-800 mb-6">💡 打工人生存法则</h2>
+              <div class="bg-gradient-to-br ${type.color} text-white rounded-xl p-6 text-center">
+                <p class="text-xl font-semibold">${type.survival}</p>
+              </div>
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
+              <h2 class="text-2xl font-bold text-gray-800 mb-4">📊 你的打工人画像</h2>
+              <div class="grid grid-cols-2 gap-4">
+                <div class="bg-gray-50 rounded-xl p-4">
+                  <p class="text-sm text-gray-500 mb-1">暴躁指数</p>
+                  <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div class="bg-gradient-to-r from-red-400 to-red-600 h-4 rounded-full" style="width: ${Math.round((result.A / 5) * 100)}%"></div>
                   </div>
-                `).join('')}
+                  <p class="text-right text-sm font-semibold text-gray-700 mt-1">${Math.round((result.A / 5) * 100)}%</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4">
+                  <p class="text-sm text-gray-500 mb-1">社交指数</p>
+                  <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 h-4 rounded-full" style="width: ${Math.round((result.S / 5) * 100)}%"></div>
+                  </div>
+                  <p class="text-right text-sm font-semibold text-gray-700 mt-1">${Math.round((result.S / 5) * 100)}%</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4">
+                  <p class="text-sm text-gray-500 mb-1">内卷指数</p>
+                  <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div class="bg-gradient-to-r from-amber-400 to-amber-600 h-4 rounded-full" style="width: ${Math.round((result.R / 5) * 100)}%"></div>
+                  </div>
+                  <p class="text-right text-sm font-semibold text-gray-700 mt-1">${Math.round((result.R / 5) * 100)}%</p>
+                </div>
+                <div class="bg-gray-50 rounded-xl p-4">
+                  <p class="text-sm text-gray-500 mb-1">感性指数</p>
+                  <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div class="bg-gradient-to-r from-pink-400 to-rose-500 h-4 rounded-full" style="width: ${Math.round((result.F / 5) * 100)}%"></div>
+                  </div>
+                  <p class="text-right text-sm font-semibold text-gray-700 mt-1">${Math.round((result.F / 5) * 100)}%</p>
+                </div>
               </div>
             </div>
             
-            <!-- 适合职业 -->
-            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
-              <h2 class="text-2xl font-bold text-gray-800 mb-6">💼 适合职业</h2>
-              <div class="flex flex-wrap gap-3">
-                ${mbti.careers.map(c => `
-                  <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full font-medium">
-                    ${c}
-                  </span>
-                `).join('')}
-              </div>
-            </div>
-            
-            <!-- 重新开始 -->
             <div class="text-center">
               <button onclick="restartTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
-                🔄 重新测试
+                🔄 再测一次
               </button>
             </div>
           </div>
@@ -464,19 +549,49 @@
     }
 
     function calculateResult() {
-      const scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+      const scores = { A: 0, B: 0, S: 0, C: 0, P: 0, R: 0, D: 0, F: 0 };
       
       Object.values(answers).forEach(value => {
         scores[value]++;
       });
       
-      const type = 
-        (scores.E >= scores.I ? 'E' : 'I') +
-        (scores.S >= scores.N ? 'S' : 'N') +
-        (scores.T >= scores.F ? 'T' : 'F') +
-        (scores.J >= scores.P ? 'J' : 'P');
+      const dim1 = scores.A >= scores.B ? 'A' : 'B';
+      const dim2 = scores.S >= scores.C ? 'S' : 'C';
+      const dim3 = scores.P >= scores.R ? 'P' : 'R';
+      const dim4 = scores.D >= scores.F ? 'D' : 'F';
       
-      return { type, ...scores };
+      let typeKey = dim1 + dim2 + dim3 + dim4;
+      
+      // 16 base types from the 4 dimensions
+      const baseTypes = [
+        'ASPD', 'ASPF', 'ASRD', 'ASRF',
+        'ACPD', 'ACPF', 'ACRD', 'ACRF',
+        'BSPD', 'BSPF', 'BSRD', 'BSRF',
+        'BCPD', 'BCPF', 'BCRD', 'BCRF'
+      ];
+      
+      // If it's a base type, use it directly
+      if (baseTypes.includes(typeKey)) {
+        // For the 4 extra types, we remap some edge cases
+        // BSPF -> sometimes BSPF2 (when S=5, P=5, F=5 exact match)
+        if (typeKey === 'BSPF' && scores.S === 5 && scores.P === 5) {
+          typeKey = 'BSPF2';
+        }
+        // BCPD -> sometimes BCPD2
+        else if (typeKey === 'BCPD' && scores.C === 5 && scores.P === 5) {
+          typeKey = 'BCPD2';
+        }
+        // BSRD -> sometimes BSRD2
+        else if (typeKey === 'BSRD' && scores.S === 5 && scores.R === 5) {
+          typeKey = 'BSRD2';
+        }
+        // ACPF -> sometimes ACPF2
+        else if (typeKey === 'ACPF' && scores.A >= 3 && scores.C === 5 && scores.P >= 3 && scores.F === 5) {
+          typeKey = 'ACPF2';
+        }
+      }
+      
+      return { typeKey, ...scores };
     }
 
     function startTest() {
