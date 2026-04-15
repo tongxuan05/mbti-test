@@ -634,6 +634,233 @@
       render();
     }
 
+    function renderPKResult(p1, p2) {
+      const t1 = typeDataMap[p1.typeKey];
+      const t2 = typeDataMap[p2.typeKey];
+      const dims = [
+        { key: 'A', label: '暴躁', color: 'from-red-400 to-red-600' },
+        { key: 'S', label: '社交', color: 'from-yellow-400 to-orange-500' },
+        { key: 'R', label: '内卷', color: 'from-amber-400 to-amber-600' },
+        { key: 'F', label: '感性', color: 'from-pink-400 to-rose-500' }
+      ];
+
+      // 计算总分用于剧情
+      const p1Scores = p1.scores;
+      const p2Scores = p2.scores;
+      
+      // 生成剧情数据
+      const story = generatePKStory(p1, p2);
+
+      return `
+        <div class="min-h-screen bg-gray-50 py-8 px-4">
+          <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-8 fade-in">
+              <div class="text-5xl mb-2">⚔️</div>
+              <h1 class="text-4xl font-bold text-gray-800 mb-2">PK 结果</h1>
+            </div>
+
+            <!-- 双方头像对比 -->
+            <div class="grid grid-cols-2 gap-4 mb-8 fade-in">
+              <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
+                <div class="text-5xl mb-2">${t1.emoji}</div>
+                <h2 class="text-xl font-bold bg-gradient-to-r ${t1.color} bg-clip-text text-transparent">${p1.typeKey}</h2>
+                <p class="text-lg text-gray-700 font-medium">${t1.name}</p>
+                <p class="text-sm text-gray-500 mt-1">"${t1.motto}"</p>
+              </div>
+              <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
+                <div class="text-5xl mb-2">${t2.emoji}</div>
+                <h2 class="text-xl font-bold bg-gradient-to-r ${t2.color} bg-clip-text text-transparent">${p2.typeKey}</h2>
+                <p class="text-lg text-gray-700 font-medium">${t2.name}</p>
+                <p class="text-sm text-gray-500 mt-1">"${t2.motto}"</p>
+              </div>
+            </div>
+
+            <!-- 四维对比 -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in">
+              <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">📊 四维对比</h3>
+              <div class="space-y-4">
+                ${dims.map(d => {
+                  const s1 = Math.round((p1Scores[d.key] / 5) * 100);
+                  const s2 = Math.round((p2Scores[d.key] / 5) * 100);
+                  return `
+                    <div>
+                      <div class="flex justify-between text-sm mb-1">
+                        <span class="font-semibold text-gray-700">${d.label}指数</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold w-8 text-right text-orange-600">${s1}%</span>
+                        <div class="flex-1 h-3 rounded-full bg-gradient-to-r ${d.color}" style="width: ${s1}%"></div>
+                        <span class="text-xs text-gray-400">|</span>
+                        <div class="flex-1 h-3 rounded-full bg-gradient-to-r ${d.color}" style="width: ${s2}%"></div>
+                        <span class="text-xs font-bold w-8 text-blue-600">${s2}%</span>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- 剧情演绎：职场人生 -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in">
+              <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">🎬 职场人生：他们的故事</h3>
+              ${story.map((scene, idx) => `
+                <div class="mb-8 ${idx > 0 ? 'border-t pt-8' : ''}">
+                  <div class="text-center mb-4">
+                    <span class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-1 rounded-full text-sm font-bold">${scene.title}</span>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-orange-50 rounded-xl p-4 border-l-4 border-orange-500">
+                      <p class="font-bold text-orange-700 mb-2">${t1.emoji} ${t1.name}</p>
+                      <p class="text-gray-700">${scene.p1}</p>
+                    </div>
+                    <div class="bg-blue-50 rounded-xl p-4 border-l-4 border-blue-500">
+                      <p class="font-bold text-blue-700 mb-2">${t2.emoji} ${t2.name}</p>
+                      <p class="text-gray-700">${scene.p2}</p>
+                    </div>
+                  </div>
+                </div>
+              `).join('')}
+            </div>
+
+            <div class="text-center space-y-4">
+              <button onclick="restartTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
+                🔄 自己再测一次
+              </button>
+              <div>
+                <button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
+                  ⚔️ 再找一个人PK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function generatePKStory(p1, p2) {
+      const s1 = p1.scores;
+      const s2 = p2.scores;
+      
+      // 根据分数生成不同剧情
+      const stories = [];
+
+      // 第一年：入职
+      const p1FirstYear = s1.A >= 3 
+        ? '入职第一天就把工位收拾得明明白白，看到不合理流程当场就提了意见，同事们都觉得"这人不好惹"'
+        : '入职第一天唯唯诺诺，自我介绍声音小到听不见，被安排坐到一个靠角落的工位，心里委屈但不敢说';
+      const p2FirstYear = s2.A >= 3 
+        ? '入职第一天就把工位收拾得明明白白，看到不合理流程当场就提了意见，同事们都觉得"这人不好惹"'
+        : '入职第一天唯唯诺诺，自我介绍声音小到听不见，被安排坐到一个靠角落的工位，心里委屈但不敢说';
+      
+      stories.push({
+        title: '📋 入职第一天',
+        p1: p1FirstYear,
+        p2: p2FirstYear
+      });
+
+      // 第一年绩效考核
+      const p1Year1Result = s1.R >= 3 && s1.A >= 3 
+        ? '年底绩效拿了3.75，工资涨了5000，年终奖拿了3个月。老板说"这小伙子有冲劲"。他用奖金买了一台最新款MacBook Pro'
+        : '年底绩效拿了3.25，年终奖0.5个月，勉强及格。老板说"态度不错但产出有待提高"。他默默把绩效通知截图发到了"打工人吐槽群"';
+      const p2Year1Result = s2.R >= 3 && s2.A >= 3 
+        ? '年底绩效拿了3.75，工资涨了5000，年终奖拿了3个月。老板说"这小伙子有冲劲"。他用奖金买了一台最新款MacBook Pro'
+        : '年底绩效拿了3.25，年终奖0.5个月，勉强及格。老板说"态度不错但产出有待提高"。他默默把绩效通知截图发到了"打工人吐槽群"';
+
+      stories.push({
+        title: '💰 第一年底：绩效考核',
+        p1: p1Year1Result,
+        p2: p2Year1Result
+      });
+
+      // 第三年
+      const p1Year3 = s1.R >= 4 
+        ? '已经是团队骨干了，一个人扛着三个项目。每天早上8:30到公司，晚上10点走。被提拔为小组长，手下带了5个人，头发开始变少了'
+        : s1.S >= 3 
+          ? '混成了部门的"交际花"，谁家有困难他都帮。但业绩始终中等，被领导评价为"好人但不是将才"。他安慰自己"快乐就好"'
+          : '成了部门的透明人，开会从不发言但每次都认真做笔记。领导对他的印象是"那个...谁来着？"。他在公司三年，认识他的人不超过10个';
+      const p2Year3 = s2.R >= 4 
+        ? '已经是团队骨干了，一个人扛着三个项目。每天早上8:30到公司，晚上10点走。被提拔为小组长，手下带了5个人，头发开始变少了'
+        : s2.S >= 3 
+          ? '混成了部门的"交际花"，谁家有困难他都帮。但业绩始终中等，被领导评价为"好人但不是将才"。他安慰自己"快乐就好"'
+          : '成了部门的透明人，开会从不发言但每次都认真做笔记。领导对他的印象是"那个...谁来着？"。他在公司三年，认识他的人不超过10个';
+
+      stories.push({
+        title: '🔥 第三年：分道扬镳',
+        p1: p1Year3,
+        p2: p2Year3
+      });
+
+      // 第五年
+      const p1Year5 = s1.R >= 4 && s1.A >= 3 
+        ? '跳槽到了大厂，年薪50万。新公司加班文化严重但他如鱼得水。朋友圈签名改成了"天道酬勤"。前同事们都在给他点赞'
+        : s1.A >= 3 && s1.S >= 3 
+          ? '成了中层管理者，最擅长的是向上管理和甩锅。年终述职PPT做了80页，把团队成果说成自己的。成功晋升P7，月薪涨了8000'
+          : '还是基层员工，五年换了3家公司，每次都是因为"和领导沟通不畅"。朋友问他"你到底在坚持什么"，他说"我在坚持不加班"';
+      const p2Year5 = s2.R >= 4 && s2.A >= 3 
+        ? '跳槽到了大厂，年薪50万。新公司加班文化严重但他如鱼得水。朋友圈签名改成了"天道酬勤"。前同事们都在给他点赞'
+        : s2.A >= 3 && s2.S >= 3 
+          ? '成了中层管理者，最擅长的是向上管理和甩锅。年终述职PPT做了80页，把团队成果说成自己的。成功晋升P7，月薪涨了8000'
+          : '还是基层员工，五年换了3家公司，每次都是因为"和领导沟通不畅"。朋友问他"你到底在坚持什么"，他说"我在坚持不加班"';
+
+      stories.push({
+        title: '💼 第五年：人生分岔口',
+        p1: p1Year5,
+        p2: p2Year5
+      });
+
+      // 第八年
+      const p1Year8 = s1.R >= 4 
+        ? '年薪80万，但体检报告出来了：脂肪肝、颈椎病、轻度抑郁。老婆说"你再不辞职我就带孩子回娘家"。他在车里坐了半个小时，抽了三根烟，然后继续回公司开会'
+        : s1.F >= 3 
+          ? '年薪40万，是部门里人缘最好的人。每年组织两次部门旅游，同事们过生日他比谁都积极。老婆说他"对同事比对我还好"。他笑着说"家和万事兴嘛"'
+          : '年薪25万，在一家小公司做执行层。每天5:59准时收拾书包，6:00整打卡走人。同事觉得他太较真，他觉得同事太奴性。他在豆瓣有个小组叫"不加班联盟"，有2万粉丝';
+      const p2Year8 = s2.R >= 4 
+        ? '年薪80万，但体检报告出来了：脂肪肝、颈椎病、轻度抑郁。老婆说"你再不辞职我就带孩子回娘家"。他在车里坐了半个小时，抽了三根烟，然后继续回公司开会'
+        : s2.F >= 3 
+          ? '年薪40万，是部门里人缘最好的人。每年组织两次部门旅游，同事们过生日他比谁都积极。老婆说他"对同事比对我还好"。他笑着说"家和万事兴嘛"'
+          : '年薪25万，在一家小公司做执行层。每天5:59准时收拾书包，6:00整打卡走人。同事觉得他太较真，他觉得同事太奴性。他在豆瓣有个小组叫"不加班联盟"，有2万粉丝';
+
+      stories.push({
+        title: '🏥 第八年：身体和灵魂',
+        p1: p1Year8,
+        p2: p2Year8
+      });
+
+      // 第十年
+      const p1Year10 = s1.R >= 4 && s1.A >= 3 
+        ? '年薪120万，公司给了期权。35岁成了VP，但已经秃顶了。儿子作文《我的爸爸》里写"我爸爸是个赚钱机器，他不在家"。他看完沉默了很久，第二天给儿子报了个夏令营'
+        : s1.A >= 3 
+          ? '创业了，当了老板。第一天就给公司定了规矩：不打卡、弹性工作、项目制考核。结果公司撑了两年就倒闭了，欠了50万。他在朋友圈发了一条"我不后悔"，然后删掉了'
+          : '年薪60万，终于当上了总监。最骄傲的不是升职，而是他带出来的团队离职率全公司最低。下属说"跟着他干活开心"。他笑着回应"开心才是最重要的"';
+      const p2Year10 = s2.R >= 4 && s2.A >= 3 
+        ? '年薪120万，公司给了期权。35岁成了VP，但已经秃顶了。儿子作文《我的爸爸》里写"我爸爸是个赚钱机器，他不在家"。他看完沉默了很久，第二天给儿子报了个夏令营'
+        : s2.A >= 3 
+          ? '创业了，当了老板。第一天就给公司定了规矩：不打卡、弹性工作、项目制考核。结果公司撑了两年就倒闭了，欠了50万。他在朋友圈发了一条"我不后悔"，然后删掉了'
+          : '年薪60万，终于当上了总监。最骄傲的不是升职，而是他带出来的团队离职率全公司最低。下属说"跟着他干活开心"。他笑着回应"开心才是最重要的"';
+
+      stories.push({
+        title: '👔 第十年：终局',
+        p1: p1Year10,
+        p2: p2Year10
+      });
+
+      // 结局
+      const p1End = s1.R >= 4 
+        ? '40岁退休了，住进了别墅区。有一天在花园里修剪花草，接到前同事电话说"公司上市了"。他笑了笑说"挺好的"，然后继续修剪。他的体检报告上有8项异常指标'
+        : '40岁还在打工，但活得很开心。每天准时上下班，周末陪孩子上兴趣班。朋友问他"你不觉得遗憾吗"，他说"我老婆孩子热炕头，有什么遗憾的"';
+      const p2End = s2.R >= 4 
+        ? '40岁退休了，住进了别墅区。有一天在花园里修剪花草，接到前同事电话说"公司上市了"。他笑了笑说"挺好的"，然后继续修剪。他的体检报告上有8项异常指标'
+        : '40岁还在打工，但活得很开心。每天准时上下班，周末陪孩子上兴趣班。朋友问他"你不觉得遗憾吗"，他说"我老婆孩子热炕头，有什么遗憾的"';
+
+      stories.push({
+        title: '🌅 四十年后：人生结局',
+        p1: p1End,
+        p2: p2End
+      });
+
+      return stories;
+    }
+
     function showPK() {
       document.getElementById('pkSection').classList.remove('hidden');
       const result = calculateResult();
