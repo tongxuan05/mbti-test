@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MBTI 性格测试</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Noto Sans SC', sans-serif; }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+    .option-btn {
+      transition: all 0.3s ease;
+    }
+    .option-btn:hover {
+      transform: scale(1.02);
+    }
+    .option-btn.selected {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border-color: transparent;
+    }
+    .progress-bar {
+      transition: width 0.5s ease;
+    }
+    .fade-in {
+      animation: fadeIn 0.5s ease-in;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .dimension-card {
+      transition: all 0.3s ease;
+    }
+    .dimension-card:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+  <div id="app"></div>
+
+  <script>
+    const questions = [
+      // E/I 维度 (外向/内向)
+      { id: 1, dimension: 'EI', text: '在社交聚会中，你通常会？', options: [
+        { text: '主动与很多人交谈，包括陌生人', value: 'E' },
+        { text: '只与少数认识的人交谈', value: 'I' }
+      ]},
+      { id: 2, dimension: 'EI', text: '经过一周忙碌的工作后，你更倾向于？', options: [
+        { text: '和朋友出去聚会放松', value: 'E' },
+        { text: '在家安静休息，做自己喜欢的事', value: 'I' }
+      ]},
+      { id: 3, dimension: 'EI', text: '在团队讨论中，你通常？', options: [
+        { text: '积极发言，喜欢表达自己的想法', value: 'E' },
+        { text: '先倾听他人，思考后再发言', value: 'I' }
+      ]},
+      { id: 4, dimension: 'EI', text: '你更喜欢哪种工作方式？', options: [
+        { text: '开放式办公室，随时可以和同事交流', value: 'E' },
+        { text: '独立办公室或远程工作，减少干扰', value: 'I' }
+      ]},
+      { id: 5, dimension: 'EI', text: '当你有一个新想法时，你会？', options: [
+        { text: '立即找人讨论，通过交流完善想法', value: 'E' },
+        { text: '先自己思考清楚，再选择性分享', value: 'I' }
+      ]},
+
+      // S/N 维度 (感觉/直觉)
+      { id: 6, dimension: 'SN', text: '学习新事物时，你更喜欢？', options: [
+        { text: '具体的实例和实际操作', value: 'S' },
+        { text: '理论框架和概念模型', value: 'N' }
+      ]},
+      { id: 7, dimension: 'SN', text: '你更擅长？', options: [
+        { text: '关注细节和事实', value: 'S' },
+        { text: '把握整体趋势和可能性', value: 'N' }
+      ]},
+      { id: 8, dimension: 'SN', text: '在阅读或看电影时，你更关注？', options: [
+        { text: '具体的情节和人物行为', value: 'S' },
+        { text: '隐含的主题和象征意义', value: 'N' }
+      ]},
+      { id: 9, dimension: 'SN', text: '做计划时，你更倾向于？', options: [
+        { text: '制定具体、可执行的步骤', value: 'S' },
+        { text: '确定大方向，保留灵活调整的空间', value: 'N' }
+      ]},
+      { id: 10, dimension: 'SN', text: '别人通常认为你？', options: [
+        { text: '务实、脚踏实地', value: 'S' },
+        { text: '有想象力、富有创造力', value: 'N' }
+      ]},
+
+      // T/F 维度 (思考/情感)
+      { id: 11, dimension: 'TF', text: '朋友向你诉苦时，你通常会？', options: [
+        { text: '帮他们分析问题，提供解决方案', value: 'T' },
+        { text: '先给予情感支持和安慰', value: 'F' }
+      ]},
+      { id: 12, dimension: 'TF', text: '做重要决定时，你更依赖？', options: [
+        { text: '逻辑分析和客观数据', value: 'T' },
+        { text: '个人价值观和对他人的影响', value: 'F' }
+      ]},
+      { id: 13, dimension: 'TF', text: '在团队中发生分歧时，你更看重？', options: [
+        { text: '哪个方案更有效、更合理', value: 'T' },
+        { text: '如何维持团队和谐，让大家都舒服', value: 'F' }
+      ]},
+      { id: 14, dimension: 'TF', text: '评价一项工作时，你更注重？', options: [
+        { text: '成果质量和效率', value: 'T' },
+        { text: '团队成员的感受和成长', value: 'F' }
+      ]},
+      { id: 15, dimension: 'TF', text: '你更希望别人认为你？', options: [
+        { text: '能力强、思维清晰', value: 'T' },
+        { text: '善解人意、温暖可靠', value: 'F' }
+      ]},
+
+      // J/P 维度 (判断/知觉)
+      { id: 16, dimension: 'JP', text: '你的日常生活通常是？', options: [
+        { text: '有规律的、按计划进行', value: 'J' },
+        { text: '随性的、根据心情调整', value: 'P' }
+      ]},
+      { id: 17, dimension: 'JP', text: '面对截止日期，你通常？', options: [
+        { text: '提前完成，不喜欢临时赶工', value: 'J' },
+        { text: '在压力下效率更高，经常最后时刻完成', value: 'P' }
+      ]},
+      { id: 18, dimension: 'JP', text: '旅行时，你更喜欢？', options: [
+        { text: '提前规划好行程和住宿', value: 'J' },
+        { text: '到了目的地再随机应变', value: 'P' }
+      ]},
+      { id: 19, dimension: 'JP', text: '你的工作空间通常是？', options: [
+        { text: '整洁有序，物品各归其位', value: 'J' },
+        { text: '看似杂乱但自己知道东西在哪', value: 'P' }
+      ]},
+      { id: 20, dimension: 'JP', text: '面对新机会时，你更倾向于？', options: [
+        { text: '评估利弊后做出决定并坚持', value: 'J' },
+        { text: '保持开放，随时准备调整方向', value: 'P' }
+      ]}
+    ];
+
+    const mbtiDescriptions = {
+      'ISTJ': {
+        name: '物流师',
+        emoji: '📋',
+        color: 'from-blue-500 to-blue-700',
+        description: '安静、严肃，通过全面性和可靠性获得成功。注重实际、实事求是、追求现实，负责任。决定做什么事情时，会坚定不移地去做，不受干扰和反对。',
+        strengths: ['诚实可靠', '意志坚强', '非常负责任', '冷静务实'],
+        careers: ['会计师', '审计师', '项目经理', '数据分析师', '军人/警察']
+      },
+      'ISFJ': {
+        name: '守卫者',
+        emoji: '🛡️',
+        color: 'from-green-500 to-green-700',
+        description: '安静、友好、负责任、有良心。坚定地致力于完成任务。注重细节，关心他人的感受，努力创造和谐的环境。',
+        strengths: ['支持他人', '可靠体贴', '观察力强', '忠诚热心'],
+        careers: ['护士', '社工', '教师', '人力资源', '行政管理']
+      },
+      'INFJ': {
+        name: '提倡者',
+        emoji: '🌟',
+        color: 'from-purple-500 to-purple-700',
+        description: '寻求思想、关系、物质等之间的意义和联系。想知道什么能激励人，对人有很强的洞察力。有责任心，坚持自己的价值观。',
+        strengths: ['富有创意', '洞察力敏锐', '有原则', '充满激情'],
+        careers: ['心理咨询师', '作家', '人力资源总监', '教授', '社会企业家']
+      },
+      'INTJ': {
+        name: '建筑师',
+        emoji: '🏗️',
+        color: 'from-indigo-500 to-indigo-700',
+        description: '有独创性和强烈的内驱力去实现自己的想法和目标。能够很快看到外部事件的模式，并能构思想法去合理解释。',
+        strengths: ['战略思维', '独立自主', '意志坚定', '求知欲强'],
+        careers: ['科学家', '投资银行家', '系统架构师', '法律顾问', '企业战略顾问']
+      },
+      'ISTP': {
+        name: '鉴赏家',
+        emoji: '🔧',
+        color: 'from-orange-500 to-orange-700',
+        description: '灵活、忍耐力强，是个安静的观察者直到有问题发生，就会马上行动，找到实用的解决方法。分析事物运作的原理。',
+        strengths: ['乐观有活力', '创造力强', '实用主义', '临危不乱'],
+        careers: ['工程师', '飞行员', '程序员', '法医', '机械师']
+      },
+      'ISFP': {
+        name: '探险家',
+        emoji: '🎨',
+        color: 'from-pink-500 to-pink-700',
+        description: '安静、友好、敏感、和善。享受当前。喜欢有自己的空间，按自己的时间表工作。忠于自己的价值观。',
+        strengths: ['审美敏锐', '善解人意', '适应力强', '好奇心强'],
+        careers: ['设计师', '艺术家', '兽医', '厨师', '物理治疗师']
+      },
+      'INFP': {
+        name: '调停者',
+        emoji: '🌈',
+        color: 'from-teal-500 to-teal-700',
+        description: '理想主义，对自己认为有价值的人或事忠心。希望外在的生活与内在的价值观相统一。好奇，很快能看到事情的可能性。',
+        strengths: ['富有同情心', '创意无限', '追求和谐', '善于沟通'],
+        careers: ['作家', '心理学家', '社会工作者', '编辑', '用户体验设计师']
+      },
+      'INTP': {
+        name: '逻辑学家',
+        emoji: '🔬',
+        color: 'from-cyan-500 to-cyan-700',
+        description: '对感兴趣的事物寻求合理解释。喜欢理论和抽象的事情。安静、内向、独立。 sceptical，有时挑剔。',
+        strengths: ['分析能力强', '思维开放', '好奇心旺盛', '客观公正'],
+        careers: ['软件工程师', '数学家', '研究员', '哲学家', '数据科学家']
+      },
+      'ESTP': {
+        name: '企业家',
+        emoji: '🚀',
+        color: 'from-red-500 to-red-700',
+        description: '灵活、忍耐力强，以实际的方法解决问题。喜欢与他人共事。享受当下的生活，不喜欢被理论束缚。',
+        strengths: ['大胆直接', '理性务实', '社交能力强', '感知敏锐'],
+        careers: ['销售代表', '创业者', '消防员', '运动员', '项目经理']
+      },
+      'ESFP': {
+        name: '表演者',
+        emoji: '🎭',
+        color: 'from-yellow-500 to-yellow-700',
+        description: '外向、友好、包容。热爱生活、人类和物质上的享受。喜欢与他人共事，带来欢乐和温暖。',
+        strengths: ['大胆原创', '审美天赋', '实践能力强', '观察力敏锐'],
+        careers: ['演员', '活动策划', '公关经理', '旅游顾问', '健身教练']
+      },
+      'ENFP': {
+        name: '竞选者',
+        emoji: '✨',
+        color: 'from-violet-500 to-violet-700',
+        description: '热情洋溢，富有想象力。认为生活充满可能性。能很快地将事情和信息联系起来，然后很自信地根据自己的模式解决问题。',
+        strengths: ['好奇心强', '洞察力敏锐', '精力充沛', '善于交际'],
+        careers: ['记者', '创意总监', '心理咨询师', '培训师', '市场营销']
+      },
+      'ENTP': {
+        name: '辩论家',
+        emoji: '⚡',
+        color: 'from-amber-500 to-amber-700',
+        description: '反应快、睿智，喜欢解决新的、有挑战性的问题。讨厌例行公事。擅长言辞，能巧妙而机智地应对他人。',
+        strengths: ['知识渊博', '思维敏捷', '原创性强', '魅力四射'],
+        careers: ['律师', '创业者', '政治顾问', '创意总监', '风险投资人']
+      },
+      'ESTJ': {
+        name: '总经理',
+        emoji: '👔',
+        color: 'from-slate-500 to-slate-700',
+        description: '务实、注重事实。果断，能迅速做出实施决策。善于组织项目和人员来完成目标。重视效率和结果。',
+        strengths: ['组织能力强', '果断坚定', '高效务实', '责任感强'],
+        careers: ['企业高管', '法官', '财务总监', '学校校长', '军官']
+      },
+      'ESFJ': {
+        name: '执政官',
+        emoji: '🤝',
+        color: 'from-emerald-500 to-emerald-700',
+        description: '热心肠、有责任心、合作。希望周边的环境温馨而和谐，并为此果断地执行。喜欢和他人共事。',
+        strengths: ['实用主义者', '忠诚可靠', '敏感温暖', '善于交际'],
+        careers: ['医疗工作者', '教育管理者', '活动统筹', '客户关系经理', '人力资源']
+      },
+      'ENFJ': {
+        name: '主人公',
+        emoji: '👑',
+        color: 'from-rose-500 to-rose-700',
+        description: '温暖、有同理心、反应灵敏、负责任。高度关注他人的情绪和需求。善于发现他人的潜能。天生的领导者。',
+        strengths: ['宽容体贴', '可靠负责', '魅力天成', '天然领导者'],
+        careers: ['培训师', '人力资源总监', '公关经理', '非营利组织负责人', '政治家']
+      },
+      'ENTJ': {
+        name: '指挥官',
+        emoji: '🎯',
+        color: 'from-gray-600 to-gray-800',
+        description: '坦诚、果断，是天生的领导者。能迅速看到不合逻辑和效率低下的程序和政策。善于制定综合性系统来解决问题。',
+        strengths: ['高效务实', '意志坚强', '战略思维', '知识渊博'],
+        careers: ['CEO', '管理顾问', '律师', '大学教授', '创业公司创始人']
+      }
+    };
+
+    let currentQuestion = 0;
+    let answers = {};
+
+    function render() {
+      const app = document.getElementById('app');
+      
+      if (currentQuestion === -1) {
+        app.innerHTML = renderWelcome();
+      } else if (currentQuestion < questions.length) {
+        app.innerHTML = renderQuestion();
+      } else {
+        app.innerHTML = renderResult();
+      }
+    }
+
+    function renderWelcome() {
+      return `
+        <div class="gradient-bg min-h-screen flex items-center justify-center px-4">
+          <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-2xl w-full fade-in">
+            <div class="text-center">
+              <div class="text-6xl mb-6">🧠</div>
+              <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">MBTI 性格测试</h1>
+              <p class="text-gray-600 text-lg mb-8">
+                探索你的性格类型，了解自己的思维方式和行为偏好
+              </p>
+              <div class="bg-gray-50 rounded-xl p-6 mb-8 text-left">
+                <h3 class="font-semibold text-gray-800 mb-3">测试说明：</h3>
+                <ul class="text-gray-600 space-y-2">
+                  <li>• 共 20 道题目，预计用时 3-5 分钟</li>
+                  <li>• 每题有两个选项，请选择最符合你的那个</li>
+                  <li>• 没有对错之分，请根据第一直觉作答</li>
+                  <li>• 测试完成后会生成你的性格类型报告</li>
+                </ul>
+              </div>
+              <button onclick="startTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
+                开始测试 →
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderQuestion() {
+      const q = questions[currentQuestion];
+      const progress = ((currentQuestion) / questions.length) * 100;
+      const selectedAnswer = answers[q.id];
+
+      return `
+        <div class="min-h-screen bg-gray-50 py-8 px-4">
+          <div class="max-w-2xl mx-auto">
+            <!-- 进度条 -->
+            <div class="bg-white rounded-full h-3 mb-8 shadow-sm">
+              <div class="progress-bar gradient-bg h-3 rounded-full" style="width: ${progress}%"></div>
+            </div>
+            <div class="text-center mb-4 text-gray-600">
+              第 ${currentQuestion + 1} / ${questions.length} 题
+            </div>
+            
+            <div class="bg-white rounded-2xl shadow-lg p-8 fade-in">
+              <h2 class="text-2xl font-semibold text-gray-800 mb-8 text-center">${q.text}</h2>
+              
+              <div class="space-y-4">
+                ${q.options.map((opt, idx) => `
+                  <button
+                    onclick="selectAnswer(${q.id}, '${opt.value}')"
+                    class="option-btn w-full p-5 border-2 rounded-xl text-left text-lg ${selectedAnswer === opt.value ? 'selected' : 'border-gray-200 hover:border-purple-400'}"
+                  >
+                    <div class="flex items-center">
+                      <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center mr-4 ${selectedAnswer === opt.value ? 'border-white bg-white bg-opacity-20' : 'border-gray-300'}">
+                        ${String.fromCharCode(65 + idx)}
+                      </div>
+                      <span>${opt.text}</span>
+                    </div>
+                  </button>
+                `).join('')}
+              </div>
+              
+              <div class="flex justify-between mt-8 pt-6 border-t">
+                <button
+                  onclick="prevQuestion()"
+                  class="px-6 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors ${currentQuestion === 0 ? 'invisible' : ''}"
+                >
+                  ← 上一题
+                </button>
+                <button
+                  onclick="nextQuestion()"
+                  class="px-8 py-3 rounded-lg gradient-bg text-white font-semibold hover:opacity-90 transition-opacity ${!selectedAnswer ? 'opacity-50 cursor-not-allowed' : ''}"
+                  ${!selectedAnswer ? 'disabled' : ''}
+                >
+                  ${currentQuestion === questions.length - 1 ? '查看结果' : '下一题 →'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderResult() {
+      const result = calculateResult();
+      const mbti = mbtiDescriptions[result.type];
+      
+      return `
+        <div class="min-h-screen bg-gray-50 py-8 px-4">
+          <div class="max-w-4xl mx-auto">
+            <!-- 结果头部 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
+              <div class="text-center mb-8">
+                <div class="text-7xl mb-4">${mbti.emoji}</div>
+                <h1 class="text-5xl font-bold bg-gradient-to-r ${mbti.color} bg-clip-text text-transparent mb-2">
+                  ${result.type}
+                </h1>
+                <p class="text-2xl text-gray-700 font-medium">${mbti.name}</p>
+              </div>
+              
+              <p class="text-gray-600 text-lg leading-relaxed mb-8">${mbti.description}</p>
+              
+              <!-- 四维度分析 -->
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                ${renderDimension('E', 'I', result.E, result.I, '外向', '内向', 'from-yellow-400 to-orange-500', 'from-blue-400 to-indigo-500')}
+                ${renderDimension('S', 'N', result.S, result.N, '感觉', '直觉', 'from-green-400 to-emerald-500', 'from-purple-400 to-violet-500')}
+                ${renderDimension('T', 'F', result.T, result.F, '思考', '情感', 'from-cyan-400 to-blue-500', 'from-pink-400 to-rose-500')}
+                ${renderDimension('J', 'P', result.J, result.P, '判断', '知觉', 'from-indigo-400 to-purple-500', 'from-yellow-400 to-orange-500')}
+              </div>
+            </div>
+            
+            <!-- 优势 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
+              <h2 class="text-2xl font-bold text-gray-800 mb-6">💪 核心优势</h2>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                ${mbti.strengths.map(s => `
+                  <div class="bg-gradient-to-br ${mbti.color} text-white rounded-xl p-4 text-center">
+                    <p class="font-semibold">${s}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            
+            <!-- 适合职业 -->
+            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
+              <h2 class="text-2xl font-bold text-gray-800 mb-6">💼 适合职业</h2>
+              <div class="flex flex-wrap gap-3">
+                ${mbti.careers.map(c => `
+                  <span class="bg-gray-100 text-gray-700 px-4 py-2 rounded-full font-medium">
+                    ${c}
+                  </span>
+                `).join('')}
+              </div>
+            </div>
+            
+            <!-- 重新开始 -->
+            <div class="text-center">
+              <button onclick="restartTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
+                🔄 重新测试
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderDimension(left, right, leftCount, rightCount, leftLabel, rightLabel, leftColor, rightColor) {
+      const total = leftCount + rightCount;
+      const leftPercent = Math.round((leftCount / total) * 100);
+      const rightPercent = 100 - leftPercent;
+      const dominant = leftCount >= rightCount ? left : right;
+      
+      return `
+        <div class="bg-gray-50 rounded-xl p-4">
+          <div class="flex justify-between items-center mb-2">
+            <span class="font-bold text-lg bg-gradient-to-r ${leftColor} bg-clip-text text-transparent">${left}</span>
+            <span class="text-gray-500">vs</span>
+            <span class="font-bold text-lg bg-gradient-to-r ${rightColor} bg-clip-text text-transparent">${right}</span>
+          </div>
+          <div class="flex justify-between text-sm text-gray-600 mb-2">
+            <span>${leftLabel}</span>
+            <span>${rightLabel}</span>
+          </div>
+          <div class="flex h-3 rounded-full overflow-hidden bg-gray-200">
+            <div class="bg-gradient-to-r ${leftColor}" style="width: ${leftPercent}%"></div>
+            <div class="bg-gradient-to-r ${rightColor}" style="width: ${rightPercent}%"></div>
+          </div>
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+            <span>${leftPercent}%</span>
+            <span>${rightPercent}%</span>
+          </div>
+          <div class="text-center mt-2">
+            <span class="text-sm font-semibold text-gray-700">倾向：${dominant} (${dominant === left ? leftPercent : rightPercent}%)</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function calculateResult() {
+      const scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+      
+      Object.values(answers).forEach(value => {
+        scores[value]++;
+      });
+      
+      const type = 
+        (scores.E >= scores.I ? 'E' : 'I') +
+        (scores.S >= scores.N ? 'S' : 'N') +
+        (scores.T >= scores.F ? 'T' : 'F') +
+        (scores.J >= scores.P ? 'J' : 'P');
+      
+      return { type, ...scores };
+    }
+
+    function startTest() {
+      currentQuestion = 0;
+      answers = {};
+      render();
+    }
+
+    function selectAnswer(questionId, value) {
+      answers[questionId] = value;
+      render();
+    }
+
+    function nextQuestion() {
+      if (answers[questions[currentQuestion].id]) {
+        currentQuestion++;
+        render();
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function prevQuestion() {
+      if (currentQuestion > 0) {
+        currentQuestion--;
+        render();
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function restartTest() {
+      currentQuestion = -1;
+      answers = {};
+      render();
+    }
+
+    // 初始化
+    currentQuestion = -1;
+    render();
+  </script>
+</body>
+</html>
