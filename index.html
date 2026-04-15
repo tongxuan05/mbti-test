@@ -503,10 +503,25 @@
               </div>
             </div>
             
-            <div class="text-center">
+            <div class="text-center space-y-4">
               <button onclick="restartTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
                 🔄 再测一次
               </button>
+              <div>
+                <button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
+                  ⚔️ 邀请好友PK
+                </button>
+              </div>
+              <div id="pkSection" class="hidden mt-6">
+                <div class="bg-gray-50 rounded-xl p-6">
+                  <p class="text-gray-700 font-medium mb-3">把链接发给朋友，让他也测测！</p>
+                  <div class="flex gap-2">
+                    <input id="pkLink" type="text" readonly class="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm" />
+                    <button onclick="copyPKLink()" class="gradient-bg text-white px-6 py-2 rounded-lg font-semibold text-sm">复制</button>
+                  </div>
+                  <p class="text-xs text-gray-500 mt-2">朋友测试完成后会自动跳转到 PK 对比页面</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -619,9 +634,234 @@
       render();
     }
 
+    function showPK() {
+      document.getElementById('pkSection').classList.remove('hidden');
+      const result = calculateResult();
+      const type = typeDataMap[result.typeKey];
+      const pkData = {
+        typeKey: result.typeKey,
+        name: type.name,
+        emoji: type.emoji,
+        color: type.color,
+        motto: type.motto,
+        scores: { A: result.A, B: result.B, S: result.S, C: result.C, P: result.P, R: result.R, D: result.D, F: result.F }
+      };
+      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(pkData))));
+      const pkLink = window.location.origin + window.location.pathname + '?pk=' + encoded;
+      document.getElementById('pkLink').value = pkLink;
+    }
+
+    function copyPKLink() {
+      const input = document.getElementById('pkLink');
+      input.select();
+      document.execCommand('copy');
+      alert('链接已复制！发给朋友让他也测测');
+    }
+
+    function renderPKResult(p1, p2) {
+      const t1 = typeDataMap[p1.typeKey];
+      const t2 = typeDataMap[p2.typeKey];
+      const dims = [
+        { key: 'A', label: '暴躁指数', color: 'from-red-400 to-red-600' },
+        { key: 'S', label: '社交指数', color: 'from-yellow-400 to-orange-500' },
+        { key: 'R', label: '内卷指数', color: 'from-amber-400 to-amber-600' },
+        { key: 'F', label: '感性指数', color: 'from-pink-400 to-rose-500' }
+      ];
+
+      let pkComment = '';
+      const p1Total = p1.scores.A + p1.scores.R;
+      const p2Total = p2.scores.A + p2.scores.R;
+      if (p1Total > p2Total + 3) pkComment = `${p1.emoji} ${p1.name} 完胜！${p2.emoji} ${p2.name} 被按在地上摩擦`;
+      else if (p2Total > p1Total + 3) pkComment = `${p2.emoji} ${p2.name} 完胜！${p1.emoji} ${p1.name} 被按在地上摩擦`;
+      else if (p1Total > p2Total) pkComment = `${p1.emoji} ${p1.name} 险胜！两人实力相当，火药味十足`;
+      else if (p2Total > p1Total) pkComment = `${p2.emoji} ${p2.name} 险胜！两人实力相当，火药味十足`;
+      else pkComment = `平局！你俩是失散多年的打工人兄弟/姐妹`;
+
+      return `
+        <div class="min-h-screen bg-gray-50 py-8 px-4">
+          <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-8 fade-in">
+              <div class="text-5xl mb-2">⚔️</div>
+              <h1 class="text-4xl font-bold text-gray-800 mb-2">PK 结果</h1>
+              <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl p-4 mt-4">
+                <p class="text-lg font-semibold">${pkComment}</p>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+              <div class="bg-white rounded-2xl shadow-lg p-6 fade-in">
+                <div class="text-center mb-4">
+                  <div class="text-5xl mb-2">${t1.emoji}</div>
+                  <h2 class="text-2xl font-bold bg-gradient-to-r ${t1.color} bg-clip-text text-transparent">${p1.typeKey}</h2>
+                  <p class="text-lg text-gray-700 font-medium">${t1.name}</p>
+                  <p class="text-sm text-gray-500 mt-1">"${t1.motto}"</p>
+                </div>
+                ${dims.map(d => `
+                  <div class="mt-3">
+                    <div class="flex justify-between text-sm mb-1">
+                      <span class="text-gray-600">${d.label}</span>
+                      <span class="font-semibold">${Math.round((p1.scores[d.key] / 5) * 100)}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                      <div class="bg-gradient-to-r ${d.color} h-3 rounded-full" style="width: ${Math.round((p1.scores[d.key] / 5) * 100)}%"></div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+
+              <div class="bg-white rounded-2xl shadow-lg p-6 fade-in">
+                <div class="text-center mb-4">
+                  <div class="text-5xl mb-2">${t2.emoji}</div>
+                  <h2 class="text-2xl font-bold bg-gradient-to-r ${t2.color} bg-clip-text text-transparent">${p2.typeKey}</h2>
+                  <p class="text-lg text-gray-700 font-medium">${t2.name}</p>
+                  <p class="text-sm text-gray-500 mt-1">"${t2.motto}"</p>
+                </div>
+                ${dims.map(d => `
+                  <div class="mt-3">
+                    <div class="flex justify-between text-sm mb-1">
+                      <span class="text-gray-600">${d.label}</span>
+                      <span class="font-semibold">${Math.round((p2.scores[d.key] / 5) * 100)}%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-3">
+                      <div class="bg-gradient-to-r ${d.color} h-3 rounded-full" style="width: ${Math.round((p2.scores[d.key] / 5) * 100)}%"></div>
+                    </div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in">
+              <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">📊 四维对比</h3>
+              <div class="space-y-4">
+                ${dims.map(d => {
+                  const s1 = Math.round((p1.scores[d.key] / 5) * 100);
+                  const s2 = Math.round((p2.scores[d.key] / 5) * 100);
+                  const diff = s1 - s2;
+                  let winner = diff > 10 ? '👈 他更暴躁' : diff < -10 ? '他更暴躁 👉' : '势均力敌';
+                  if (d.key === 'S') winner = diff > 10 ? '👈 他更社牛' : diff < -10 ? '他更社牛 👉' : '势均力敌';
+                  if (d.key === 'R') winner = diff > 10 ? '👈 他更卷' : diff < -10 ? '他更卷 👉' : '势均力敌';
+                  if (d.key === 'F') winner = diff > 10 ? '👈 他更感性' : diff < -10 ? '他更感性 👉' : '势均力敌';
+                  return `
+                    <div>
+                      <div class="flex justify-between text-sm mb-1">
+                        <span class="font-semibold text-gray-700">${d.label}</span>
+                        <span class="text-xs text-gray-500">${winner}</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold w-8 text-right">${s1}%</span>
+                        <div class="flex-1 flex h-4 rounded-full overflow-hidden bg-gray-200">
+                          <div class="bg-gradient-to-r ${d.color}" style="width: ${s1}%"></div>
+                          <div class="bg-gradient-to-r from-gray-300 to-gray-400" style="width: ${100 - s1}%"></div>
+                        </div>
+                        <div class="flex-1 flex h-4 rounded-full overflow-hidden bg-gray-200">
+                          <div class="bg-gradient-to-r ${d.color}" style="width: ${s2}%"></div>
+                          <div class="bg-gradient-to-r from-gray-300 to-gray-400" style="width: ${100 - s2}%"></div>
+                        </div>
+                        <span class="text-xs font-bold w-8">${s2}%</span>
+                      </div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <div class="text-center space-y-4">
+              <button onclick="restartTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
+                🔄 自己再测一次
+              </button>
+              <div>
+                <button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
+                  ⚔️ 再邀请一个人PK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
     // 初始化
     currentQuestion = -1;
-    render();
+
+    // 检查是否是 PK 模式
+    const urlParams = new URLSearchParams(window.location.search);
+    const pkParam = urlParams.get('pk');
+    if (pkParam) {
+      try {
+        const p1 = JSON.parse(decodeURIComponent(escape(atob(pkParam))));
+        // 进入 PK 挑战模式
+        let pkMode = 'challenge';
+        const pkData = { ...p1 };
+        
+        // 重写 render 来支持 PK 流程
+        const originalRender = render;
+        render = function() {
+          const app = document.getElementById('app');
+          if (pkMode === 'challenge') {
+            // 显示挑战信息
+            const t1 = typeDataMap[pkData.typeKey];
+            app.innerHTML = `
+              <div class="gradient-bg min-h-screen flex items-center justify-center px-4">
+                <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-2xl w-full fade-in">
+                  <div class="text-center">
+                    <div class="text-6xl mb-4">⚔️</div>
+                    <h1 class="text-3xl font-bold text-gray-800 mb-3">你被挑战了！</h1>
+                    <div class="bg-gray-50 rounded-xl p-4 mb-6">
+                      <div class="text-4xl mb-2">${t1.emoji}</div>
+                      <p class="text-xl font-bold text-gray-700">${t1.name}（${pkData.typeKey}）</p>
+                      <p class="text-gray-500 mt-1">"${t1.motto}"</p>
+                    </div>
+                    <p class="text-gray-600 mb-6">完成测试，看看谁能更暴躁！</p>
+                    <button onclick="startPKTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
+                      接受挑战 →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            `;
+          } else if (pkMode === 'result') {
+            const result = calculateResult();
+            const p2 = {
+              typeKey: result.typeKey,
+              name: typeDataMap[result.typeKey].name,
+              emoji: typeDataMap[result.typeKey].emoji,
+              color: typeDataMap[result.typeKey].color,
+              motto: typeDataMap[result.typeKey].motto,
+              scores: { A: result.A, B: result.B, S: result.S, C: result.C, P: result.P, R: result.R, D: result.D, F: result.F }
+            };
+            app.innerHTML = renderPKResult(pkData, p2);
+          } else {
+            originalRender();
+          }
+        };
+
+        window.startPKTest = function() {
+          pkMode = 'testing';
+          currentQuestion = 0;
+          answers = {};
+          // 重写 nextQuestion 最后一步
+          const originalNext = nextQuestion;
+          nextQuestion = function() {
+            if (answers[questions[currentQuestion].id]) {
+              if (currentQuestion === questions.length - 1) {
+                pkMode = 'result';
+              }
+              currentQuestion++;
+              render();
+              window.scrollTo(0, 0);
+            }
+          };
+          render();
+          window.scrollTo(0, 0);
+        };
+
+        render();
+      } catch(e) {
+        render();
+      }
+    } else {
+      render();
+    }
   </script>
 </body>
 </html>
