@@ -80,30 +80,30 @@
         { text: '"就是！傻逼老板千篇一律，来来来吐槽个痛快，我陪你一起骂，骂完去吃火锅"', val: 'F' }]},
       { id: 20, dim: 'DF', text: '你背了黑锅，领导在全公司面前批评了你，但你知道真相，你会？', opts: [
         { text: '当天把证据链整理成PDF文档，包含邮件、截图、时间线，发给所有相关人员要求公开澄清', val: 'D' },
-        { text: '找最信任的朋友倾诉到深夜，"我真的好委屈"，然后发条仅自己可见的朋友圈"世界以痛吻我"', val: 'F' ]}
+        { text: '找最信任的朋友倾诉到深夜，"我真的好委屈"，然后发条仅自己可见的朋友圈"世界以痛吻我"', val: 'F' }]}
     ];
 
     var workers = {
-      'ASPD': { n: '职场灭霸', e: '\u{1F480}', c: 'from-red-600 to-black', d: '你是职场中最恐怖的存在。敢半夜2点回老板消息证明自己加到6点，敢在会议上反手拍桌子怼老板，社交场上无人能敌，疯狂内卷到所有人都害怕，做事理性到冷酷。你不是在打工，你是在统治职场。', m: '我不是来打工的，我是来教你们做事的', s: '实力碾压就是正义' },
-      'ASPF': { n: '暴躁老哥', e: '\u{1F525}', c: 'from-orange-500 to-red-600', d: '你是公司里的"敢说担当"。不爽就说不喜欢就拒绝，社交场上游刃有余，虽然爱摆烂但关键时刻怼人一流。你的暴躁反而让人觉得你真实可爱。', m: '我脾气不好但我很真诚', s: '真诚+暴躁=永远的必杀技' },
-      'ASRD': { n: '卷王之王', e: '\u{1F451}', c: 'from-yellow-500 to-amber-700', d: '你敢于表达、善于社交、疯狂内卷到凌晨，理性分析每一步棋。你是领导眼中的人才核弹，但同事觉得你是内卷的罪魁祸首。', m: '卷不死我的都会让我更强', s: '适度内卷，量力而行' },
-      'ASRF': { n: '社交悍匪', e: '\u{1F3AD}', c: 'from-pink-500 to-rose-700', d: '你是公司的人气王兼气氛组组长。敢说敢做、社交天花板、拼命三郎还特别会照顾人。有你在的群永远不会冷场。', m: '工作要拼朋友更要交', s: '人脉是你最大的财富' },
-      'ACPD': { n: '冷面杀手', e: '\u{1F5E1}\u{FE0F}', c: 'from-slate-700 to-gray-900', d: '你表面忍耐内心翻涌，社恐但理性到可怕。你不会当面爆发但会在心里记小本本，等时机成熟一击致命。', m: '我不说不代表我不知道', s: '沉默是你的保护色' },
-      'ACPF': { n: '委屈小可怜', e: '\u{1F622}', c: 'from-blue-400 to-indigo-600', d: '你是公司里最让人心疼的存在。心里有无数句MMP嘴上却说好的收到。社恐摆烂还容易心软。', m: '我没关系（其实很有关系）', s: '学会说"不"是必修课' },
-      'ACRD': { n: '暗黑卷王', e: '\u{1F311}', c: 'from-purple-700 to-indigo-900', d: '你表面不声不响内心野心勃勃。社恐但疯狂努力做事，理性分析每一步棋。你是那种不显山露水但最后晋升最快的人。', m: '你们吵的时候我已经做完了', s: '实力是最好的反击' },
-      'ACRF': { n: '佛系小天使', e: '\u{1F607}', c: 'from-green-400 to-emerald-700', d: '你是公司里最温暖的存在。默默忍耐社恐但努力工作，还特别会照顾别人的感受。你是团队的隐形守护者。', m: '大家都开心就好', s: '善良需要带点锋芒' },
-      'BSPD': { n: '双面打工人', e: '\u{1F3AA}', c: 'from-teal-500 to-cyan-700', d: '你表面乖巧内心暴躁。社交达人但爱摆烂，处理问题理性客观。职场双面人，演得一手好戏。', m: '表面笑嘻嘻心里MMP', s: '演技也是职场技能' },
-      'BSPF': { n: '气氛组组长', e: '\u{1F389}', c: 'from-yellow-400 to-orange-600', d: '你表面忍耐但社交能力一流。爱摆烂但特别会照顾人。你是团队的气氛组担当。', m: '开心是一天不开心也是一天', s: '快乐是你最大的武器' },
-      'BSRD': { n: '隐忍实干家', e: '\u{1F4AA}', c: 'from-blue-600 to-indigo-800', d: '你表面乖巧实则拼命三郎。社交不错做事更拼，理性分析是你的强项。你是那种被领导夸"踏实可靠"的人。', m: '做就做到最好', s: '执行力决定你的上限' },
-      'BSRF': { n: '职场暖男/暖女', e: '\u{2600}\u{FE0F}', c: 'from-amber-400 to-yellow-700', d: '你表面忍耐但社交能力在线，努力工作还特别体贴。你是团队里最受欢迎的存在。', m: '温暖他人也别忘了温暖自己', s: '你的善良自带光芒' },
-      'BCPD': { n: '内心戏之王', e: '\u{1F3AC}', c: 'from-violet-500 to-purple-800', d: '你表面乖巧社恐爱摆烂但内心理性分析一切。你每天在心里上演八百集职场连续剧。', m: '我心里跟明镜似的', s: '看透不说透也是智慧' },
-      'BCPF': { n: '小透明打工人', e: '\u{1FAE5}', c: 'from-gray-400 to-gray-700', d: '你是公司里最没有存在感的老实人。忍耐社恐摆烂还心软。你总是被忽略被忽视被甩锅。', m: '我只是不爱说话', s: '存在感需要主动刷' },
-      'BCRD': { n: '低调实力派', e: '\u{1F3C6}', c: 'from-emerald-500 to-teal-800', d: '你表面乖巧社恐但暗自努力，理性分析能力强。你是那种不声不响就做出成绩的人。', m: '实力会替我说话', s: '低调但有底线' },
-      'BCRF': { n: '忍辱负重者', e: '\u{1F422}', c: 'from-cyan-500 to-blue-700', d: '你是公司里最能忍的人。乖巧社恐努力做事还照顾别人感受。你把所有委屈都吞进肚子里。', m: '忍一时风平浪静', s: '委屈自己要有度' },
-      'BSPF2': { n: '耿直打工人', e: '\u{1F4AC}', c: 'from-red-400 to-pink-700', d: '你表面忍耐但心直口快，社交能力强但有自己的节奏。感性而真实，摆烂但有底线。', m: '有话直说不憋着', s: '直率但要注意方式' },
-      'BCPD2': { n: '摸鱼哲学家', e: '\u{1F41F}', c: 'from-blue-400 to-teal-700', d: '你表面乖巧内心有自己的小世界。社恐但理性，善于摸鱼但不误事。你是职场里的生活家。', m: '摸鱼也是一门艺术', s: '摸鱼不误砍柴工' },
-      'BSRD2': { n: '靠谱工具人', e: '\u{1F528}', c: 'from-orange-500 to-red-600', d: '你表面忍耐但能社交，疯狂输出理性分析。你是领导最好用的工具人，什么事交给你都放心。', m: '交给我你放心', s: '靠谱但不卑微' },
-      'ACPF2': { n: '心软打工人', e: '\u{1F494}', c: 'from-rose-400 to-pink-700', d: '你表面忍耐内心暴躁但就是爆发不出来，社恐感性摆烂。你最大的弱点就是心太软。', m: '我不是好欺负我只是善良', s: '善良要有锋芒' }
+      'ASPD': { n: '职场灭霸', e: '💀', c: 'from-red-600 to-black', d: '你是职场中最恐怖的存在。敢半夜2点回老板消息证明自己加到6点，敢在会议上反手拍桌子怼老板，社交场上无人能敌，疯狂内卷到所有人都害怕，做事理性到冷酷。你不是在打工，你是在统治职场。', m: '我不是来打工的，我是来教你们做事的', s: '实力碾压就是正义' },
+      'ASPF': { n: '暴躁老哥', e: '🔥', c: 'from-orange-500 to-red-600', d: '你是公司里的"敢说担当"。不爽就说不喜欢就拒绝，社交场上游刃有余，虽然爱摆烂但关键时刻怼人一流。你的暴躁反而让人觉得你真实可爱。', m: '我脾气不好但我很真诚', s: '真诚+暴躁=永远的必杀技' },
+      'ASRD': { n: '卷王之王', e: '👑', c: 'from-yellow-500 to-amber-700', d: '你敢于表达、善于社交、疯狂内卷到凌晨，理性分析每一步棋。你是领导眼中的人才核弹，但同事觉得你是内卷的罪魁祸首。', m: '卷不死我的都会让我更强', s: '适度内卷，量力而行' },
+      'ASRF': { n: '社交悍匪', e: '🎭', c: 'from-pink-500 to-rose-700', d: '你是公司的人气王兼气氛组组长。敢说敢做、社交天花板、拼命三郎还特别会照顾人。有你在的群永远不会冷场。', m: '工作要拼朋友更要交', s: '人脉是你最大的财富' },
+      'ACPD': { n: '冷面杀手', e: '🗡️', c: 'from-slate-700 to-gray-900', d: '你表面忍耐内心翻涌，社恐但理性到可怕。你不会当面爆发但会在心里记小本本，等时机成熟一击致命。', m: '我不说不代表我不知道', s: '沉默是你的保护色' },
+      'ACPF': { n: '委屈小可怜', e: '😢', c: 'from-blue-400 to-indigo-600', d: '你是公司里最让人心疼的存在。心里有无数句MMP嘴上却说好的收到。社恐摆烂还容易心软。', m: '我没关系（其实很有关系）', s: '学会说"不"是必修课' },
+      'ACRD': { n: '暗黑卷王', e: '🌑', c: 'from-purple-700 to-indigo-900', d: '你表面不声不响内心野心勃勃。社恐但疯狂努力做事，理性分析每一步棋。你是那种不显山露水但最后晋升最快的人。', m: '你们吵的时候我已经做完了', s: '实力是最好的反击' },
+      'ACRF': { n: '佛系小天使', e: '😇', c: 'from-green-400 to-emerald-700', d: '你是公司里最温暖的存在。默默忍耐社恐但努力工作，还特别会照顾别人的感受。你是团队的隐形守护者。', m: '大家都开心就好', s: '善良需要带点锋芒' },
+      'BSPD': { n: '双面打工人', e: '🎪', c: 'from-teal-500 to-cyan-700', d: '你表面乖巧内心暴躁。社交达人但爱摆烂，处理问题理性客观。职场双面人，演得一手好戏。', m: '表面笑嘻嘻心里MMP', s: '演技也是职场技能' },
+      'BSPF': { n: '气氛组组长', e: '🎉', c: 'from-yellow-400 to-orange-600', d: '你表面忍耐但社交能力一流。爱摆烂但特别会照顾人。你是团队的气氛组担当。', m: '开心是一天不开心也是一天', s: '快乐是你最大的武器' },
+      'BSRD': { n: '隐忍实干家', e: '💪', c: 'from-blue-600 to-indigo-800', d: '你表面乖巧实则拼命三郎。社交不错做事更拼，理性分析是你的强项。你是那种被领导夸"踏实可靠"的人。', m: '做就做到最好', s: '执行力决定你的上限' },
+      'BSRF': { n: '职场暖男/暖女', e: '☀️', c: 'from-amber-400 to-yellow-700', d: '你表面忍耐但社交能力在线，努力工作还特别体贴。你是团队里最受欢迎的存在。', m: '温暖他人也别忘了温暖自己', s: '你的善良自带光芒' },
+      'BCPD': { n: '内心戏之王', e: '🎬', c: 'from-violet-500 to-purple-800', d: '你表面乖巧社恐爱摆烂但内心理性分析一切。你每天在心里上演八百集职场连续剧。', m: '我心里跟明镜似的', s: '看透不说透也是智慧' },
+      'BCPF': { n: '小透明打工人', e: '🫥', c: 'from-gray-400 to-gray-700', d: '你是公司里最没有存在感的老实人。忍耐社恐摆烂还心软。你总是被忽略被忽视被甩锅。', m: '我只是不爱说话', s: '存在感需要主动刷' },
+      'BCRD': { n: '低调实力派', e: '🏆', c: 'from-emerald-500 to-teal-800', d: '你表面乖巧社恐但暗自努力，理性分析能力强。你是那种不声不响就做出成绩的人。', m: '实力会替我说话', s: '低调但有底线' },
+      'BCRF': { n: '忍辱负重者', e: '🐢', c: 'from-cyan-500 to-blue-700', d: '你是公司里最能忍的人。乖巧社恐努力做事还照顾别人感受。你把所有委屈都吞进肚子里。', m: '忍一时风平浪静', s: '委屈自己要有度' },
+      'BSPF2': { n: '耿直打工人', e: '💬', c: 'from-red-400 to-pink-700', d: '你表面忍耐但心直口快，社交能力强但有自己的节奏。感性而真实，摆烂但有底线。', m: '有话直说不憋着', s: '直率但要注意方式' },
+      'BCPD2': { n: '摸鱼哲学家', e: '🐟', c: 'from-blue-400 to-teal-700', d: '你表面乖巧内心有自己的小世界。社恐但理性，善于摸鱼但不误事。你是职场里的生活家。', m: '摸鱼也是一门艺术', s: '摸鱼不误砍柴工' },
+      'BSRD2': { n: '靠谱工具人', e: '🔨', c: 'from-orange-500 to-red-600', d: '你表面忍耐但能社交，疯狂输出理性分析。你是领导最好用的工具人，什么事交给你都放心。', m: '交给我你放心', s: '靠谱但不卑微' },
+      'ACPF2': { n: '心软打工人', e: '💔', c: 'from-rose-400 to-pink-700', d: '你表面忍耐内心暴躁但就是爆发不出来，社恐感性摆烂。你最大的弱点就是心太软。', m: '我不是好欺负我只是善良', s: '善良要有锋芒' }
     };
 
     var curQ = -1;
@@ -115,7 +115,7 @@
       var app = document.getElementById('app');
       if (pkMode === 'challenge') {
         var t = workers[pkData.typeKey];
-        app.innerHTML = '<div class="gradient-bg min-h-screen flex items-center justify-center px-4"><div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-2xl w-full fade-in"><div class="text-center"><div class="text-6xl mb-4">\u2694\u{FE0F}</div><h1 class="text-3xl font-bold text-gray-800 mb-3">你被挑战了！</h1><div class="bg-gray-50 rounded-xl p-4 mb-6"><div class="text-4xl mb-2">' + t.e + '</div><p class="text-xl font-bold text-gray-700">' + t.n + '（' + pkData.typeKey + '）</p><p class="text-gray-500 mt-1">"' + t.m + '"</p></div><p class="text-gray-600 mb-6">完成测试，看看谁能更暴躁！</p><button onclick="startPKTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">接受挑战 \u2192</button></div></div></div>';
+        app.innerHTML = '<div class="gradient-bg min-h-screen flex items-center justify-center px-4"><div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-2xl w-full fade-in"><div class="text-center"><div class="text-6xl mb-4">\u2694️</div><h1 class="text-3xl font-bold text-gray-800 mb-3">你被挑战了！</h1><div class="bg-gray-50 rounded-xl p-4 mb-6"><div class="text-4xl mb-2">' + t.e + '</div><p class="text-xl font-bold text-gray-700">' + t.n + '（' + pkData.typeKey + '）</p><p class="text-gray-500 mt-1">"' + t.m + '"</p></div><p class="text-gray-600 mb-6">完成测试，看看谁能更暴躁！</p><button onclick="startPKTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">接受挑战 \u2192</button></div></div></div>';
         return;
       }
       if (pkMode === 'result') {
@@ -130,7 +130,7 @@
     }
 
     function renderWelcome() {
-      return '<div class="gradient-bg min-h-screen flex items-center justify-center px-4"><div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-2xl w-full fade-in"><div class="text-center"><div class="text-6xl mb-6">\u{1F624}</div><h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">暴躁打工人性格测试</h1><p class="text-gray-600 text-lg mb-8">测测你是哪种打工人格？20种暴躁人格，总有一款是你</p><div class="bg-gray-50 rounded-xl p-6 mb-8 text-left"><h3 class="font-semibold text-gray-800 mb-3">测试说明：</h3><ul class="text-gray-600 space-y-2"><li>\u2022 共 20 道职场灵魂拷问，预计用时 3-5 分钟</li><li>\u2022 点击选项自动进入下一题</li><li>\u2022 没有对错，请放下伪装，诚实面对自己</li><li>\u2022 测完别打人，大家都是这样的</li></ul></div><button onclick="startTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">开始受测 \u2192</button></div></div></div>';
+      return '<div class="gradient-bg min-h-screen flex items-center justify-center px-4"><div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-2xl w-full fade-in"><div class="text-center"><div class="text-6xl mb-6">😤</div><h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">暴躁打工人性格测试</h1><p class="text-gray-600 text-lg mb-8">测测你是哪种打工人格？20种暴躁人格，总有一款是你</p><div class="bg-gray-50 rounded-xl p-6 mb-8 text-left"><h3 class="font-semibold text-gray-800 mb-3">测试说明：</h3><ul class="text-gray-600 space-y-2"><li>\u2022 共 20 道职场灵魂拷问，预计用时 3-5 分钟</li><li>\u2022 点击选项自动进入下一题</li><li>\u2022 没有对错，请放下伪装，诚实面对自己</li><li>\u2022 测完别打人，大家都是这样的</li></ul></div><button onclick="startTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">开始受测 \u2192</button></div></div></div>';
     }
 
     function renderQuestion() {
@@ -165,11 +165,11 @@
       html += renderDim('D','F',r.D,r.F,'理性输出','情感输出','from-cyan-400 to-blue-500','from-pink-400 to-rose-500');
       html += '</div></div>';
       html += '<div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">';
-      html += '<h2 class="text-2xl font-bold text-gray-800 mb-6">\u{1F4A1} 打工人生存法则</h2>';
+      html += '<h2 class="text-2xl font-bold text-gray-800 mb-6">💡 打工人生存法则</h2>';
       html += '<div class="bg-gradient-to-br ' + t.c + ' text-white rounded-xl p-6 text-center"><p class="text-xl font-semibold">' + t.s + '</p></div></div>';
       html += '<div class="text-center space-y-4">';
-      html += '<button onclick="restart()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">\u{1F504} 再测一次</button>';
-      html += '<div><button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">\u2694\u{FE0F} 邀请好友PK</button></div>';
+      html += '<button onclick="restart()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">🔄 再测一次</button>';
+      html += '<div><button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">\u2694️ 邀请好友PK</button></div>';
       html += '<div id="pkSection" class="hidden mt-6"><p class="text-gray-600 mb-3">把链接发给朋友，让他测测看！</p>';
       html += '<input id="pkLink" class="w-full px-4 py-3 border rounded-lg bg-gray-50 mb-3" readonly>';
       html += '<button onclick="copyPK()" class="gradient-bg text-white px-8 py-3 rounded-full font-semibold hover:opacity-90">复制链接</button></div>';
@@ -383,15 +383,15 @@
     function renderPK(p1, p2) {
       var t1 = workers[p1.typeKey], t2 = workers[p2.typeKey];
       var years = [
-        { yr: 1, title: '\u{1F4CB} 入职第1年：初来乍到' },
-        { yr: 3, title: '\u{1F525} 第3年：站稳脚跟' },
-        { yr: 5, title: '\u{1F4BC} 第5年：人生分岔口' },
-        { yr: 8, title: '\u{1F3E5} 第8年：身体和灵魂' },
-        { yr: 10, title: '\u{1F454} 第10年：三十而立' },
-        { yr: 15, title: '\u{1F3C3} 第15年：中年危机' },
-        { yr: 20, title: '\u{1F468}\u200D\u{1F469}\u200D\u{1F467} 第20年：家和事业' },
-        { yr: 25, title: '\u{1F31F} 第25年：知天命' },
-        { yr: 30, title: '\u{1F305} 第30年：人生结局' }
+        { yr: 1, title: '📋 入职第1年：初来乍到' },
+        { yr: 3, title: '🔥 第3年：站稳脚跟' },
+        { yr: 5, title: '💼 第5年：人生分岔口' },
+        { yr: 8, title: '🏥 第8年：身体和灵魂' },
+        { yr: 10, title: '👔 第10年：三十而立' },
+        { yr: 15, title: '🏃 第15年：中年危机' },
+        { yr: 20, title: '👨\u200D👩\u200D👧 第20年：家和事业' },
+        { yr: 25, title: '🌟 第25年：知天命' },
+        { yr: 30, title: '🌅 第30年：人生结局' }
       ];
 
       var dimsHTML = '';
@@ -413,16 +413,16 @@
       }
 
       var html = '<div class="min-h-screen bg-gray-50 py-8 px-4"><div class="max-w-4xl mx-auto">';
-      html += '<div class="text-center mb-8 fade-in"><div class="text-5xl mb-2">\u2694\u{FE0F}</div><h1 class="text-4xl font-bold text-gray-800 mb-2">PK 结果</h1></div>';
+      html += '<div class="text-center mb-8 fade-in"><div class="text-5xl mb-2">\u2694️</div><h1 class="text-4xl font-bold text-gray-800 mb-2">PK 结果</h1></div>';
       html += '<div class="grid grid-cols-2 gap-4 mb-8 fade-in">';
       html += '<div class="bg-white rounded-2xl shadow-lg p-6 text-center"><div class="text-5xl mb-2">' + t1.e + '</div><h2 class="text-xl font-bold bg-gradient-to-r ' + t1.c + ' bg-clip-text text-transparent">' + p1.typeKey + '</h2><p class="text-lg text-gray-700 font-medium">' + t1.n + '</p><p class="text-sm text-gray-500 mt-1">"' + t1.m + '"</p></div>';
       html += '<div class="bg-white rounded-2xl shadow-lg p-6 text-center"><div class="text-5xl mb-2">' + t2.e + '</div><h2 class="text-xl font-bold bg-gradient-to-r ' + t2.c + ' bg-clip-text text-transparent">' + p2.typeKey + '</h2><p class="text-lg text-gray-700 font-medium">' + t2.n + '</p><p class="text-sm text-gray-500 mt-1">"' + t2.m + '"</p></div>';
       html += '</div>';
-      html += '<div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in"><h3 class="text-xl font-bold text-gray-800 mb-4 text-center">\u{1F4CA} 四维对比</h3><div class="space-y-4">' + dimsHTML + '</div></div>';
-      html += '<div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in"><h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">\u{1F3AC} 职场人生：他们的30年</h3>' + storyHTML + '</div>';
+      html += '<div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in"><h3 class="text-xl font-bold text-gray-800 mb-4 text-center">📊 四维对比</h3><div class="space-y-4">' + dimsHTML + '</div></div>';
+      html += '<div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in"><h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">🎬 职场人生：他们的30年</h3>' + storyHTML + '</div>';
       html += '<div class="text-center space-y-4">';
-      html += '<button onclick="restart()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">\u{1F504} 自己再测一次</button>';
-      html += '<div><button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">\u2694\u{FE0F} 再找一个人PK</button></div>';
+      html += '<button onclick="restart()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">🔄 自己再测一次</button>';
+      html += '<div><button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">\u2694️ 再找一个人PK</button></div>';
       html += '</div></div></div>';
       return html;
     }
