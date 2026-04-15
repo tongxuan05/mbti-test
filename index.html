@@ -8,1087 +8,360 @@
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
   <style>
     * { font-family: 'Noto Sans SC', sans-serif; }
-    .gradient-bg {
-      background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-    }
-    .card-hover:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-    }
-    .option-btn {
-      transition: all 0.3s ease;
-    }
-    .option-btn:hover {
-      transform: scale(1.02);
-    }
-    .option-btn.selected {
-      background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
-      color: white;
-      border-color: transparent;
-    }
-    .progress-bar {
-      transition: width 0.5s ease;
-    }
-    .fade-in {
-      animation: fadeIn 0.5s ease-in;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    .dimension-card {
-      transition: all 0.3s ease;
-    }
-    .dimension-card:hover {
-      transform: scale(1.05);
-    }
+    .gradient-bg { background: linear-gradient(135deg, #f97316 0%, #ef4444 100%); }
+    .option-btn { transition: all 0.2s ease; }
+    .option-btn:hover { transform: scale(1.02); }
+    .option-btn.selected { background: linear-gradient(135deg, #f97316 0%, #ef4444 100%); color: white; border-color: transparent; }
+    .progress-bar { transition: width 0.3s ease; }
+    .fade-in { animation: fadeIn 0.4s ease-in; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
   <div id="app"></div>
-
   <script>
     const questions = [
-      // A/B 维度：爆发型 / 忍耐型 (Anger expression)
       { id: 1, dimension: 'AB', text: '晚上10点刚下班到家，老板钉钉发来消息："有个小问题你顺手处理下"，你会？', options: [
         { text: '凌晨2点钉钉回复老板并@全员："已处理完，附件是解决方案、复盘报告和明年规划"，然后继续加班到6点顺便把公司WiFi密码改了', value: 'A' },
-        { text: '直接手机关机睡觉，第二天早上说"昨晚手机被我家狗叼走啃了，现在已经成渣了"', value: 'B' }
-      ]},
+        { text: '直接手机关机睡觉，第二天早上说"昨晚手机被我家狗叼走啃了，现在已经成渣了"', value: 'B' }]},
       { id: 2, dimension: 'AB', text: '开会时老板当众diss你："你做的什么东西，大学生就这水平？"，你会？', options: [
         { text: '反手一巴掌拍在桌子上把水杯震飞，"你说什么？你再说一遍试试？"然后开始360度托马斯全旋式输出', value: 'A' },
-        { text: '低头说"对不起我改"，心里已经把老板做成了表情包发到闺蜜群', value: 'B' }
-      ]},
+        { text: '低头说"对不起我改"，心里已经把老板做成了表情包发到闺蜜群', value: 'B' }]},
       { id: 3, dimension: 'AB', text: '周五晚上11点，客户打电话说方案要大改，周一早上要用，你会？', options: [
         { text: '"改可以，加钱"，对方不加钱直接拉黑，顺手把号码标记为"诈骗电话"', value: 'A' },
-        { text: '"好的好的我今晚赶出来"，通宵到周日早上5点，然后发朋友圈"又是充实的一天呢"', value: 'B' }
-      ]},
+        { text: '"好的好的我今晚赶出来"，通宵到周日早上5点，然后发朋友圈"又是充实的一天呢"', value: 'B' }]},
       { id: 4, dimension: 'AB', text: '同事把他的周报甩给你说"你帮我写一下呗，我请了病假"，结果他在朋友圈晒三亚旅游，你会？', options: [
-        { text: '把截图甩到公司大群并@老板@HR@所有人："建议大家看看这位请病假去三亚的同事，顺便问一下病假条怎么开的"', value: 'A' },
-        { text: '帮他写了，然后在周报里悄悄写上"本月最大的收获是学会了替同事写周报"', value: 'B' }
-      ]},
-      { id: 5, dimension: 'AB', text: '领导说"这个周末大家加个班吧，没有加班费但是可以调休"（但调休永远调不了），你会？', options: [
+        { text: '把截图甩到公司大群并@老板@HR@所有人，建议看看这位请病假去三亚的同事', value: 'A' },
+        { text: '帮他写了，然后在周报里悄悄写上"本月最大的收获是学会了替同事写周报"', value: 'B' }]},
+      { id: 5, dimension: 'AB', text: '领导说"这个周末大家加个班吧，没有加班费但是可以调休"，你会？', options: [
         { text: '"领导，上次调休我还剩48小时，要不您先批了？不批我今天可能不太加得动"', value: 'A' },
-        { text: '"好的收到"，然后周末在家打开电脑，一边刷剧一边把PPT字体从微软雅黑改成宋体假装在工作', value: 'B' }
-      ]},
-
-      // S/C 维度：社交牛人 / 社恐达人 (Social style)
+        { text: '"好的收到"，然后周末在家一边刷剧一边把PPT字体从微软雅黑改成宋体假装在工作', value: 'B' }]},
       { id: 6, dimension: 'SC', text: '公司年会要抽表演节目，你被抽中了，你会？', options: [
-        { text: '直接上台唱一首《征服》，唱到一半把西装外套脱了露出里面的"我爱工作"文化衫，最后把麦克风摔了说"谢谢大家我是XX部门的"', value: 'S' },
-        { text: '提前三天开始焦虑，年会当天凌晨发烧39度去医院，医生都说"你这烧得有点巧啊"', value: 'C' }
-      ]},
+        { text: '直接上台唱一首《征服》，唱到一半把西装外套脱了露出里面的"我爱工作"文化衫', value: 'S' },
+        { text: '提前三天开始焦虑，年会当天凌晨发烧39度去医院，医生都说"你这烧得有点巧啊"', value: 'C' }]},
       { id: 7, dimension: 'SC', text: '新来了一个实习生坐你旁边，一天到晚问你问题，你会？', options: [
         { text: '拉他进群吃午饭，"有什么不懂的尽管问，哥罩着你，但请先叫我一声师傅"', value: 'S' },
-        { text: '戴上降噪耳机播放"办公室白噪音"，实在躲不过就指着屏幕说"这个嘛...你查一下百度就知道了"', value: 'C' }
-      ]},
+        { text: '戴上降噪耳机播放"办公室白噪音"，实在躲不过就说"这个嘛...你查一下百度"', value: 'C' }]},
       { id: 8, dimension: 'SC', text: '跨部门开会，对方部门的人疯狂甩锅给你们，你会？', options: [
-        { text: '当场站起来打开投影仪放出邮件截图和聊天记录，用激光笔一条条指着怼，最后说"还有谁要甩？一起甩过来"', value: 'S' },
-        { text: '低头疯狂记笔记，表面"好的好的我们再看看"，心里已经给对方写好了悼词', value: 'C' }
-      ]},
+        { text: '当场站起来打开投影仪放出邮件截图和聊天记录，用激光笔一条条指着怼', value: 'S' },
+        { text: '低头疯狂记笔记，表面"好的好的我们再看看"，心里已经给对方写好了悼词', value: 'C' }]},
       { id: 9, dimension: 'SC', text: '老板在公司大群里@你问"这个项目进度怎么样了"，你会？', options: [
         { text: '立刻回复一个500字详细报告，附带甘特图、风险矩阵、里程碑计划和后续三个预案', value: 'S' },
-        { text: '已读不回，等老板私聊我才回"哎呀刚才在开会没看到，进度挺好的"', value: 'C' }
-      ]},
+        { text: '已读不回，等老板私聊我才回"哎呀刚才在开会没看到，进度挺好的"', value: 'C' }]},
       { id: 10, dimension: 'SC', text: '隔壁部门的小哥哥/小姐姐天天找你聊天，你会？', options: [
         { text: '聊啊！顺便问问有没有对象，没有的话周末约个饭，有的话问问能不能介绍给闺蜜/兄弟', value: 'S' },
-        { text: '表面微笑回复"嗯嗯哈哈嗯嗯"，内心"求求你了让我安静干活吧我真的不是社牛"', value: 'C' }
-      ]},
-
-      // P/R 维度：摆烂型 / 卷王型 (Work attitude)
+        { text: '表面微笑回复"嗯嗯哈哈嗯嗯"，内心"求求你了让我安静干活吧我真的不是社牛"', value: 'C' }]},
       { id: 11, dimension: 'PR', text: '手里有三个deadline，但你一点都不想干，你会？', options: [
         { text: '打开B站刷"打工人日常"视频，坚信"deadline才是第一生产力"，最后一晚咖啡当水喝奇迹般地全搞定', value: 'P' },
-        { text: '当天就开始做，做了个Excel排期表精确到每小时，提前两天全部完成还多出了一份复盘报告', value: 'R' }
-      ]},
+        { text: '当天就开始做，做了个Excel排期表精确到每小时，提前两天全部完成还多出一份复盘报告', value: 'R' }]},
       { id: 12, dimension: 'PR', text: '看到同事每天加班到12点，还在群里发"今天又充实了一天！感恩！"，你会？', options: [
         { text: '"装什么装，不就是白天摸鱼晚上补作业吗，有本事白天干完啊"', value: 'P' },
-        { text: '"大佬带带我！"然后默默把闹钟从9点改到8点半，把午休从1小时改成15分钟', value: 'R' }
-      ]},
+        { text: '"大佬带带我！"然后默默把闹钟从9点改到8点半，把午休从1小时改成15分钟', value: 'R' }]},
       { id: 13, dimension: 'PR', text: '领导给了一个没人愿意接的烂摊子项目，你会？', options: [
-        { text: '"领导，这个项目跟我专业方向不太匹配，我建议让XX来，他之前做过类似的"，精准甩锅一气呵成', value: 'P' },
-        { text: '"我来！"，然后花了一周时间梳理流程、建立SOP、把烂摊子变成了公司标杆项目，最后拿了优秀员工', value: 'R' }
-      ]},
+        { text: '"领导，这个项目跟我专业方向不太匹配，我建议让XX来"，精准甩锅一气呵成', value: 'P' },
+        { text: '"我来！"，然后花了一周时间梳理流程、建立SOP、把烂摊子变成了公司标杆项目', value: 'R' }]},
       { id: 14, dimension: 'PR', text: '你的KPI已经完成了，离年底还有3个月，你会？', options: [
         { text: '每天准时上下班，剩余时间用来考PMP、学Python、考咖啡师资格证，技多不压身', value: 'P' },
-        { text: '主动找领导要更多项目，"我想挑战一下自己"，内心"趁现在多攒点资本年底好谈涨薪"', value: 'R' }
-      ]},
+        { text: '主动找领导要更多项目，"我想挑战一下自己"，内心"趁现在多攒点资本年底好谈涨薪"', value: 'R' }]},
       { id: 15, dimension: 'PR', text: '公司有个晋升名额，但竞争对手是老板的亲戚/关系户，你会？', options: [
         { text: '算了算了，命里有时终须有，不跟关系户争，保住狗命要紧，下班买张彩票安慰自己', value: 'P' },
-        { text: '就算拼不过也要拼！准备了80页PPT、10个数据模型、3套方案，在评审会上把关系户衬成了实习生', value: 'R' }
-      ]},
-
-      // D/F 维度：理性输出 / 情感输出 (Communication style)
+        { text: '就算拼不过也要拼！准备了80页PPT、10个数据模型、3套方案，在评审会上把关系户衬成了实习生', value: 'R' }]},
       { id: 16, dimension: 'DF', text: '项目失败了，复盘会上大家都在找原因，你会？', options: [
-        { text: '拿出数据表格和鱼骨图，"第3周开始偏差率超过15%，根因是需求变更太频繁且没有走变更流程"，全程不带感情色彩', value: 'D' },
-        { text: '"大家别灰心，我们已经做得很好了，失败是成功之母，下次一定能行！"，说完带头鼓掌', value: 'F' }
-      ]},
+        { text: '拿出数据表格和鱼骨图，"第3周开始偏差率超过15%，根因是需求变更太频繁且没有走变更流程"', value: 'D' },
+        { text: '"大家别灰心，我们已经做得很好了，失败是成功之母，下次一定能行！"，说完带头鼓掌', value: 'F' }]},
       { id: 17, dimension: 'DF', text: '你最好的同事因为失误被领导骂哭了，你会？', options: [
         { text: '递上纸巾但表情严肃："哭没用，来我帮你分析一下怎么补救，第一步...第二步..."', value: 'D' },
-        { text: '陪着一起哭，"这领导就是有病，他不配骂你，走我们去楼下喝奶茶吐槽个痛快"', value: 'F' }
-      ]},
+        { text: '陪着一起哭，"这领导就是有病，他不配骂你，走我们去楼下喝奶茶吐槽个痛快"', value: 'F' }]},
       { id: 18, dimension: 'DF', text: '实习生把报告写得一塌糊涂，数据错了一大片，你会？', options: [
-        { text: '用红笔标出所有错误并在旁边写上批注，"第3段数据来源不明，第5段逻辑不通，第8段格式不对，全部重写"', value: 'D' },
-        { text: '"整体框架挺好的，思路也很清晰，就是有些小地方需要再完善一下"，然后自己偷偷帮他改了', value: 'F' }
-      ]},
+        { text: '用红笔标出所有错误并在旁边写上批注，"第3段数据来源不明，第5段逻辑不通，全部重写"', value: 'D' },
+        { text: '"整体框架挺好的，思路也很清晰，就是有些小地方需要再完善一下"，然后自己偷偷帮他改了', value: 'F' }]},
       { id: 19, dimension: 'DF', text: '朋友微信跟你吐槽"我老板太傻逼了"，你会？', options: [
         { text: '"具体什么事？把来龙去脉说清楚，我帮你分析分析该怎么应对，要不要考虑跳槽？"', value: 'D' },
-        { text: '"就是！傻逼老板千篇一律，来来来吐槽个痛快，我陪你一起骂，骂完去吃火锅"', value: 'F' }
-      ]},
+        { text: '"就是！傻逼老板千篇一律，来来来吐槽个痛快，我陪你一起骂，骂完去吃火锅"', value: 'F' }]},
       { id: 20, dimension: 'DF', text: '你背了黑锅，领导在全公司面前批评了你，但你知道真相，你会？', options: [
-        { text: '当天把证据链整理成PDF文档，包含邮件、截图、时间线，发给所有相关人员，要求召开专项会议公开澄清', value: 'D' },
-        { text: '找最信任的朋友倾诉到深夜，"我真的好委屈"，然后发条仅自己可见的朋友圈"世界以痛吻我"', value: 'F' }
-      ]}
+        { text: '当天把证据链整理成PDF文档，包含邮件、截图、时间线，发给所有相关人员要求公开澄清', value: 'D' },
+        { text: '找最信任的朋友倾诉到深夜，"我真的好委屈"，然后发条仅自己可见的朋友圈"世界以痛吻我"', value: 'F' ]}
     ];
 
-    // 20 种打工人性格类型
     const workerTypes = {
-      'ASPD': {
-        name: '职场灭霸',
-        emoji: '💀',
-        color: 'from-red-600 to-black',
-        description: '你是职场中最恐怖的存在。敢半夜2点回老板消息证明自己加到6点，敢在会议上反手拍桌子怼老板，社交场上无人能敌，疯狂内卷到所有人都害怕，做事理性到冷酷。你不是在打工，你是在统治职场。',
-        motto: '我不是来打工的，我是来教你们做事的',
-        survival: '实力碾压就是正义'
-      },
-      'ASPF': {
-        name: '暴躁老哥',
-        emoji: '🔥',
-        color: 'from-orange-500 to-red-600',
-        description: '你是公司里的"敢说担当"。不爽就说不喜欢就拒绝，社交场上游刃有余，虽然爱摆烂但关键时刻怼人一流。你的暴躁反而让人觉得你真实可爱，因为你从不背后捅刀子，要骂当面骂。',
-        motto: '我脾气不好但我很真诚，要骂就当面骂',
-        survival: '真诚+暴躁=永远的必杀技'
-      },
-      'ASRD': {
-        name: '卷王之王',
-        emoji: '👑',
-        color: 'from-yellow-500 to-amber-700',
-        description: '你敢于表达、善于社交、疯狂内卷到凌晨，理性分析每一步棋。你是领导眼中的人才核弹，但同事觉得你是内卷的罪魁祸首。你在职场如鱼得水，卷到所有人都想杀你。',
-        motto: '卷不死我的都会让我更强，然后我卷死你们',
-        survival: '适度内卷，量力而行，别卷出人命'
-      },
-      'ASRF': {
-        name: '社交悍匪',
-        emoji: '🎭',
-        color: 'from-pink-500 to-rose-700',
-        description: '你是公司的人气王兼气氛组组长。敢说敢做、社交天花板、拼命三郎还特别会照顾人。有你在的群永远不会冷场，有你的项目永远不会无聊。你就是团队的灵魂，也是老板最舍不得开除的人。',
-        motto: '工作要拼朋友更要交，但老板除外',
-        survival: '人脉是你最大的财富，但别让人脉变成债主'
-      },
-      'ACPD': {
-        name: '冷面杀手',
-        emoji: '🗡️',
-        color: 'from-slate-700 to-gray-900',
-        description: '你表面忍耐内心翻涌，社恐但理性到可怕。你不会当面爆发但会在心里记小本本，等时机成熟一击致命。做事冷静有条理，是你这种人在幕后掌控全局。别惹老实人，老实人爆发起来最恐怖。',
-        motto: '我不说不代表我不知道，我在等一个合适的时机',
-        survival: '沉默是你的保护色，但别沉默到被当成空气'
-      },
-      'ACPF': {
-        name: '委屈小可怜',
-        emoji: '😢',
-        color: 'from-blue-400 to-indigo-600',
-        description: '你是公司里最让人心疼的存在。心里有无数句MMP嘴上却说好的收到。社恐摆烂还容易心软。你总是委屈自己成全别人，每天回家后崩溃大哭。但请记得对自己好一点，你值得被温柔对待。',
-        motto: '我没关系（其实很有关系，但我不会说）',
-        survival: '学会说"不"是必修课，你已经挂科太多次了'
-      },
-      'ACRD': {
-        name: '暗黑卷王',
-        emoji: '🌑',
-        color: 'from-purple-700 to-indigo-900',
-        description: '你表面不声不响内心野心勃勃。社恐但疯狂努力做事，理性分析每一步棋。你是那种不显山露水但最后晋升最快的人。狠起来连自己都卷，同事们都不知道你什么时候偷偷做了那么多事。',
-        motto: '你们吵的时候我已经做完了，你们睡的时候我还在做',
-        survival: '实力是最好的反击，但偶尔也要让别人知道你有多强'
-      },
-      'ACRF': {
-        name: '佛系小天使',
-        emoji: '😇',
-        color: 'from-green-400 to-emerald-700',
-        description: '你是公司里最温暖的存在。默默忍耐社恐但努力工作，还特别会照顾别人的感受。你虽然不爱说话但你的行动力让人感动。你是团队的隐形守护者，所有人都离不开你但所有人都会忽略你。',
-        motto: '大家都开心就好（除了我自己）',
-        survival: '善良需要带点锋芒，不然就是懦弱'
-      },
-      'BSPD': {
-        name: '双面打工人',
-        emoji: '🎪',
-        color: 'from-teal-500 to-cyan-700',
-        description: '你表面乖巧内心暴躁。社交达人但爱摆烂，处理问题理性客观。你是那种当面说"好的收到"背后翻白眼的高手。职场双面人，演得一手好戏，奥斯卡欠你一座小金人。',
-        motto: '表面笑嘻嘻心里MMP，我演技太好了',
-        survival: '演技也是职场技能，但别把自己骗了'
-      },
-      'BSPF': {
-        name: '气氛组组长',
-        emoji: '🎉',
-        color: 'from-yellow-400 to-orange-600',
-        description: '你表面忍耐但社交能力一流。爱摆烂但特别会照顾人。你是团队的气氛组担当，虽然心里吐槽但总能把大家哄开心。有你在的地方就有笑声，但没人知道你私下哭过多少次。',
-        motto: '开心是一天不开心也是一天，那我选开心',
-        survival: '快乐是你最大的武器，但别让快乐掩盖了委屈'
-      },
-      'BSRD': {
-        name: '隐忍实干家',
-        emoji: '💪',
-        color: 'from-blue-600 to-indigo-800',
-        description: '你表面乖巧实则拼命三郎。社交不错做事更拼，理性分析是你的强项。你是那种被领导夸"踏实可靠"的人。你的忍耐和执行力是你最大的优势，但你也最容易被人当工具人使。',
-        motto: '做就做到最好，做不好就做到最好',
-        survival: '执行力决定你的上限，但要学会拒绝'
-      },
-      'BSRF': {
-        name: '职场暖男/暖女',
-        emoji: '☀️',
-        color: 'from-amber-400 to-yellow-700',
-        description: '你表面忍耐但社交能力在线，努力工作还特别体贴。你是团队里最受欢迎的存在。虽然不会拒绝别人让人心疼，但你的善良感染了身边的每一个人。你就是行走的小太阳。',
-        motto: '温暖他人也别忘了温暖自己',
-        survival: '你的善良自带光芒，但别被善良绑架'
-      },
-      'BCPD': {
-        name: '内心戏之王',
-        emoji: '🎬',
-        color: 'from-violet-500 to-purple-800',
-        description: '你表面乖巧社恐爱摆烂但内心理性分析一切。你每天在心里上演八百集职场连续剧。虽然不说但你看得比谁都清楚。你是被低估的聪明人，所有事你都知道只是不说。',
-        motto: '我心里跟明镜似的，你们那点小心思',
-        survival: '看透不说透也是一种智慧，但偶尔也要说出来'
-      },
-      'BCPF': {
-        name: '小透明打工人',
-        emoji: '🫥',
-        color: 'from-gray-400 to-gray-700',
-        description: '你是公司里最没有存在感的老实人。忍耐社恐摆烂还心软。你总是被忽略被忽视被甩锅，但你的默默付出其实很重要。请相信自己，你比你想象的更有价值，只是你太不爱表现了。',
-        motto: '我只是不爱说话不是没想法（虽然没人听）',
-        survival: '存在感需要主动刷，不然你就真透明了'
-      },
-      'BCRD': {
-        name: '低调实力派',
-        emoji: '🏆',
-        color: 'from-emerald-500 to-teal-800',
-        description: '你表面乖巧社恐但暗自努力，理性分析能力强。你是那种不声不响就做出成绩的人。不张扬但有实力，不说话但有追求。你用行动证明一切，最后所有人都被你的实力震惊。',
-        motto: '实力会替我说话，我只是懒得解释',
-        survival: '低调但有底线，触碰底线就炸'
-      },
-      'BCRF': {
-        name: '忍辱负重者',
-        emoji: '🐢',
-        color: 'from-cyan-500 to-blue-700',
-        description: '你是公司里最能忍的人。乖巧社恐努力做事还照顾别人感受。你把所有委屈都吞进肚子里，加班到凌晨5点第二天照样微笑打卡上班。正是你的忍耐和善良支撑着整个团队。你辛苦了，真的。',
-        motto: '忍一时风平浪静，退一步越想越气',
-        survival: '委屈自己要有度，过了这个度就翻脸'
-      },
-      'BSPF2': {
-        name: '耿直打工人',
-        emoji: '💬',
-        color: 'from-red-400 to-pink-700',
-        description: '你表面忍耐但心直口快，社交能力强但有自己的节奏。感性而真实，摆烂但有底线。你是团队里最真实的声音，有什么说什么，从不藏着掖着。你最大的优点和缺点都是太真实了。',
-        motto: '有话直说不憋着，憋着伤身体',
-        survival: '直率但要注意方式，不然容易没朋友'
-      },
-      'BCPD2': {
-        name: '摸鱼哲学家',
-        emoji: '🐟',
-        color: 'from-blue-400 to-teal-700',
-        description: '你表面乖巧内心有自己的小世界。社恐但理性，善于摸鱼但不误事。你是职场里的生活家，知道工作与生活的平衡之道。你能在摸鱼的同时把活干得漂漂亮亮，这才是真本事。',
-        motto: '摸鱼也是一门艺术，我是一级摸鱼大师',
-        survival: '摸鱼不误砍柴工，关键是摸完鱼还能干活'
-      },
-      'BSRD2': {
-        name: '靠谱工具人',
-        emoji: '🔨',
-        color: 'from-orange-500 to-red-600',
-        description: '你表面忍耐但能社交，疯狂输出理性分析。你是领导最好用的工具人，什么事交给你都放心。你加班到凌晨6点第二天照样精神抖擞。但请记得，工具人也需要被珍惜，要学会要价。',
-        motto: '交给我你放心，但加钱的事也可以谈',
-        survival: '靠谱但不卑微，好用但要加价'
-      },
-      'ACPF2': {
-        name: '心软打工人',
-        emoji: '💔',
-        color: 'from-rose-400 to-pink-700',
-        description: '你表面忍耐内心暴躁但就是爆发不出来，社恐感性摆烂。你最大的弱点就是心太软，别人一说好话你就答应了，帮别人干活还倒贴。请学会保护自己，你的善良很珍贵，不是每个人都配得上。',
-        motto: '我不是好欺负我只是善良（但快被逼疯了）',
-        survival: '善良要有锋芒，不然就是好欺负'
-      }
+      'ASPD': { name: '职场灭霸', emoji: '\u{1F480}', color: 'from-red-600 to-black', description: '你是职场中最恐怖的存在。敢半夜2点回老板消息证明自己加到6点，敢在会议上反手拍桌子怼老板，社交场上无人能敌，疯狂内卷到所有人都害怕，做事理性到冷酷。你不是在打工，你是在统治职场。', motto: '我不是来打工的，我是来教你们做事的', survival: '实力碾压就是正义' },
+      'ASPF': { name: '暴躁老哥', emoji: '\u{1F525}', color: 'from-orange-500 to-red-600', description: '你是公司里的"敢说担当"。不爽就说不喜欢就拒绝，社交场上游刃有余，虽然爱摆烂但关键时刻怼人一流。你的暴躁反而让人觉得你真实可爱。', motto: '我脾气不好但我很真诚', survival: '真诚+暴躁=永远的必杀技' },
+      'ASRD': { name: '卷王之王', emoji: '\u{1F451}', color: 'from-yellow-500 to-amber-700', description: '你敢于表达、善于社交、疯狂内卷到凌晨，理性分析每一步棋。你是领导眼中的人才核弹，但同事觉得你是内卷的罪魁祸首。', motto: '卷不死我的都会让我更强', survival: '适度内卷，量力而行' },
+      'ASRF': { name: '社交悍匪', emoji: '\u{1F3AD}', color: 'from-pink-500 to-rose-700', description: '你是公司的人气王兼气氛组组长。敢说敢做、社交天花板、拼命三郎还特别会照顾人。有你在的群永远不会冷场。', motto: '工作要拼朋友更要交', survival: '人脉是你最大的财富' },
+      'ACPD': { name: '冷面杀手', emoji: '\u{1F5E1}\u{FE0F}', color: 'from-slate-700 to-gray-900', description: '你表面忍耐内心翻涌，社恐但理性到可怕。你不会当面爆发但会在心里记小本本，等时机成熟一击致命。', motto: '我不说不代表我不知道', survival: '沉默是你的保护色' },
+      'ACPF': { name: '委屈小可怜', emoji: '\u{1F622}', color: 'from-blue-400 to-indigo-600', description: '你是公司里最让人心疼的存在。心里有无数句MMP嘴上却说好的收到。社恐摆烂还容易心软。', motto: '我没关系（其实很有关系）', survival: '学会说"不"是必修课' },
+      'ACRD': { name: '暗黑卷王', emoji: '\u{1F311}', color: 'from-purple-700 to-indigo-900', description: '你表面不声不响内心野心勃勃。社恐但疯狂努力做事，理性分析每一步棋。你是那种不显山露水但最后晋升最快的人。', motto: '你们吵的时候我已经做完了', survival: '实力是最好的反击' },
+      'ACRF': { name: '佛系小天使', emoji: '\u{1F607}', color: 'from-green-400 to-emerald-700', description: '你是公司里最温暖的存在。默默忍耐社恐但努力工作，还特别会照顾别人的感受。你是团队的隐形守护者。', motto: '大家都开心就好', survival: '善良需要带点锋芒' },
+      'BSPD': { name: '双面打工人', emoji: '\u{1F3AA}', color: 'from-teal-500 to-cyan-700', description: '你表面乖巧内心暴躁。社交达人但爱摆烂，处理问题理性客观。职场双面人，演得一手好戏。', motto: '表面笑嘻嘻心里MMP', survival: '演技也是职场技能' },
+      'BSPF': { name: '气氛组组长', emoji: '\u{1F389}', color: 'from-yellow-400 to-orange-600', description: '你表面忍耐但社交能力一流。爱摆烂但特别会照顾人。你是团队的气氛组担当。', motto: '开心是一天不开心也是一天', survival: '快乐是你最大的武器' },
+      'BSRD': { name: '隐忍实干家', emoji: '\u{1F4AA}', color: 'from-blue-600 to-indigo-800', description: '你表面乖巧实则拼命三郎。社交不错做事更拼，理性分析是你的强项。你是那种被领导夸"踏实可靠"的人。', motto: '做就做到最好', survival: '执行力决定你的上限' },
+      'BSRF': { name: '职场暖男/暖女', emoji: '\u{2600}\u{FE0F}', color: 'from-amber-400 to-yellow-700', description: '你表面忍耐但社交能力在线，努力工作还特别体贴。你是团队里最受欢迎的存在。', motto: '温暖他人也别忘了温暖自己', survival: '你的善良自带光芒' },
+      'BCPD': { name: '内心戏之王', emoji: '\u{1F3AC}', color: 'from-violet-500 to-purple-800', description: '你表面乖巧社恐爱摆烂但内心理性分析一切。你每天在心里上演八百集职场连续剧。', motto: '我心里跟明镜似的', survival: '看透不说透也是智慧' },
+      'BCPF': { name: '小透明打工人', emoji: '\u{1FAE5}', color: 'from-gray-400 to-gray-700', description: '你是公司里最没有存在感的老实人。忍耐社恐摆烂还心软。你总是被忽略被忽视被甩锅。', motto: '我只是不爱说话', survival: '存在感需要主动刷' },
+      'BCRD': { name: '低调实力派', emoji: '\u{1F3C6}', color: 'from-emerald-500 to-teal-800', description: '你表面乖巧社恐但暗自努力，理性分析能力强。你是那种不声不响就做出成绩的人。', motto: '实力会替我说话', survival: '低调但有底线' },
+      'BCRF': { name: '忍辱负重者', emoji: '\u{1F422}', color: 'from-cyan-500 to-blue-700', description: '你是公司里最能忍的人。乖巧社恐努力做事还照顾别人感受。你把所有委屈都吞进肚子里。', motto: '忍一时风平浪静', survival: '委屈自己要有度' },
+      'BSPF2': { name: '耿直打工人', emoji: '\u{1F4AC}', color: 'from-red-400 to-pink-700', description: '你表面忍耐但心直口快，社交能力强但有自己的节奏。感性而真实，摆烂但有底线。', motto: '有话直说不憋着', survival: '直率但要注意方式' },
+      'BCPD2': { name: '摸鱼哲学家', emoji: '\u{1F41F}', color: 'from-blue-400 to-teal-700', description: '你表面乖巧内心有自己的小世界。社恐但理性，善于摸鱼但不误事。你是职场里的生活家。', motto: '摸鱼也是一门艺术', survival: '摸鱼不误砍柴工' },
+      'BSRD2': { name: '靠谱工具人', emoji: '\u{1F528}', color: 'from-orange-500 to-red-600', description: '你表面忍耐但能社交，疯狂输出理性分析。你是领导最好用的工具人，什么事交给你都放心。', motto: '交给我你放心', survival: '靠谱但不卑微' },
+      'ACPF2': { name: '心软打工人', emoji: '\u{1F494}', color: 'from-rose-400 to-pink-700', description: '你表面忍耐内心暴躁但就是爆发不出来，社恐感性摆烂。你最大的弱点就是心太软。', motto: '我不是好欺负我只是善良', survival: '善良要有锋芒' }
     };
 
-    // 20 types mapping
-    const typeKeys = [
-      'ASPD', 'ASPF', 'ASRD', 'ASRF',
-      'ACPD', 'ACPF', 'ACRD', 'ACRF',
-      'BSPD', 'BSPF', 'BSRD', 'BSRF',
-      'BCPD', 'BCPF', 'BCRD', 'BCRF',
-      'BSPF2', 'BCPD2', 'BSRD2', 'ACPF2'
-    ];
-
     const typeDataMap = {
-      'ASPD': workerTypes['ASPD'],
-      'ASPF': workerTypes['ASPF'],
-      'ASRD': workerTypes['ASRD'],
-      'ASRF': workerTypes['ASRF'],
-      'ACPD': workerTypes['ACPD'],
-      'ACPF': workerTypes['ACPF'],
-      'ACRD': workerTypes['ACRD'],
-      'ACRF': workerTypes['ACRF'],
-      'BSPD': workerTypes['BSPD'],
-      'BSPF': workerTypes['BSPF'],
-      'BSRD': workerTypes['BSRD'],
-      'BSRF': workerTypes['BSRF'],
-      'BCPD': workerTypes['BCPD'],
-      'BCPF': workerTypes['BCPF'],
-      'BCRD': workerTypes['BCRD'],
-      'BCRF': workerTypes['BCRF'],
-      'BSPF2': workerTypes['BSPF2'],
-      'BCPD2': workerTypes['BCPD2'],
-      'BSRD2': workerTypes['BSRD2'],
-      'ACPF2': workerTypes['ACPF2']
+      'ASPD': workerTypes['ASPD'], 'ASPF': workerTypes['ASPF'], 'ASRD': workerTypes['ASRD'], 'ASRF': workerTypes['ASRF'],
+      'ACPD': workerTypes['ACPD'], 'ACPF': workerTypes['ACPF'], 'ACRD': workerTypes['ACRD'], 'ACRF': workerTypes['ACRF'],
+      'BSPD': workerTypes['BSPD'], 'BSPF': workerTypes['BSPF'], 'BSRD': workerTypes['BSRD'], 'BSRF': workerTypes['BSRF'],
+      'BCPD': workerTypes['BCPD'], 'BCPF': workerTypes['BCPF'], 'BCRD': workerTypes['BCRD'], 'BCRF': workerTypes['BCRF'],
+      'BSPF2': workerTypes['BSPF2'], 'BCPD2': workerTypes['BCPD2'], 'BSRD2': workerTypes['BSRD2'], 'ACPF2': workerTypes['ACPF2']
     };
 
     let currentQuestion = 0;
     let answers = {};
+    let pkMode = 'none';
+    let pkData = null;
 
     function render() {
       const app = document.getElementById('app');
-      
-      if (currentQuestion === -1) {
-        app.innerHTML = renderWelcome();
-      } else if (currentQuestion < questions.length) {
-        app.innerHTML = renderQuestion();
-      } else {
-        app.innerHTML = renderResult();
+      if (pkMode === 'challenge') {
+        const t = typeDataMap[pkData.typeKey];
+        app.innerHTML = `<div class="gradient-bg min-h-screen flex items-center justify-center px-4"><div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-2xl w-full fade-in"><div class="text-center"><div class="text-6xl mb-4">\u2694\u{FE0F}</div><h1 class="text-3xl font-bold text-gray-800 mb-3">你被挑战了！</h1><div class="bg-gray-50 rounded-xl p-4 mb-6"><div class="text-4xl mb-2">${t.emoji}</div><p class="text-xl font-bold text-gray-700">${t.name}（${pkData.typeKey}）</p><p class="text-gray-500 mt-1">"${t.motto}"</p></div><p class="text-gray-600 mb-6">完成测试，看看谁能更暴躁！</p><button onclick="startPKTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">接受挑战 \u2192</button></div></div></div>`;
+        return;
       }
+      if (pkMode === 'result') {
+        const result = calculateResult();
+        const p2 = { typeKey: result.typeKey, name: typeDataMap[result.typeKey].name, emoji: typeDataMap[result.typeKey].emoji, color: typeDataMap[result.typeKey].color, motto: typeDataMap[result.typeKey].motto, scores: { A: result.A, B: result.B, S: result.S, C: result.C, P: result.P, R: result.R, D: result.D, F: result.F } };
+        app.innerHTML = renderPKResult(pkData, p2);
+        return;
+      }
+      if (currentQuestion === -1) { app.innerHTML = renderWelcome(); }
+      else if (currentQuestion < questions.length) { app.innerHTML = renderQuestion(); }
+      else { app.innerHTML = renderResult(); }
     }
 
     function renderWelcome() {
-      return `
-        <div class="gradient-bg min-h-screen flex items-center justify-center px-4">
-          <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-2xl w-full fade-in">
-            <div class="text-center">
-              <div class="text-6xl mb-6">😤</div>
-              <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">暴躁打工人性格测试</h1>
-              <p class="text-gray-600 text-lg mb-8">
-                测测你是哪种打工人格？20种暴躁人格，总有一款是你
-              </p>
-              <div class="bg-gray-50 rounded-xl p-6 mb-8 text-left">
-                <h3 class="font-semibold text-gray-800 mb-3">测试说明：</h3>
-                <ul class="text-gray-600 space-y-2">
-                  <li>• 共 20 道职场灵魂拷问，预计用时 3-5 分钟</li>
-                  <li>• 每题有两个选项，请选择你最真实的反应</li>
-                  <li>• 没有对错，请放下伪装，诚实面对自己</li>
-                  <li>• 测完别打人，大家都是这样的</li>
-                </ul>
-              </div>
-              <button onclick="startTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
-                开始受测 →
-              </button>
-            </div>
-          </div>
-        </div>
-      `;
+      return `<div class="gradient-bg min-h-screen flex items-center justify-center px-4"><div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-2xl w-full fade-in"><div class="text-center"><div class="text-6xl mb-6">\u{1F624}</div><h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">暴躁打工人性格测试</h1><p class="text-gray-600 text-lg mb-8">测测你是哪种打工人格？20种暴躁人格，总有一款是你</p><div class="bg-gray-50 rounded-xl p-6 mb-8 text-left"><h3 class="font-semibold text-gray-800 mb-3">测试说明：</h3><ul class="text-gray-600 space-y-2"><li>\u2022 共 20 道职场灵魂拷问，预计用时 3-5 分钟</li><li>\u2022 点击选项自动进入下一题</li><li>\u2022 没有对错，请放下伪装，诚实面对自己</li><li>\u2022 测完别打人，大家都是这样的</li></ul></div><button onclick="startTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">开始受测 \u2192</button></div></div></div>`;
     }
 
     function renderQuestion() {
       const q = questions[currentQuestion];
-      const progress = ((currentQuestion) / questions.length) * 100;
+      const progress = ((currentQuestion + 1) / questions.length) * 100;
       const selectedAnswer = answers[q.id];
-
-      return `
-        <div class="min-h-screen bg-gray-50 py-8 px-4">
-          <div class="max-w-2xl mx-auto">
-            <div class="bg-white rounded-full h-3 mb-8 shadow-sm">
-              <div class="progress-bar gradient-bg h-3 rounded-full" style="width: ${progress}%"></div>
-            </div>
-            <div class="text-center mb-4 text-gray-600">
-              第 ${currentQuestion + 1} / ${questions.length} 题
-            </div>
-            
-            <div class="bg-white rounded-2xl shadow-lg p-8 fade-in">
-              <h2 class="text-2xl font-semibold text-gray-800 mb-8 text-center">${q.text}</h2>
-              
-              <div class="space-y-4">
-                ${q.options.map((opt, idx) => `
-                  <button
-                    onclick="selectAnswer(${q.id}, '${opt.value}')"
-                    class="option-btn w-full p-5 border-2 rounded-xl text-left text-lg ${selectedAnswer === opt.value ? 'selected' : 'border-gray-200 hover:border-orange-400'}"
-                  >
-                    <div class="flex items-center">
-                      <div class="w-8 h-8 rounded-full border-2 flex items-center justify-center mr-4 ${selectedAnswer === opt.value ? 'border-white bg-white bg-opacity-20' : 'border-gray-300'}">
-                        ${String.fromCharCode(65 + idx)}
-                      </div>
-                      <span>${opt.text}</span>
-                    </div>
-                  </button>
-                `).join('')}
-              </div>
-              
-              <div class="flex justify-between mt-8 pt-6 border-t">
-                <button
-                  onclick="prevQuestion()"
-                  class="px-6 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors ${currentQuestion === 0 ? 'invisible' : ''}"
-                >
-                  ← 上一题
-                </button>
-                <button
-                  onclick="nextQuestion()"
-                  class="px-8 py-3 rounded-lg gradient-bg text-white font-semibold hover:opacity-90 transition-opacity ${!selectedAnswer ? 'opacity-50 cursor-not-allowed' : ''}"
-                  ${!selectedAnswer ? 'disabled' : ''}
-                >
-                  ${currentQuestion === questions.length - 1 ? '查看我是什么打工人' : '下一题 →'}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
+      return `<div class="min-h-screen bg-gray-50 py-8 px-4"><div class="max-w-2xl mx-auto"><div class="bg-white rounded-full h-3 mb-8 shadow-sm"><div class="progress-bar gradient-bg h-3 rounded-full" style="width: ${progress}%"></div></div><div class="text-center mb-4 text-gray-600">第 ${currentQuestion + 1} / ${questions.length} 题</div><div class="bg-white rounded-2xl shadow-lg p-8 fade-in"><h2 class="text-2xl font-semibold text-gray-800 mb-8 text-center">${q.text}</h2><div class="space-y-4">${q.options.map((opt, idx) => `<button onclick="selectAnswer(${q.id}, '${opt.value}')" class="option-btn w-full p-5 border-2 rounded-xl text-left text-lg ${selectedAnswer ? 'selected' : 'border-gray-200 hover:border-orange-400'}"><div class="flex items-center"><div class="w-8 h-8 rounded-full border-2 flex items-center justify-center mr-4 ${selectedAnswer ? 'border-white bg-white bg-opacity-20' : 'border-gray-300'}">${String.fromCharCode(65 + idx)}</div><span>${opt.text}</span></div></button>`).join('')}</div><div class="flex justify-between mt-8 pt-6 border-t"><button onclick="prevQuestion()" class="px-6 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors ${currentQuestion === 0 ? 'invisible' : ''}">\u2190 上一题</button></div></div></div></div>`;
     }
 
     function renderResult() {
       const result = calculateResult();
       const type = typeDataMap[result.typeKey];
-      
-      return `
-        <div class="min-h-screen bg-gray-50 py-8 px-4">
-          <div class="max-w-4xl mx-auto">
-            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
-              <div class="text-center mb-8">
-                <div class="text-7xl mb-4">${type.emoji}</div>
-                <h1 class="text-5xl font-bold bg-gradient-to-r ${type.color} bg-clip-text text-transparent mb-2">
-                  ${result.typeKey}
-                </h1>
-                <p class="text-2xl text-gray-700 font-medium">${type.name}</p>
-              </div>
-              
-              <div class="bg-gray-50 rounded-xl p-6 mb-6 text-center">
-                <p class="text-lg font-medium text-gray-700">"${type.motto}"</p>
-              </div>
-              
-              <p class="text-gray-600 text-lg leading-relaxed mb-8">${type.description}</p>
-              
-              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                ${renderDimension('A', 'B', result.A, result.B, '爆发型', '忍耐型', 'from-red-400 to-red-600', 'from-blue-400 to-blue-600')}
-                ${renderDimension('S', 'C', result.S, result.C, '社交牛人', '社恐达人', 'from-yellow-400 to-orange-500', 'from-indigo-400 to-indigo-600')}
-                ${renderDimension('P', 'R', result.P, result.R, '摆烂型', '卷王型', 'from-green-400 to-green-600', 'from-amber-400 to-amber-600')}
-                ${renderDimension('D', 'F', result.D, result.F, '理性输出', '情感输出', 'from-cyan-400 to-blue-500', 'from-pink-400 to-rose-500')}
-              </div>
-            </div>
-            
-            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
-              <h2 class="text-2xl font-bold text-gray-800 mb-6">💡 打工人生存法则</h2>
-              <div class="bg-gradient-to-br ${type.color} text-white rounded-xl p-6 text-center">
-                <p class="text-xl font-semibold">${type.survival}</p>
-              </div>
-            </div>
-            
-            <div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in">
-              <h2 class="text-2xl font-bold text-gray-800 mb-4">📊 你的打工人画像</h2>
-              <div class="grid grid-cols-2 gap-4">
-                <div class="bg-gray-50 rounded-xl p-4">
-                  <p class="text-sm text-gray-500 mb-1">暴躁指数</p>
-                  <div class="w-full bg-gray-200 rounded-full h-4">
-                    <div class="bg-gradient-to-r from-red-400 to-red-600 h-4 rounded-full" style="width: ${Math.round((result.A / 5) * 100)}%"></div>
-                  </div>
-                  <p class="text-right text-sm font-semibold text-gray-700 mt-1">${Math.round((result.A / 5) * 100)}%</p>
-                </div>
-                <div class="bg-gray-50 rounded-xl p-4">
-                  <p class="text-sm text-gray-500 mb-1">社交指数</p>
-                  <div class="w-full bg-gray-200 rounded-full h-4">
-                    <div class="bg-gradient-to-r from-yellow-400 to-orange-500 h-4 rounded-full" style="width: ${Math.round((result.S / 5) * 100)}%"></div>
-                  </div>
-                  <p class="text-right text-sm font-semibold text-gray-700 mt-1">${Math.round((result.S / 5) * 100)}%</p>
-                </div>
-                <div class="bg-gray-50 rounded-xl p-4">
-                  <p class="text-sm text-gray-500 mb-1">内卷指数</p>
-                  <div class="w-full bg-gray-200 rounded-full h-4">
-                    <div class="bg-gradient-to-r from-amber-400 to-amber-600 h-4 rounded-full" style="width: ${Math.round((result.R / 5) * 100)}%"></div>
-                  </div>
-                  <p class="text-right text-sm font-semibold text-gray-700 mt-1">${Math.round((result.R / 5) * 100)}%</p>
-                </div>
-                <div class="bg-gray-50 rounded-xl p-4">
-                  <p class="text-sm text-gray-500 mb-1">感性指数</p>
-                  <div class="w-full bg-gray-200 rounded-full h-4">
-                    <div class="bg-gradient-to-r from-pink-400 to-rose-500 h-4 rounded-full" style="width: ${Math.round((result.F / 5) * 100)}%"></div>
-                  </div>
-                  <p class="text-right text-sm font-semibold text-gray-700 mt-1">${Math.round((result.F / 5) * 100)}%</p>
-                </div>
-              </div>
-            </div>
-            
-            <div class="text-center space-y-4">
-              <button onclick="restartTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
-                🔄 再测一次
-              </button>
-              <div>
-                <button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
-                  ⚔️ 邀请好友PK
-                </button>
-              </div>
-              <div id="pkSection" class="hidden mt-6">
-                <div class="bg-gray-50 rounded-xl p-6">
-                  <p class="text-gray-700 font-medium mb-3">把链接发给朋友，让他也测测！</p>
-                  <div class="flex gap-2">
-                    <input id="pkLink" type="text" readonly class="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm" />
-                    <button onclick="copyPKLink()" class="gradient-bg text-white px-6 py-2 rounded-lg font-semibold text-sm">复制</button>
-                  </div>
-                  <p class="text-xs text-gray-500 mt-2">朋友测试完成后会自动跳转到 PK 对比页面</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
+      return `<div class="min-h-screen bg-gray-50 py-8 px-4"><div class="max-w-4xl mx-auto"><div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in"><div class="text-center mb-8"><div class="text-7xl mb-4">${type.emoji}</div><h1 class="text-5xl font-bold bg-gradient-to-r ${type.color} bg-clip-text text-transparent mb-2">${result.typeKey}</h1><p class="text-2xl text-gray-700 font-medium">${type.name}</p></div><div class="bg-gray-50 rounded-xl p-6 mb-6 text-center"><p class="text-lg font-medium text-gray-700">"${type.motto}"</p></div><p class="text-gray-600 text-lg leading-relaxed mb-8">${type.description}</p><div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">${renderDimension('A','B',result.A,result.B,'爆发型','忍耐型','from-red-400 to-red-600','from-blue-400 to-blue-600')}${renderDimension('S','C',result.S,result.C,'社交牛人','社恐达人','from-yellow-400 to-orange-500','from-indigo-400 to-indigo-600')}${renderDimension('P','R',result.P,result.R,'摆烂型','卷王型','from-green-400 to-green-600','from-amber-400 to-amber-600')}${renderDimension('D','F',result.D,result.F,'理性输出','情感输出','from-cyan-400 to-blue-500','from-pink-400 to-rose-500')}</div></div><div class="bg-white rounded-2xl shadow-lg p-8 mb-8 fade-in"><h2 class="text-2xl font-bold text-gray-800 mb-6">\u{1F4A1} 打工人生存法则</h2><div class="bg-gradient-to-br ${type.color} text-white rounded-xl p-6 text-center"><p class="text-xl font-semibold">${type.survival}</p></div></div><div class="text-center space-y-4"><button onclick="restartTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">\u{1F504} 再测一次</button><div><button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">\u2694\u{FE0F} 邀请好友PK</button></div><div id="pkSection" class="hidden mt-6"><div class="bg-gray-50 rounded-xl p-6"><p class="text-gray-700 font-medium mb-3">把链接发给朋友，让他也测测！</p><div class="flex gap-2"><input id="pkLink" type="text" readonly class="flex-1 bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm" /><button onclick="copyPKLink()" class="gradient-bg text-white px-6 py-2 rounded-lg font-semibold text-sm">复制</button></div></div></div></div></div></div>`;
     }
 
     function renderDimension(left, right, leftCount, rightCount, leftLabel, rightLabel, leftColor, rightColor) {
       const total = leftCount + rightCount;
       const leftPercent = Math.round((leftCount / total) * 100);
-      const rightPercent = 100 - leftPercent;
       const dominant = leftCount >= rightCount ? left : right;
-      
-      return `
-        <div class="bg-gray-50 rounded-xl p-4">
-          <div class="flex justify-between items-center mb-2">
-            <span class="font-bold text-lg bg-gradient-to-r ${leftColor} bg-clip-text text-transparent">${left}</span>
-            <span class="text-gray-500">vs</span>
-            <span class="font-bold text-lg bg-gradient-to-r ${rightColor} bg-clip-text text-transparent">${right}</span>
-          </div>
-          <div class="flex justify-between text-sm text-gray-600 mb-2">
-            <span>${leftLabel}</span>
-            <span>${rightLabel}</span>
-          </div>
-          <div class="flex h-3 rounded-full overflow-hidden bg-gray-200">
-            <div class="bg-gradient-to-r ${leftColor}" style="width: ${leftPercent}%"></div>
-            <div class="bg-gradient-to-r ${rightColor}" style="width: ${rightPercent}%"></div>
-          </div>
-          <div class="flex justify-between text-xs text-gray-500 mt-1">
-            <span>${leftPercent}%</span>
-            <span>${rightPercent}%</span>
-          </div>
-          <div class="text-center mt-2">
-            <span class="text-sm font-semibold text-gray-700">倾向：${dominant} (${dominant === left ? leftPercent : rightPercent}%)</span>
-          </div>
-        </div>
-      `;
+      return `<div class="bg-gray-50 rounded-xl p-4"><div class="flex justify-between items-center mb-2"><span class="font-bold text-lg bg-gradient-to-r ${leftColor} bg-clip-text text-transparent">${left}</span><span class="text-gray-500">vs</span><span class="font-bold text-lg bg-gradient-to-r ${rightColor} bg-clip-text text-transparent">${right}</span></div><div class="flex justify-between text-sm text-gray-600 mb-2"><span>${leftLabel}</span><span>${rightLabel}</span></div><div class="flex h-3 rounded-full overflow-hidden bg-gray-200"><div class="bg-gradient-to-r ${leftColor}" style="width: ${leftPercent}%"></div><div class="bg-gradient-to-r ${rightColor}" style="width: ${100-leftPercent}%"></div></div><div class="text-center mt-2"><span class="text-sm font-semibold text-gray-700">倾向：${dominant} (${leftPercent}%)</span></div></div>`;
     }
 
     function calculateResult() {
       const scores = { A: 0, B: 0, S: 0, C: 0, P: 0, R: 0, D: 0, F: 0 };
-      
-      Object.values(answers).forEach(value => {
-        scores[value]++;
-      });
-      
-      const dim1 = scores.A >= scores.B ? 'A' : 'B';
-      const dim2 = scores.S >= scores.C ? 'S' : 'C';
-      const dim3 = scores.P >= scores.R ? 'P' : 'R';
-      const dim4 = scores.D >= scores.F ? 'D' : 'F';
-      
-      let typeKey = dim1 + dim2 + dim3 + dim4;
-      
-      // 16 base types from the 4 dimensions
-      const baseTypes = [
-        'ASPD', 'ASPF', 'ASRD', 'ASRF',
-        'ACPD', 'ACPF', 'ACRD', 'ACRF',
-        'BSPD', 'BSPF', 'BSRD', 'BSRF',
-        'BCPD', 'BCPF', 'BCRD', 'BCRF'
-      ];
-      
-      // Remap some edge cases to the extra 4 types
-      if (baseTypes.includes(typeKey)) {
-        if (typeKey === 'BSPF' && scores.S === 5 && scores.P === 5) {
-          typeKey = 'BSPF2';
-        }
-        else if (typeKey === 'BCPD' && scores.C === 5 && scores.P === 5) {
-          typeKey = 'BCPD2';
-        }
-        else if (typeKey === 'BSRD' && scores.S === 5 && scores.R === 5) {
-          typeKey = 'BSRD2';
-        }
-        else if (typeKey === 'ACPF' && scores.A >= 3 && scores.C === 5 && scores.P >= 3 && scores.F === 5) {
-          typeKey = 'ACPF2';
-        }
-      }
-      
+      Object.values(answers).forEach(value => { scores[value]++; });
+      let typeKey = (scores.A >= scores.B ? 'A' : 'B') + (scores.S >= scores.C ? 'S' : 'C') + (scores.P >= scores.R ? 'P' : 'R') + (scores.D >= scores.F ? 'D' : 'F');
+      const baseTypes = ['ASPD','ASPF','ASRD','ASRF','ACPD','ACPF','ACRD','ACRF','BSPD','BSPF','BSRD','BSRF','BCPD','BCPF','BCRD','BCRF'];
+      if (typeKey === 'BSPF' && scores.S === 5 && scores.P === 5) typeKey = 'BSPF2';
+      else if (typeKey === 'BCPD' && scores.C === 5 && scores.P === 5) typeKey = 'BCPD2';
+      else if (typeKey === 'BSRD' && scores.S === 5 && scores.R === 5) typeKey = 'BSRD2';
+      else if (typeKey === 'ACPF' && scores.A >= 3 && scores.C === 5 && scores.P >= 3 && scores.F === 5) typeKey = 'ACPF2';
       return { typeKey, ...scores };
     }
 
-    function startTest() {
-      currentQuestion = 0;
-      answers = {};
-      render();
-    }
-
-    function selectAnswer(questionId, value) {
-      answers[questionId] = value;
-      render();
-    }
-
-    function nextQuestion() {
-      if (answers[questions[currentQuestion].id]) {
-        currentQuestion++;
-        render();
-        window.scrollTo(0, 0);
-      }
-    }
-
-    function prevQuestion() {
-      if (currentQuestion > 0) {
-        currentQuestion--;
-        render();
-        window.scrollTo(0, 0);
-      }
-    }
-
-    function restartTest() {
-      currentQuestion = -1;
-      answers = {};
-      render();
-    }
-
-    function renderPKResult(p1, p2) {
-      const t1 = typeDataMap[p1.typeKey];
-      const t2 = typeDataMap[p2.typeKey];
-      const dims = [
-        { key: 'A', label: '暴躁', color: 'from-red-400 to-red-600' },
-        { key: 'S', label: '社交', color: 'from-yellow-400 to-orange-500' },
-        { key: 'R', label: '内卷', color: 'from-amber-400 to-amber-600' },
-        { key: 'F', label: '感性', color: 'from-pink-400 to-rose-500' }
-      ];
-
-      // 计算总分用于剧情
-      const p1Scores = p1.scores;
-      const p2Scores = p2.scores;
-      
-      // 生成剧情数据
-      const story = generatePKStory(p1, p2);
-
-      return `
-        <div class="min-h-screen bg-gray-50 py-8 px-4">
-          <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-8 fade-in">
-              <div class="text-5xl mb-2">⚔️</div>
-              <h1 class="text-4xl font-bold text-gray-800 mb-2">PK 结果</h1>
-            </div>
-
-            <!-- 双方头像对比 -->
-            <div class="grid grid-cols-2 gap-4 mb-8 fade-in">
-              <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <div class="text-5xl mb-2">${t1.emoji}</div>
-                <h2 class="text-xl font-bold bg-gradient-to-r ${t1.color} bg-clip-text text-transparent">${p1.typeKey}</h2>
-                <p class="text-lg text-gray-700 font-medium">${t1.name}</p>
-                <p class="text-sm text-gray-500 mt-1">"${t1.motto}"</p>
-              </div>
-              <div class="bg-white rounded-2xl shadow-lg p-6 text-center">
-                <div class="text-5xl mb-2">${t2.emoji}</div>
-                <h2 class="text-xl font-bold bg-gradient-to-r ${t2.color} bg-clip-text text-transparent">${p2.typeKey}</h2>
-                <p class="text-lg text-gray-700 font-medium">${t2.name}</p>
-                <p class="text-sm text-gray-500 mt-1">"${t2.motto}"</p>
-              </div>
-            </div>
-
-            <!-- 四维对比 -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in">
-              <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">📊 四维对比</h3>
-              <div class="space-y-4">
-                ${dims.map(d => {
-                  const s1 = Math.round((p1Scores[d.key] / 5) * 100);
-                  const s2 = Math.round((p2Scores[d.key] / 5) * 100);
-                  return `
-                    <div>
-                      <div class="flex justify-between text-sm mb-1">
-                        <span class="font-semibold text-gray-700">${d.label}指数</span>
-                      </div>
-                      <div class="flex items-center gap-2">
-                        <span class="text-xs font-bold w-8 text-right text-orange-600">${s1}%</span>
-                        <div class="flex-1 h-3 rounded-full bg-gradient-to-r ${d.color}" style="width: ${s1}%"></div>
-                        <span class="text-xs text-gray-400">|</span>
-                        <div class="flex-1 h-3 rounded-full bg-gradient-to-r ${d.color}" style="width: ${s2}%"></div>
-                        <span class="text-xs font-bold w-8 text-blue-600">${s2}%</span>
-                      </div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-
-            <!-- 剧情演绎：职场人生 -->
-            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in">
-              <h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">🎬 职场人生：他们的故事</h3>
-              ${story.map((scene, idx) => `
-                <div class="mb-8 ${idx > 0 ? 'border-t pt-8' : ''}">
-                  <div class="text-center mb-4">
-                    <span class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-1 rounded-full text-sm font-bold">${scene.title}</span>
-                  </div>
-                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-orange-50 rounded-xl p-4 border-l-4 border-orange-500">
-                      <p class="font-bold text-orange-700 mb-2">${t1.emoji} ${t1.name}</p>
-                      <p class="text-gray-700">${scene.p1}</p>
-                    </div>
-                    <div class="bg-blue-50 rounded-xl p-4 border-l-4 border-blue-500">
-                      <p class="font-bold text-blue-700 mb-2">${t2.emoji} ${t2.name}</p>
-                      <p class="text-gray-700">${scene.p2}</p>
-                    </div>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-
-            <div class="text-center space-y-4">
-              <button onclick="restartTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
-                🔄 自己再测一次
-              </button>
-              <div>
-                <button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
-                  ⚔️ 再找一个人PK
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    }
+    function startTest() { currentQuestion = 0; answers = {}; render(); }
+    function selectAnswer(questionId, value) { answers[questionId] = value; setTimeout(() => { currentQuestion++; render(); window.scrollTo(0, 0); }, 300); }
+    function prevQuestion() { if (currentQuestion > 0) { currentQuestion--; render(); window.scrollTo(0, 0); } }
+    function restartTest() { currentQuestion = -1; answers = {}; pkMode = 'none'; render(); }
+    function showPK() { document.getElementById('pkSection').classList.remove('hidden'); const result = calculateResult(); const type = typeDataMap[result.typeKey]; const data = { typeKey: result.typeKey, name: type.name, emoji: type.emoji, color: type.color, motto: type.motto, scores: { A: result.A, B: result.B, S: result.S, C: result.C, P: result.P, R: result.R, D: result.D, F: result.F } }; document.getElementById('pkLink').value = window.location.origin + window.location.pathname + '?pk=' + btoa(unescape(encodeURIComponent(JSON.stringify(data)))); }
+    function copyPKLink() { const input = document.getElementById('pkLink'); input.select(); document.execCommand('copy'); alert('链接已复制！发给朋友让他也测测'); }
+    function startPKTest() { pkMode = 'testing'; currentQuestion = 0; answers = {}; render(); window.scrollTo(0, 0); }
 
     function generatePKStory(p1, p2) {
-      const s1 = p1.scores;
-      const s2 = p2.scores;
-      
-      // 根据分数生成不同剧情
+      const s1 = p1.scores, s2 = p2.scores;
+      const t1 = typeDataMap[p1.typeKey], t2 = typeDataMap[p2.typeKey];
       const stories = [];
-
-      // 第一年：入职
-      const p1FirstYear = s1.A >= 3 
-        ? '入职第一天就把工位收拾得明明白白，看到不合理流程当场就提了意见，同事们都觉得"这人不好惹"'
-        : '入职第一天唯唯诺诺，自我介绍声音小到听不见，被安排坐到一个靠角落的工位，心里委屈但不敢说';
-      const p2FirstYear = s2.A >= 3 
-        ? '入职第一天就把工位收拾得明明白白，看到不合理流程当场就提了意见，同事们都觉得"这人不好惹"'
-        : '入职第一天唯唯诺诺，自我介绍声音小到听不见，被安排坐到一个靠角落的工位，心里委屈但不敢说';
       
-      stories.push({
-        title: '📋 入职第一天',
-        p1: p1FirstYear,
-        p2: p2FirstYear
+      function getEvent(scores, type, year) {
+        const A = scores.A, S = scores.S, P = scores.P, R = scores.R, D = scores.D, F = scores.F;
+        const name = type.name;
+        const events = {
+          1: {
+            highA: `${name}入职第一天就把不合理流程当场指出，CTO亲自下来和他聊了半小时，破格让他参与核心项目`,
+            lowA: `${name}入职第一天被安排到角落工位，三个月没人教他任何东西，靠自己摸索学会了所有系统`,
+            highR: `${name}入职第一个月就主动加班熟悉了全部门的项目文档，第二个月开始独立承担模块开发`,
+            lowR: `${name}入职后每天准时6点下班，剩余时间报了个在职研究生班，考上了985 MBA`,
+            highS: `${name}入职一周就和全公司混熟了，连保洁阿姨都知道新来了个热情的年轻人`,
+            lowS: `${name}入职一个月，部门一半人还不知道他叫什么，但他写的代码质量全组第一`
+          },
+          3: {
+            highA_highR: `${name}已经是技术骨干了，一个人扛着三个项目。年底绩效3.75，年终奖6个月，工资涨了8000。但他也开始掉头发了`,
+            highA_lowR: `${name}成了部门的"刺头"，敢怼产品经理敢怼测试。绩效3.5，不好不坏。但所有同事都站他这边`,
+            lowA_highR: `${name}默默无闻但产出惊人，一个人悄悄完成了部门40%的需求。老板终于在年终注意到他，给了3.75`,
+            lowA_lowR: `${name}三年换了2家公司，每次都是因为"和领导理念不合"。现在在一家创业公司，每天5:59收拾书包`,
+            highS: `${name}已经是部门的"交际花"兼非正式HR，谁家有困难他都帮。业绩中等但所有人都喜欢和他合作`,
+            lowS: `${name}三年在公司认识的人不超过15个，但他的技术方案被选为公司年度最佳实践`
+          },
+          5: {
+            highA_highR: `${name}跳槽到了头部大厂，年薪55万。新公司996但他如鱼得水，半年就带起了10人团队`,
+            highA_highS: `${name}被提拔为项目经理，最擅长向上管理和跨部门协调。年终述职把团队成果讲得精彩，成功P7`,
+            lowA_highR: `${name}五年没跳槽，从P5升到了P6+，年薪42万。不声不响但老板离不开他，因为"只有他靠得住"`,
+            lowA_lowR: `${name}还在做执行层，但成了自由职业者接私活，月入2万不打卡。在B站做职场吐槽UP主，有5万粉丝`,
+            highF: `${name}年薪38万，是部门人缘最好的。每年组织两次团建，同事生日记得比老婆还清楚`,
+            highD: `${name}年薪45万，用数据和流程把团队效率提升了30%。老板说他"像一台精密的机器"`
+          },
+          8: {
+            highR_highA: `${name}年薪85万，但体检报告：脂肪肝、颈椎曲度变直、甲状腺结节。老婆说"你再不回家我就带孩子走"。他在车里坐了半小时，回去继续开会`,
+            highR_lowA: `${name}年薪70万，团队管理者。每天最后一个走但不说苦。儿子作文《我的爸爸》写"爸爸总是在加班"`,
+            lowR_highS: `${name}年薪45万，创业做了个职场社交APP，融了天使轮。虽然不赚钱但认识的人遍布半个互联网圈`,
+            lowR_lowS: `${name}年薪28万，在国企做技术，每天5:30下班接孩子。周末陪儿子上乐高班，老婆说他"是个好爸爸"`,
+            highF: `${name}年薪42万，部门里所有人的情感支柱。谁失恋了他陪喝酒，谁离职了他写推荐信`,
+            highD: `${name}年薪65万，公司流程改革的推手。他设计的项目管理体系被推广到全集团`
+          },
+          10: {
+            highR_highA: `${name}年薪120万+期权，35岁当了总监。但秃了顶，儿子怕他。他在家长会上一看，所有爸爸都比他头发多`,
+            highR_lowA: `${name}年薪90万，技术VP。不擅长说话但技术决策全对。董事会说"有他在公司就稳"`,
+            lowR_highS: `${name}创业失败欠了60万，但人脉还在。前同事们都帮他介绍了新项目，他说"我欠大家的一定要还"`,
+            lowR_lowA: `${name}年薪50万，终于当上了总监。最骄傲的是团队离职率全公司最低。下属说"跟着他干活开心"`,
+            highP: `${name}35岁开始做自由顾问，按小时收费800。每周工作3天，其余时间旅行`,
+            highD_highA: `${name}自己开了咨询公司，第一年就把前雇主变成了客户。他说"我不是来交朋友的，我是来赚钱的"`
+          },
+          15: {
+            highR: `${name}40岁，公司CDO（首席数字官），手下300人。每年出差200天，在机场的时间比在家多。体检报告12项异常`,
+            lowR_highS: `${name}40岁，是一家中型公司的合伙人。不干活但认识所有人，靠"刷脸"就能搞定80%的业务`,
+            lowR_lowS: `${name}40岁，在一家公司做技术专家，不带团队但没人敢动他。每天准时下班陪女儿练钢琴`,
+            highA: `${name}40岁，因为脾气得罪了太多人，从大厂跳到了创业公司当CTO。"至少没人管我了"`,
+            lowA: `${name}40岁，终于学会了说"不"。拒绝了第三次不合理加班要求，老板反而更尊重他了`,
+            highF: `${name}40岁，公司里所有人都叫他"X哥/X姐"。他记得每个员工的生日和家属名字`,
+            highD: `${name}40岁，出版了一本《高效团队管理方法论》，卖了10万册。被请去大学当客座教授`
+          },
+          20: {
+            highR_highA: `${name}45岁，年薪200万。儿子留学去了美国，一年回来一次。妻子提出了离婚。他在律师楼签字的时候想起了25年前那个加班的晚上`,
+            highR_lowA: `${name}45岁，公司合伙人，持股5%。不说话的时候像个技术宅，说话的时候像个CEO`,
+            lowR_highS: `${name}45岁，自己开了个职场咨询工作室，帮人做职业规划。来的人排到了三个月后`,
+            lowR_lowS: `${name}45岁，在一家小公司做CTO，公司不大但幸福感很强。他每天给员工带自己做的咖啡`,
+            highP: `${name}45岁，环游世界已经走了30个国家。远程做技术顾问，年收入50万但花不完`,
+            highF: `${name}45岁，公司年会上所有人都哭了，因为他放了一段记录大家一起奋斗的视频`
+          },
+          25: {
+            highR: `${name}50岁，集团副总裁。每天4:30起床健身然后去公司。女儿说"爸爸你像个机器人"，他说"爸爸就是想给你最好的生活"`,
+            lowR: `${name}50岁，还在做自己喜欢的事：写代码。不管理任何人，但全公司的架构师都来请教他`,
+            highA: `${name}50岁，终于学会了控制脾气。因为他发现"发脾气解决不了问题，但微笑可以"`,
+            lowA: `${name}50岁，年轻时忍了太多，现在终于爆发了。辞了职去西藏开了个客栈，"我终于可以为自己活了"`,
+            highS: `${name}50岁，行业里无人不知的人脉王。他一个电话就能帮儿子找到最好的实习`,
+            lowS: `${name}50岁，依然独来独往。但他写的技术博客有100万读者，"我不需要认识所有人，让所有人认识我就够了"`,
+            highD: `${name}50岁，行业知名顾问，出场费5万/天。他的判断从没错过`,
+            highF: `${name}50岁，公司里的"定海神针"。所有人遇到事情第一个找他，因为他总能让人心安`
+          },
+          30: {
+            highR_highA: `${name}55岁退休，住进500平的别墅。花园里种满了玫瑰。有一天接到前同事电话说"公司IPO了"。他笑了笑说"挺好的"，继续修剪玫瑰。体检报告15项异常，但他有钱治`,
+            highR_lowA: `${name}55岁，公司上市那天他哭了。不是因为钱，是因为"终于对得起这些年熬的夜"。儿子回国了，说他"老了"`,
+            lowR_highS: `${name}55岁，开了第三家公司。这次不为了赚钱，为了"让年轻人少走弯路"。他的徒弟遍布互联网圈`,
+            lowR_lowS: `${name}55岁，在一家小公司做技术顾问，半退休状态。每天接送孙子上学，在小区里下棋`,
+            highP: `${name}55岁，已经在第40个国家了。发了条朋友圈"人生不是轨道，是旷野"。点赞1200个`,
+            highF: `${name}55岁，被公司授予"终身成就奖"。获奖感言是"感谢每一个陪我走过的人"`,
+            highD: `${name}55岁，他的管理方法论被写进了MBA教材。他说"我这辈子就做了一件事：把事情想清楚"`
+          }
+        };
+        let yearEvents = events[year] || {};
+        // Pick the most specific match
+        if (year === 3 && A >= 3 && R >= 3) return yearEvents.highA_highR;
+        if (year === 3 && A >= 3 && R < 3) return yearEvents.highA_lowR;
+        if (year === 3 && A < 3 && R >= 3) return yearEvents.lowA_highR;
+        if (year === 3 && A < 3 && R < 3) return yearEvents.lowA_lowR;
+        if (year === 5 && A >= 3 && R >= 3) return yearEvents.highA_highR;
+        if (year === 5 && A >= 3 && S >= 3) return yearEvents.highA_highS;
+        if (year === 5 && A < 3 && R >= 3) return yearEvents.lowA_highR;
+        if (year === 5 && A < 3 && R < 3) return yearEvents.lowA_lowR;
+        if (year === 5 && F >= 3) return yearEvents.highF;
+        if (year === 5 && D >= 3) return yearEvents.highD;
+        if (year === 8 && R >= 3 && A >= 3) return yearEvents.highR_highA;
+        if (year === 8 && R >= 3 && A < 3) return yearEvents.highR_lowA;
+        if (year === 8 && R < 3 && S >= 3) return yearEvents.lowR_highS;
+        if (year === 8 && R < 3 && S < 3) return yearEvents.lowR_lowS;
+        if (year === 8 && F >= 3) return yearEvents.highF;
+        if (year === 8 && D >= 3) return yearEvents.highD;
+        if (year === 10 && R >= 3 && A >= 3) return yearEvents.highR_highA;
+        if (year === 10 && R >= 3 && A < 3) return yearEvents.highR_lowA;
+        if (year === 10 && R < 3 && S >= 3) return yearEvents.lowR_highS;
+        if (year === 10 && R < 3 && A < 3) return yearEvents.lowR_lowA;
+        if (year === 10 && P >= 3) return yearEvents.highP;
+        if (year === 10 && D >= 3 && A >= 3) return yearEvents.highD_highA;
+        if (year === 15 && R >= 3) return yearEvents.highR;
+        if (year === 15 && R < 3 && S >= 3) return yearEvents.lowR_highS;
+        if (year === 15 && R < 3 && S < 3) return yearEvents.lowR_lowS;
+        if (year === 15 && A >= 3) return yearEvents.highA;
+        if (year === 15 && A < 3) return yearEvents.lowA;
+        if (year === 15 && F >= 3) return yearEvents.highF;
+        if (year === 15 && D >= 3) return yearEvents.highD;
+        if (year === 20 && R >= 3 && A >= 3) return yearEvents.highR_highA;
+        if (year === 20 && R >= 3 && A < 3) return yearEvents.highR_lowA;
+        if (year === 20 && R < 3 && S >= 3) return yearEvents.lowR_highS;
+        if (year === 20 && R < 3 && S < 3) return yearEvents.lowR_lowS;
+        if (year === 20 && P >= 3) return yearEvents.highP;
+        if (year === 20 && F >= 3) return yearEvents.highF;
+        if (year === 25 && R >= 3) return yearEvents.highR;
+        if (year === 25 && R < 3) return yearEvents.lowR;
+        if (year === 25 && A >= 3) return yearEvents.highA;
+        if (year === 25 && A < 3) return yearEvents.lowA;
+        if (year === 25 && S >= 3) return yearEvents.highS;
+        if (year === 25 && S < 3) return yearEvents.lowS;
+        if (year === 25 && D >= 3) return yearEvents.highD;
+        if (year === 25 && F >= 3) return yearEvents.highF;
+        if (year === 30 && R >= 3 && A >= 3) return yearEvents.highR_highA;
+        if (year === 30 && R >= 3 && A < 3) return yearEvents.highR_lowA;
+        if (year === 30 && R < 3 && S >= 3) return yearEvents.lowR_highS;
+        if (year === 30 && R < 3 && S < 3) return yearEvents.lowR_lowS;
+        if (year === 30 && P >= 3) return yearEvents.highP;
+        if (year === 30 && F >= 3) return yearEvents.highF;
+        if (year === 30 && D >= 3) return yearEvents.highD;
+        // Fallback
+        if (A >= 3) return yearEvents.highA || '';
+        if (R >= 3) return yearEvents.highR || '';
+        if (S >= 3) return yearEvents.highS || '';
+        return yearEvents.lowA || yearEvents.lowR || yearEvents.lowS || '';
+      }
+
+      const years = [
+        { year: 1, title: '\u{1F4CB} 入职第1年：初来乍到' },
+        { year: 3, title: '\u{1F525} 第3年：站稳脚跟' },
+        { year: 5, title: '\u{1F4BC} 第5年：人生分岔口' },
+        { year: 8, title: '\u{1F3E5} 第8年：身体和灵魂' },
+        { year: 10, title: '\u{1F454} 第10年：三十而立' },
+        { year: 15, title: '\u{1F3C3} 第15年：中年危机' },
+        { year: 20, title: '\u{1F468}\u200D\u{1F469}\u200D\u{1F467} 第20年：家和事业' },
+        { year: 25, title: '\u{1F31F} 第25年：知天命' },
+        { year: 30, title: '\u{1F305} 第30年：人生结局' }
+      ];
+
+      years.forEach(({ year, title }) => {
+        stories.push({ title, p1: getEvent(s1, t1, year), p2: getEvent(s2, t2, year) });
       });
-
-      // 第一年绩效考核
-      const p1Year1Result = s1.R >= 3 && s1.A >= 3 
-        ? '年底绩效拿了3.75，工资涨了5000，年终奖拿了3个月。老板说"这小伙子有冲劲"。他用奖金买了一台最新款MacBook Pro'
-        : '年底绩效拿了3.25，年终奖0.5个月，勉强及格。老板说"态度不错但产出有待提高"。他默默把绩效通知截图发到了"打工人吐槽群"';
-      const p2Year1Result = s2.R >= 3 && s2.A >= 3 
-        ? '年底绩效拿了3.75，工资涨了5000，年终奖拿了3个月。老板说"这小伙子有冲劲"。他用奖金买了一台最新款MacBook Pro'
-        : '年底绩效拿了3.25，年终奖0.5个月，勉强及格。老板说"态度不错但产出有待提高"。他默默把绩效通知截图发到了"打工人吐槽群"';
-
-      stories.push({
-        title: '💰 第一年底：绩效考核',
-        p1: p1Year1Result,
-        p2: p2Year1Result
-      });
-
-      // 第三年
-      const p1Year3 = s1.R >= 4 
-        ? '已经是团队骨干了，一个人扛着三个项目。每天早上8:30到公司，晚上10点走。被提拔为小组长，手下带了5个人，头发开始变少了'
-        : s1.S >= 3 
-          ? '混成了部门的"交际花"，谁家有困难他都帮。但业绩始终中等，被领导评价为"好人但不是将才"。他安慰自己"快乐就好"'
-          : '成了部门的透明人，开会从不发言但每次都认真做笔记。领导对他的印象是"那个...谁来着？"。他在公司三年，认识他的人不超过10个';
-      const p2Year3 = s2.R >= 4 
-        ? '已经是团队骨干了，一个人扛着三个项目。每天早上8:30到公司，晚上10点走。被提拔为小组长，手下带了5个人，头发开始变少了'
-        : s2.S >= 3 
-          ? '混成了部门的"交际花"，谁家有困难他都帮。但业绩始终中等，被领导评价为"好人但不是将才"。他安慰自己"快乐就好"'
-          : '成了部门的透明人，开会从不发言但每次都认真做笔记。领导对他的印象是"那个...谁来着？"。他在公司三年，认识他的人不超过10个';
-
-      stories.push({
-        title: '🔥 第三年：分道扬镳',
-        p1: p1Year3,
-        p2: p2Year3
-      });
-
-      // 第五年
-      const p1Year5 = s1.R >= 4 && s1.A >= 3 
-        ? '跳槽到了大厂，年薪50万。新公司加班文化严重但他如鱼得水。朋友圈签名改成了"天道酬勤"。前同事们都在给他点赞'
-        : s1.A >= 3 && s1.S >= 3 
-          ? '成了中层管理者，最擅长的是向上管理和甩锅。年终述职PPT做了80页，把团队成果说成自己的。成功晋升P7，月薪涨了8000'
-          : '还是基层员工，五年换了3家公司，每次都是因为"和领导沟通不畅"。朋友问他"你到底在坚持什么"，他说"我在坚持不加班"';
-      const p2Year5 = s2.R >= 4 && s2.A >= 3 
-        ? '跳槽到了大厂，年薪50万。新公司加班文化严重但他如鱼得水。朋友圈签名改成了"天道酬勤"。前同事们都在给他点赞'
-        : s2.A >= 3 && s2.S >= 3 
-          ? '成了中层管理者，最擅长的是向上管理和甩锅。年终述职PPT做了80页，把团队成果说成自己的。成功晋升P7，月薪涨了8000'
-          : '还是基层员工，五年换了3家公司，每次都是因为"和领导沟通不畅"。朋友问他"你到底在坚持什么"，他说"我在坚持不加班"';
-
-      stories.push({
-        title: '💼 第五年：人生分岔口',
-        p1: p1Year5,
-        p2: p2Year5
-      });
-
-      // 第八年
-      const p1Year8 = s1.R >= 4 
-        ? '年薪80万，但体检报告出来了：脂肪肝、颈椎病、轻度抑郁。老婆说"你再不辞职我就带孩子回娘家"。他在车里坐了半个小时，抽了三根烟，然后继续回公司开会'
-        : s1.F >= 3 
-          ? '年薪40万，是部门里人缘最好的人。每年组织两次部门旅游，同事们过生日他比谁都积极。老婆说他"对同事比对我还好"。他笑着说"家和万事兴嘛"'
-          : '年薪25万，在一家小公司做执行层。每天5:59准时收拾书包，6:00整打卡走人。同事觉得他太较真，他觉得同事太奴性。他在豆瓣有个小组叫"不加班联盟"，有2万粉丝';
-      const p2Year8 = s2.R >= 4 
-        ? '年薪80万，但体检报告出来了：脂肪肝、颈椎病、轻度抑郁。老婆说"你再不辞职我就带孩子回娘家"。他在车里坐了半个小时，抽了三根烟，然后继续回公司开会'
-        : s2.F >= 3 
-          ? '年薪40万，是部门里人缘最好的人。每年组织两次部门旅游，同事们过生日他比谁都积极。老婆说他"对同事比对我还好"。他笑着说"家和万事兴嘛"'
-          : '年薪25万，在一家小公司做执行层。每天5:59准时收拾书包，6:00整打卡走人。同事觉得他太较真，他觉得同事太奴性。他在豆瓣有个小组叫"不加班联盟"，有2万粉丝';
-
-      stories.push({
-        title: '🏥 第八年：身体和灵魂',
-        p1: p1Year8,
-        p2: p2Year8
-      });
-
-      // 第十年
-      const p1Year10 = s1.R >= 4 && s1.A >= 3 
-        ? '年薪120万，公司给了期权。35岁成了VP，但已经秃顶了。儿子作文《我的爸爸》里写"我爸爸是个赚钱机器，他不在家"。他看完沉默了很久，第二天给儿子报了个夏令营'
-        : s1.A >= 3 
-          ? '创业了，当了老板。第一天就给公司定了规矩：不打卡、弹性工作、项目制考核。结果公司撑了两年就倒闭了，欠了50万。他在朋友圈发了一条"我不后悔"，然后删掉了'
-          : '年薪60万，终于当上了总监。最骄傲的不是升职，而是他带出来的团队离职率全公司最低。下属说"跟着他干活开心"。他笑着回应"开心才是最重要的"';
-      const p2Year10 = s2.R >= 4 && s2.A >= 3 
-        ? '年薪120万，公司给了期权。35岁成了VP，但已经秃顶了。儿子作文《我的爸爸》里写"我爸爸是个赚钱机器，他不在家"。他看完沉默了很久，第二天给儿子报了个夏令营'
-        : s2.A >= 3 
-          ? '创业了，当了老板。第一天就给公司定了规矩：不打卡、弹性工作、项目制考核。结果公司撑了两年就倒闭了，欠了50万。他在朋友圈发了一条"我不后悔"，然后删掉了'
-          : '年薪60万，终于当上了总监。最骄傲的不是升职，而是他带出来的团队离职率全公司最低。下属说"跟着他干活开心"。他笑着回应"开心才是最重要的"';
-
-      stories.push({
-        title: '👔 第十年：终局',
-        p1: p1Year10,
-        p2: p2Year10
-      });
-
-      // 结局
-      const p1End = s1.R >= 4 
-        ? '40岁退休了，住进了别墅区。有一天在花园里修剪花草，接到前同事电话说"公司上市了"。他笑了笑说"挺好的"，然后继续修剪。他的体检报告上有8项异常指标'
-        : '40岁还在打工，但活得很开心。每天准时上下班，周末陪孩子上兴趣班。朋友问他"你不觉得遗憾吗"，他说"我老婆孩子热炕头，有什么遗憾的"';
-      const p2End = s2.R >= 4 
-        ? '40岁退休了，住进了别墅区。有一天在花园里修剪花草，接到前同事电话说"公司上市了"。他笑了笑说"挺好的"，然后继续修剪。他的体检报告上有8项异常指标'
-        : '40岁还在打工，但活得很开心。每天准时上下班，周末陪孩子上兴趣班。朋友问他"你不觉得遗憾吗"，他说"我老婆孩子热炕头，有什么遗憾的"';
-
-      stories.push({
-        title: '🌅 四十年后：人生结局',
-        p1: p1End,
-        p2: p2End
-      });
-
       return stories;
     }
 
-    function showPK() {
-      document.getElementById('pkSection').classList.remove('hidden');
-      const result = calculateResult();
-      const type = typeDataMap[result.typeKey];
-      const pkData = {
-        typeKey: result.typeKey,
-        name: type.name,
-        emoji: type.emoji,
-        color: type.color,
-        motto: type.motto,
-        scores: { A: result.A, B: result.B, S: result.S, C: result.C, P: result.P, R: result.R, D: result.D, F: result.F }
-      };
-      const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(pkData))));
-      const pkLink = window.location.origin + window.location.pathname + '?pk=' + encoded;
-      document.getElementById('pkLink').value = pkLink;
-    }
-
-    function copyPKLink() {
-      const input = document.getElementById('pkLink');
-      input.select();
-      document.execCommand('copy');
-      alert('链接已复制！发给朋友让他也测测');
-    }
-
     function renderPKResult(p1, p2) {
-      const t1 = typeDataMap[p1.typeKey];
-      const t2 = typeDataMap[p2.typeKey];
-      const dims = [
-        { key: 'A', label: '暴躁指数', color: 'from-red-400 to-red-600' },
-        { key: 'S', label: '社交指数', color: 'from-yellow-400 to-orange-500' },
-        { key: 'R', label: '内卷指数', color: 'from-amber-400 to-amber-600' },
-        { key: 'F', label: '感性指数', color: 'from-pink-400 to-rose-500' }
-      ];
-
-      let pkComment = '';
-      const p1Total = p1.scores.A + p1.scores.R;
-      const p2Total = p2.scores.A + p2.scores.R;
-      if (p1Total > p2Total + 3) pkComment = `${p1.emoji} ${p1.name} 完胜！${p2.emoji} ${p2.name} 被按在地上摩擦`;
-      else if (p2Total > p1Total + 3) pkComment = `${p2.emoji} ${p2.name} 完胜！${p1.emoji} ${p1.name} 被按在地上摩擦`;
-      else if (p1Total > p2Total) pkComment = `${p1.emoji} ${p1.name} 险胜！两人实力相当，火药味十足`;
-      else if (p2Total > p1Total) pkComment = `${p2.emoji} ${p2.name} 险胜！两人实力相当，火药味十足`;
-      else pkComment = `平局！你俩是失散多年的打工人兄弟/姐妹`;
-
-      return `
-        <div class="min-h-screen bg-gray-50 py-8 px-4">
-          <div class="max-w-4xl mx-auto">
-            <div class="text-center mb-8 fade-in">
-              <div class="text-5xl mb-2">⚔️</div>
-              <h1 class="text-4xl font-bold text-gray-800 mb-2">PK 结果</h1>
-              <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-xl p-4 mt-4">
-                <p class="text-lg font-semibold">${pkComment}</p>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-              <div class="bg-white rounded-2xl shadow-lg p-6 fade-in">
-                <div class="text-center mb-4">
-                  <div class="text-5xl mb-2">${t1.emoji}</div>
-                  <h2 class="text-2xl font-bold bg-gradient-to-r ${t1.color} bg-clip-text text-transparent">${p1.typeKey}</h2>
-                  <p class="text-lg text-gray-700 font-medium">${t1.name}</p>
-                  <p class="text-sm text-gray-500 mt-1">"${t1.motto}"</p>
-                </div>
-                ${dims.map(d => `
-                  <div class="mt-3">
-                    <div class="flex justify-between text-sm mb-1">
-                      <span class="text-gray-600">${d.label}</span>
-                      <span class="font-semibold">${Math.round((p1.scores[d.key] / 5) * 100)}%</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-3">
-                      <div class="bg-gradient-to-r ${d.color} h-3 rounded-full" style="width: ${Math.round((p1.scores[d.key] / 5) * 100)}%"></div>
-                    </div>
-                  </div>
-                `).join('')}
-              </div>
-
-              <div class="bg-white rounded-2xl shadow-lg p-6 fade-in">
-                <div class="text-center mb-4">
-                  <div class="text-5xl mb-2">${t2.emoji}</div>
-                  <h2 class="text-2xl font-bold bg-gradient-to-r ${t2.color} bg-clip-text text-transparent">${p2.typeKey}</h2>
-                  <p class="text-lg text-gray-700 font-medium">${t2.name}</p>
-                  <p class="text-sm text-gray-500 mt-1">"${t2.motto}"</p>
-                </div>
-                ${dims.map(d => `
-                  <div class="mt-3">
-                    <div class="flex justify-between text-sm mb-1">
-                      <span class="text-gray-600">${d.label}</span>
-                      <span class="font-semibold">${Math.round((p2.scores[d.key] / 5) * 100)}%</span>
-                    </div>
-                    <div class="w-full bg-gray-200 rounded-full h-3">
-                      <div class="bg-gradient-to-r ${d.color} h-3 rounded-full" style="width: ${Math.round((p2.scores[d.key] / 5) * 100)}%"></div>
-                    </div>
-                  </div>
-                `).join('')}
-              </div>
-            </div>
-
-            <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in">
-              <h3 class="text-xl font-bold text-gray-800 mb-4 text-center">📊 四维对比</h3>
-              <div class="space-y-4">
-                ${dims.map(d => {
-                  const s1 = Math.round((p1.scores[d.key] / 5) * 100);
-                  const s2 = Math.round((p2.scores[d.key] / 5) * 100);
-                  const diff = s1 - s2;
-                  let winner = diff > 10 ? '👈 他更暴躁' : diff < -10 ? '他更暴躁 👉' : '势均力敌';
-                  if (d.key === 'S') winner = diff > 10 ? '👈 他更社牛' : diff < -10 ? '他更社牛 👉' : '势均力敌';
-                  if (d.key === 'R') winner = diff > 10 ? '👈 他更卷' : diff < -10 ? '他更卷 👉' : '势均力敌';
-                  if (d.key === 'F') winner = diff > 10 ? '👈 他更感性' : diff < -10 ? '他更感性 👉' : '势均力敌';
-                  return `
-                    <div>
-                      <div class="flex justify-between text-sm mb-1">
-                        <span class="font-semibold text-gray-700">${d.label}</span>
-                        <span class="text-xs text-gray-500">${winner}</span>
-                      </div>
-                      <div class="flex items-center gap-2">
-                        <span class="text-xs font-bold w-8 text-right">${s1}%</span>
-                        <div class="flex-1 flex h-4 rounded-full overflow-hidden bg-gray-200">
-                          <div class="bg-gradient-to-r ${d.color}" style="width: ${s1}%"></div>
-                          <div class="bg-gradient-to-r from-gray-300 to-gray-400" style="width: ${100 - s1}%"></div>
-                        </div>
-                        <div class="flex-1 flex h-4 rounded-full overflow-hidden bg-gray-200">
-                          <div class="bg-gradient-to-r ${d.color}" style="width: ${s2}%"></div>
-                          <div class="bg-gradient-to-r from-gray-300 to-gray-400" style="width: ${100 - s2}%"></div>
-                        </div>
-                        <span class="text-xs font-bold w-8">${s2}%</span>
-                      </div>
-                    </div>
-                  `;
-                }).join('')}
-              </div>
-            </div>
-
-            <div class="text-center space-y-4">
-              <button onclick="restartTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
-                🔄 自己再测一次
-              </button>
-              <div>
-                <button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
-                  ⚔️ 再邀请一个人PK
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
+      const t1 = typeDataMap[p1.typeKey], t2 = typeDataMap[p2.typeKey];
+      const dims = [{ key: 'A', label: '暴躁', color: 'from-red-400 to-red-600' }, { key: 'S', label: '社交', color: 'from-yellow-400 to-orange-500' }, { key: 'R', label: '内卷', color: 'from-amber-400 to-amber-600' }, { key: 'F', label: '感性', color: 'from-pink-400 to-rose-500' }];
+      const story = generatePKStory(p1, p2);
+      return `<div class="min-h-screen bg-gray-50 py-8 px-4"><div class="max-w-4xl mx-auto"><div class="text-center mb-8 fade-in"><div class="text-5xl mb-2">\u2694\u{FE0F}</div><h1 class="text-4xl font-bold text-gray-800 mb-2">PK 结果</h1></div><div class="grid grid-cols-2 gap-4 mb-8 fade-in"><div class="bg-white rounded-2xl shadow-lg p-6 text-center"><div class="text-5xl mb-2">${t1.emoji}</div><h2 class="text-xl font-bold bg-gradient-to-r ${t1.color} bg-clip-text text-transparent">${p1.typeKey}</h2><p class="text-lg text-gray-700 font-medium">${p1.name}</p><p class="text-sm text-gray-500 mt-1">"${p1.motto}"</p></div><div class="bg-white rounded-2xl shadow-lg p-6 text-center"><div class="text-5xl mb-2">${t2.emoji}</div><h2 class="text-xl font-bold bg-gradient-to-r ${t2.color} bg-clip-text text-transparent">${p2.typeKey}</h2><p class="text-lg text-gray-700 font-medium">${p2.name}</p><p class="text-sm text-gray-500 mt-1">"${p2.motto}"</p></div></div><div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in"><h3 class="text-xl font-bold text-gray-800 mb-4 text-center">\u{1F4CA} 四维对比</h3><div class="space-y-4">${dims.map(d => { const s1v = Math.round((p1.scores[d.key]/5)*100); const s2v = Math.round((p2.scores[d.key]/5)*100); return `<div><div class="flex justify-between text-sm mb-1"><span class="font-semibold text-gray-700">${d.label}指数</span></div><div class="flex items-center gap-2"><span class="text-xs font-bold w-8 text-right text-orange-600">${s1v}%</span><div class="flex-1 h-3 rounded-full bg-gradient-to-r ${d.color}" style="width:${s1v}%"></div><span class="text-xs text-gray-400">|</span><div class="flex-1 h-3 rounded-full bg-gradient-to-r ${d.color}" style="width:${s2v}%"></div><span class="text-xs font-bold w-8 text-blue-600">${s2v}%</span></div></div>`; }).join('')}</div></div><div class="bg-white rounded-2xl shadow-lg p-6 mb-8 fade-in"><h3 class="text-2xl font-bold text-gray-800 mb-6 text-center">\u{1F3AC} 职场人生：他们的30年</h3>${story.map((scene, idx) => `<div class="mb-8 ${idx > 0 ? 'border-t pt-8' : ''}"><div class="text-center mb-4"><span class="bg-gradient-to-r from-orange-500 to-red-500 text-white px-4 py-1 rounded-full text-sm font-bold">${scene.title}</span></div><div class="grid grid-cols-1 md:grid-cols-2 gap-4"><div class="bg-orange-50 rounded-xl p-4 border-l-4 border-orange-500"><p class="font-bold text-orange-700 mb-2">${t1.emoji} ${t1.name}</p><p class="text-gray-700">${scene.p1}</p></div><div class="bg-blue-50 rounded-xl p-4 border-l-4 border-blue-500"><p class="font-bold text-blue-700 mb-2">${t2.emoji} ${t2.name}</p><p class="text-gray-700">${scene.p2}</p></div></div></div>`).join('')}</div><div class="text-center space-y-4"><button onclick="restartTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">\u{1F504} 自己再测一次</button><div><button onclick="showPK()" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">\u2694\u{FE0F} 再找一个人PK</button></div></div></div></div>`;
     }
 
     // 初始化
     currentQuestion = -1;
-
-    // 检查是否是 PK 模式
     const urlParams = new URLSearchParams(window.location.search);
     const pkParam = urlParams.get('pk');
     if (pkParam) {
       try {
-        const p1 = JSON.parse(decodeURIComponent(escape(atob(pkParam))));
-        // 进入 PK 挑战模式
-        let pkMode = 'challenge';
-        const pkData = { ...p1 };
-        
-        // 重写 render 来支持 PK 流程
-        const originalRender = render;
-        render = function() {
-          const app = document.getElementById('app');
-          if (pkMode === 'challenge') {
-            // 显示挑战信息
-            const t1 = typeDataMap[pkData.typeKey];
-            app.innerHTML = `
-              <div class="gradient-bg min-h-screen flex items-center justify-center px-4">
-                <div class="bg-white rounded-3xl shadow-2xl p-8 md:p-12 max-w-2xl w-full fade-in">
-                  <div class="text-center">
-                    <div class="text-6xl mb-4">⚔️</div>
-                    <h1 class="text-3xl font-bold text-gray-800 mb-3">你被挑战了！</h1>
-                    <div class="bg-gray-50 rounded-xl p-4 mb-6">
-                      <div class="text-4xl mb-2">${t1.emoji}</div>
-                      <p class="text-xl font-bold text-gray-700">${t1.name}（${pkData.typeKey}）</p>
-                      <p class="text-gray-500 mt-1">"${t1.motto}"</p>
-                    </div>
-                    <p class="text-gray-600 mb-6">完成测试，看看谁能更暴躁！</p>
-                    <button onclick="startPKTest()" class="gradient-bg text-white px-10 py-4 rounded-full text-lg font-semibold hover:opacity-90 transition-opacity shadow-lg">
-                      接受挑战 →
-                    </button>
-                  </div>
-                </div>
-              </div>
-            `;
-          } else if (pkMode === 'result') {
-            const result = calculateResult();
-            const p2 = {
-              typeKey: result.typeKey,
-              name: typeDataMap[result.typeKey].name,
-              emoji: typeDataMap[result.typeKey].emoji,
-              color: typeDataMap[result.typeKey].color,
-              motto: typeDataMap[result.typeKey].motto,
-              scores: { A: result.A, B: result.B, S: result.S, C: result.C, P: result.P, R: result.R, D: result.D, F: result.F }
-            };
-            app.innerHTML = renderPKResult(pkData, p2);
-          } else {
-            originalRender();
-          }
-        };
-
-        window.startPKTest = function() {
-          pkMode = 'testing';
-          currentQuestion = 0;
-          answers = {};
-          // 重写 nextQuestion 最后一步
-          const originalNext = nextQuestion;
-          nextQuestion = function() {
-            if (answers[questions[currentQuestion].id]) {
-              if (currentQuestion === questions.length - 1) {
-                pkMode = 'result';
-              }
-              currentQuestion++;
-              render();
-              window.scrollTo(0, 0);
-            }
-          };
-          render();
-          window.scrollTo(0, 0);
-        };
-
-        render();
-      } catch(e) {
-        render();
-      }
-    } else {
-      render();
+        pkData = JSON.parse(decodeURIComponent(escape(atob(pkParam))));
+        pkMode = 'challenge';
+      } catch(e) {}
     }
+    render();
   </script>
 </body>
 </html>
