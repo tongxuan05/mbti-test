@@ -151,7 +151,12 @@
         optsHTML += '<button onclick="selAns(' + q.id + ',\'' + o.val + '\')" class="option-btn w-full p-5 border-2 rounded-xl text-left text-lg ' + cls + '"><div class="flex items-center"><div class="w-8 h-8 rounded-full border-2 flex items-center justify-center mr-4 ' + circleCls + '">' + String.fromCharCode(65 + i) + '</div><span>' + o.text + '</span></div></button>';
       }
       var prevBtn = curQ === 0 ? 'invisible' : '';
-      return '<div class="min-h-screen bg-gray-50 py-8 px-4"><div class="max-w-2xl mx-auto"><div class="bg-white rounded-full h-3 mb-8 shadow-sm"><div class="progress-bar gradient-bg h-3 rounded-full" style="width: ' + prog + '%"></div></div><div class="text-center mb-4 text-gray-600">第 ' + (curQ + 1) + ' / ' + questions.length + ' 题</div><div class="bg-white rounded-2xl shadow-lg p-8 fade-in"><h2 class="text-2xl font-semibold text-gray-800 mb-8 text-center">' + q.text + '</h2><div class="space-y-4">' + optsHTML + '</div><div class="flex justify-between mt-8 pt-6 border-t"><button onclick="prevQ()" class="px-6 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors ' + prevBtn + '">\u2190 上一题</button></div></div></div></div>';
+      var pkBanner = '';
+      if (pkMode === 'testing' && pkData) {
+        var challenger = workers[pkData.typeKey];
+        pkBanner = '<div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-2xl p-4 mb-6 flex items-center justify-center gap-3 shadow-lg fade-in"><span class="text-2xl">\u2694\uFE0F</span><span class="font-bold text-lg">PK\u6A21\u5F0F</span><span class="text-sm opacity-90">\u2014\u2014 \u6311\u6218 ' + challenger.e + ' ' + challenger.n + '(' + pkData.typeKey + ')</span></div>';
+      }
+      return '<div class="min-h-screen bg-gray-50 py-8 px-4"><div class="max-w-2xl mx-auto">' + pkBanner + '<div class="bg-white rounded-full h-3 mb-8 shadow-sm"><div class="progress-bar gradient-bg h-3 rounded-full" style="width: ' + prog + '%"></div></div><div class="text-center mb-4 text-gray-600">第 ' + (curQ + 1) + ' / ' + questions.length + ' 题</div><div class="bg-white rounded-2xl shadow-lg p-8 fade-in"><h2 class="text-2xl font-semibold text-gray-800 mb-8 text-center">' + q.text + '</h2><div class="space-y-4">' + optsHTML + '</div><div class="flex justify-between mt-8 pt-6 border-t"><button onclick="prevQ()" class="px-6 py-3 rounded-lg text-gray-600 hover:bg-gray-100 transition-colors ' + prevBtn + '">\u2190 上一题</button></div></div></div></div>';
     }
 
     function renderResult() {
