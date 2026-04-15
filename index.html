@@ -50,261 +50,259 @@
   <script>
     const questions = [
       // A/B 维度：爆发型 / 忍耐型 (Anger expression)
-      { id: 1, dimension: 'AB', text: '晚上10点刚下班，老板发消息让你处理一个明天才要的问题，你会？', options: [
-        { text: '直接装死不回，明天再说，下班时间就是我的', value: 'A' },
-        { text: '咬着牙回复"好的收到"，然后默默打开电脑', value: 'B' }
+      { id: 1, dimension: 'AB', text: '晚上10点刚下班到家，老板钉钉发来消息："有个小问题你顺手处理下"，你会？', options: [
+        { text: '凌晨2点钉钉回复老板："已处理完，还有事吗？"，然后继续加班到6点', value: 'A' },
+        { text: '直接手机关机睡觉，第二天早上说"昨晚手机没电了没看到"', value: 'B' }
       ]},
-      { id: 2, dimension: 'AB', text: '同事把他的活儿甩给你，说"你比较擅长这个"，你会？', options: [
-        { text: '"不好意思，这不是我的工作范围"，直接怼回去', value: 'A' },
-        { text: '心里骂了一万遍但还是帮他做了，怕得罪人', value: 'B' }
+      { id: 2, dimension: 'AB', text: '开会时老板当众diss你："你做的什么东西，大学生就这水平？"，你会？', options: [
+        { text: '反手一巴掌拍桌子上，"不会说话就闭嘴"，然后一顿组合拳输出', value: 'A' },
+        { text: '低头说"对不起我改"，心里已经把老板祖坟刨了八百遍', value: 'B' }
       ]},
-      { id: 3, dimension: 'AB', text: '开会时你的方案被一个啥都不懂的人否了，你会？', options: [
-        { text: '当场据理力争，不怼不爽', value: 'A' },
-        { text: '表面微笑说"好的我再想想"，内心已经气炸', value: 'B' }
+      { id: 3, dimension: 'AB', text: '周五晚上11点，客户打电话说方案要大改，周一早上要用，你会？', options: [
+        { text: '"你行你来改"，然后直接拉黑号码', value: 'A' },
+        { text: '"好的好的我今晚赶出来"，通宵到周日早上5点', value: 'B' }
       ]},
-      { id: 4, dimension: 'AB', text: '连续加班一周，结果领导说"年轻人多锻炼是好事"，你会？', options: [
-        { text: '"领导，我觉得需要聊聊工作量的问题"', value: 'A' },
-        { text: '"好的领导，我会努力的"，回家后崩溃大哭', value: 'B' }
+      { id: 4, dimension: 'AB', text: '同事把他的周报甩给你说"你帮我写一下呗，我请了假"，结果他在朋友圈晒旅游，你会？', options: [
+        { text: '把截图甩到公司大群，"@所有人 看看这位请病假去旅游的"', value: 'A' },
+        { text: '帮他写了，然后在心里默默诅咒他旅游拉肚子', value: 'B' }
       ]},
-      { id: 5, dimension: 'AB', text: '客户第8次修改需求，但预算一分不加，你会？', options: [
-        { text: '直接告诉客户修改次数已超过约定范围，需要加钱', value: 'A' },
-        { text: '一边吐槽一边改，指望下次合作能好点', value: 'B' }
+      { id: 5, dimension: 'AB', text: '领导说"这个周末大家加个班吧，没有加班费但是可以调休"（但调休永远调不了），你会？', options: [
+        { text: '"调休？上次的调休还没休呢，要不折现行？"', value: 'A' },
+        { text: '"好的收到"，然后周末在家一边打游戏一边摸鱼", value: 'B' }
       ]},
 
       // S/C 维度：社交牛人 / 社恐达人 (Social style)
-      { id: 6, dimension: 'SC', text: '公司团建要表演节目，你的第一反应是？', options: [
-        { text: '好啊好啊，终于有机会展示自己了', value: 'S' },
-        { text: '救命，装病请假行不行', value: 'C' }
+      { id: 6, dimension: 'SC', text: '公司年会要抽表演节目，你被抽中了，你会？', options: [
+        { text: '直接上台唱一首《分手快乐》，唱完把麦克风摔了走人', value: 'S' },
+        { text: '提前三天开始焦虑，年会当天装发烧去医院躲过一劫', value: 'C' }
       ]},
-      { id: 7, dimension: 'SC', text: '新来了一个同事坐你旁边，你会？', options: [
-        { text: '主动搭话，中午约着一起吃饭', value: 'S' },
-        { text: '点个头打个招呼，然后各干各的', value: 'C' }
+      { id: 7, dimension: 'SC', text: '新来了一个实习生坐你旁边，一天到晚问你问题，你会？', options: [
+        { text: '拉他进群吃午饭，"有什么不懂的尽管问，哥罩着你"', value: 'S' },
+        { text: '戴上降噪耳机假装没听到，实在躲不过就说"这个问题你可以搜一下"', value: 'C' }
       ]},
-      { id: 8, dimension: 'SC', text: '跨部门开会，一圈都是不认识的人，你会？', options: [
-        { text: '积极发言，让大家注意到我', value: 'S' },
-        { text: '坐在角落默默记笔记，能不说话就不说话', value: 'C' }
+      { id: 8, dimension: 'SC', text: '跨部门开会，对方部门的人疯狂甩锅给你们，你会？', options: [
+        { text: '当场站起来辩论30分钟，把对方怼得哑口无言', value: 'S' },
+        { text: '低头记笔记一句话不说，心里已经给对方判了死刑', value: 'C' }
       ]},
-      { id: 9, dimension: 'SC', text: '公司大群里有人在讨论一个问题，你会？', options: [
-        { text: '积极参与讨论，发表自己的看法', value: 'S' },
-        { text: '默默围观，除非被@否则绝不发言', value: 'C' }
+      { id: 9, dimension: 'SC', text: '老板在公司大群里@你问"这个项目进度怎么样了"，你会？', options: [
+        { text: '立刻回复一个500字详细报告，附带数据图表和后续计划', value: 'S' },
+        { text: '已读不回，等老板私聊我才回', value: 'C' }
       ]},
-      { id: 10, dimension: 'SC', text: '午休时间，同事叫你一起去吃饭，你会？', options: [
-        { text: '好啊，叫上更多人一起热闹', value: 'S' },
-        { text: '今天想一个人静静，"你们去吧我带饭了"', value: 'C' }
+      { id: 10, dimension: 'SC', text: '隔壁部门的小哥哥/小姐姐天天找你聊天，你会？', options: [
+        { text: '聊啊！顺便问问有没有对象，发展一下', value: 'S' },
+        { text: '表面微笑回复"嗯嗯哈哈"，内心"求你了让我安静干活吧"', value: 'C' }
       ]},
 
       // P/R 维度：摆烂型 / 卷王型 (Work attitude)
-      { id: 11, dimension: 'PR', text: '周五下午5点，有个不是很急的任务，你会？', options: [
-        { text: '周一再说吧，周末不能浪费在工作上', value: 'P' },
-        { text: '趁今天做完，周末安心休息', value: 'R' }
+      { id: 11, dimension: 'PR', text: '手里有三个deadline，但你一点都不想干，你会？', options: [
+        { text: '打开B站刷视频，"deadline才是第一生产力"，最后一晚全搞定', value: 'P' },
+        { text: '当天就开始做，每天推进20%，提前两天全部完成', value: 'R' }
       ]},
-      { id: 12, dimension: 'PR', text: '看到同事每天主动加班到10点，你的想法是？', options: [
-        { text: '有毛病吧，又在搞内卷', value: 'P' },
-        { text: '看来我也要更努力了，不能落后', value: 'R' }
+      { id: 12, dimension: 'PR', text: '看到同事每天加班到12点，还在群里发"今天又充实了一天！"，你会？', options: [
+        { text: '"装什么装，不就是白天摸鱼晚上补作业吗"', value: 'P' },
+        { text: '"大佬带带我！"然后默默把闹钟从9点改到8点半', value: 'R' }
       ]},
-      { id: 13, dimension: 'PR', text: '领导给了一个超出你能力范围的项目，你会？', options: [
-        { text: '"这个我不太擅长"，建议交给合适的人', value: 'P' },
-        { text: '接！连夜查资料学习，死磕到底', value: 'R' }
+      { id: 13, dimension: 'PR', text: '领导给了一个没人愿意接的烂摊子项目，你会？', options: [
+        { text: '"这个不太适合我"，然后精准甩锅给最适合的人', value: 'P' },
+        { text: '"我来！"，然后花了一周时间把烂摊子变成标杆项目', value: 'R' }
       ]},
-      { id: 14, dimension: 'PR', text: '你的工作已经达标了，但还有时间，你会？', options: [
-        { text: '摸鱼！看看新闻逛逛淘宝熬到下班', value: 'P' },
-        { text: '主动找更多事情做，提前推进下一步', value: 'R' }
+      { id: 14, dimension: 'PR', text: '你的KPI已经完成了，离年底还有3个月，你会？', options: [
+        { text: '每天准时上下班，剩余时间用来考证书学新技能', value: 'P' },
+        { text: '主动找领导要更多项目，"我想挑战一下自己"', value: 'R' }
       ]},
-      { id: 15, dimension: 'PR', text: '公司有个晋升机会，但竞争很激烈，你会？', options: [
-        { text: '随缘吧，命里有时终须有', value: 'P' },
-        { text: '必须拿下！精心准备材料全力以赴', value: 'R' }
+      { id: 15, dimension: 'PR', text: '公司有个晋升名额，但竞争对手是关系户，你会？', options: [
+        { text: '算了算了，不跟关系户争，保命要紧', value: 'P' },
+        { text: '就算拼不过也要拼！准备50页PPT证明自己', value: 'R' }
       ]},
 
       // D/F 维度：理性输出 / 情感输出 (Communication style)
-      { id: 16, dimension: 'DF', text: '项目失败了，复盘会上你会？', options: [
-        { text: '客观分析哪里出了问题，下次怎么改进', value: 'D' },
-        { text: '先安慰大家的情绪，"没关系我们尽力了"', value: 'F' }
+      { id: 16, dimension: 'DF', text: '项目失败了，复盘会上大家都在找原因，你会？', options: [
+        { text: '拿出数据表格，"第3周开始偏差率超过15%，问题出在需求变更太频繁"', value: 'D' },
+        { text: '"大家别灰心，我们已经做得很好了，下次再来"', value: 'F' }
       ]},
-      { id: 17, dimension: 'DF', text: '同事因为个人原因工作出了问题，你会？', options: [
-        { text: '"问题出在哪，我们一起解决"', value: 'D' },
-        { text: '"没事没事，谁都有困难的时候"', value: 'F' }
+      { id: 17, dimension: 'DF', text: '你最好的同事因为失误被领导骂哭了，你会？', options: [
+        { text: '"哭没用，来我帮你分析一下怎么补救"', value: 'D' },
+        { text: '陪着一起哭，"这领导就是有病，他不配骂你"', value: 'F' }
       ]},
-      { id: 18, dimension: 'DF', text: '下属/实习生交上来的东西一塌糊涂，你会？', options: [
-        { text: '直接指出问题，告诉他怎么改', value: 'D' },
-        { text: '先夸一下做得好的部分，再委婉地说需要改进的地方', value: 'F' }
+      { id: 18, dimension: 'DF', text: '实习生把报告写得一塌糊涂，你会？', options: [
+        { text: '用红笔标出所有问题，"第3段数据错误，第5段逻辑不通，重写"', value: 'D' },
+        { text: '"整体框架挺好的，就是有些小地方需要再完善一下"', value: 'F' }
       ]},
-      { id: 19, dimension: 'DF', text: '朋友跟你吐槽他的老板，你会？', options: [
-        { text: '帮他分析要不要跳槽，列出利弊', value: 'D' },
-        { text: '"太过分了！你老板真是离谱"，跟他一起骂', value: 'F' }
+      { id: 19, dimension: 'DF', text: '朋友微信跟你吐槽"我老板太傻逼了"，你会？', options: [
+        { text: '"具体什么事？我帮你分析分析该怎么应对"', value: 'D' },
+        { text: '"就是！傻逼老板千篇一律，来来来吐槽个痛快"', value: 'F' }
       ]},
-      { id: 20, dimension: 'DF', text: '你被领导当众批评了，但其实不是你的锅，你会？', options: [
-        { text: '会后拿着证据去找领导说明情况', value: 'D' },
-        { text: '觉得委屈但不好意思当面说，找朋友倾诉', value: 'F' }
+      { id: 20, dimension: 'DF', text: '你背了黑锅，领导在全公司面前批评了你，但你知道真相，你会？', options: [
+        { text: '把证据链整理成文档发给所有相关人员，要求公开澄清', value: 'D' },
+        { text: '找最信任的朋友倾诉，"我真的好委屈"，然后发条仅自己可见的朋友圈', value: 'F' }
       ]}
     ];
 
     // 20 种打工人性格类型
     const workerTypes = {
       'ASPD': {
-        name: '职场战神',
-        emoji: '⚔️',
-        color: 'from-red-500 to-orange-600',
-        description: '你是职场中最硬核的存在。敢于表达自己的不满，社交能力max，工作认真负责，处理问题理性果断。老板怕你、同事服你、客户敬你。你是真正的职场战神。',
-        motto: '我的底线，不容触碰',
-        survival: '硬实力就是你的底气'
+        name: '职场灭霸',
+        emoji: '💀',
+        color: 'from-red-600 to-black',
+        description: '你是职场中最恐怖的存在。敢半夜2点回老板消息证明自己加到6点，敢在会议上反手拍桌子怼老板，社交场上无人能敌，疯狂内卷到所有人都害怕，做事理性到冷酷。你不是在打工，你是在统治职场。',
+        motto: '我不是来打工的，我是来教你们做事的',
+        survival: '实力碾压就是正义'
       },
       'ASPF': {
         name: '暴躁老哥',
         emoji: '🔥',
-        color: 'from-orange-500 to-red-500',
-        description: '你是公司里的"敢说担当"。不爽就说不喜欢就拒绝，社交场上游刃有余，虽然爱摆烂但关键时刻理性清晰。你的暴躁反而让人觉得你真实可爱。',
-        motto: '我脾气不好但我很真诚',
-        survival: '真诚是永远的必杀技'
+        color: 'from-orange-500 to-red-600',
+        description: '你是公司里的"敢说担当"。不爽就说不喜欢就拒绝，社交场上游刃有余，虽然爱摆烂但关键时刻怼人一流。你的暴躁反而让人觉得你真实可爱，因为你从不背后捅刀子，要骂当面骂。',
+        motto: '我脾气不好但我很真诚，要骂就当面骂',
+        survival: '真诚+暴躁=永远的必杀技'
       },
       'ASRD': {
         name: '卷王之王',
         emoji: '👑',
-        color: 'from-yellow-500 to-amber-600',
-        description: '你敢于表达、善于社交、疯狂内卷、理性分析。你是领导眼中的人才，但同事可能觉得你太拼了。你在职场如鱼得水，但也别忘了给自己放个假。',
-        motto: '卷不死我的都会让我更强',
-        survival: '适度内卷，量力而行'
+        color: 'from-yellow-500 to-amber-700',
+        description: '你敢于表达、善于社交、疯狂内卷到凌晨，理性分析每一步棋。你是领导眼中的人才核弹，但同事觉得你是内卷的罪魁祸首。你在职场如鱼得水，卷到所有人都想杀你。',
+        motto: '卷不死我的都会让我更强，然后我卷死你们',
+        survival: '适度内卷，量力而行，别卷出人命'
       },
       'ASRF': {
         name: '社交悍匪',
         emoji: '🎭',
-        color: 'from-pink-500 to-rose-600',
-        description: '你是公司的人气王。敢说敢做、社交天花板、拼命三郎还特别会照顾人。有你在的群永远不会冷场，有你的项目永远不会无聊。你就是团队的灵魂。',
-        motto: '工作要拼朋友更要交',
-        survival: '人脉是你最大的财富'
+        color: 'from-pink-500 to-rose-700',
+        description: '你是公司的人气王兼气氛组组长。敢说敢做、社交天花板、拼命三郎还特别会照顾人。有你在的群永远不会冷场，有你的项目永远不会无聊。你就是团队的灵魂，也是老板最舍不得开除的人。',
+        motto: '工作要拼朋友更要交，但老板除外',
+        survival: '人脉是你最大的财富，但别让人脉变成债主'
       },
       'ACPD': {
         name: '冷面杀手',
         emoji: '🗡️',
-        color: 'from-slate-600 to-gray-800',
-        description: '你表面忍耐内心翻涌，社恐但理性。你不会当面爆发但会在心里记小本本。做事冷静有条理，是你这种人在幕后掌控全局。别惹老实人。',
-        motto: '我不说不代表我不知道',
-        survival: '沉默是你的保护色'
+        color: 'from-slate-700 to-gray-900',
+        description: '你表面忍耐内心翻涌，社恐但理性到可怕。你不会当面爆发但会在心里记小本本，等时机成熟一击致命。做事冷静有条理，是你这种人在幕后掌控全局。别惹老实人，老实人爆发起来最恐怖。',
+        motto: '我不说不代表我不知道，我在等一个合适的时机',
+        survival: '沉默是你的保护色，但别沉默到被当成空气'
       },
       'ACPF': {
         name: '委屈小可怜',
         emoji: '😢',
-        color: 'from-blue-400 to-indigo-500',
-        description: '你是公司里最让人心疼的存在。心里有无数句MMP嘴上却说好的收到。社恐摆烂还容易心软。你总是委屈自己成全别人，但请记得对自己好一点。',
-        motto: '我没关系（其实很有关系）',
-        survival: '学会说"不"是必修课'
+        color: 'from-blue-400 to-indigo-600',
+        description: '你是公司里最让人心疼的存在。心里有无数句MMP嘴上却说好的收到。社恐摆烂还容易心软。你总是委屈自己成全别人，每天回家后崩溃大哭。但请记得对自己好一点，你值得被温柔对待。',
+        motto: '我没关系（其实很有关系，但我不会说）',
+        survival: '学会说"不"是必修课，你已经挂科太多次了'
       },
       'ACRD': {
         name: '暗黑卷王',
         emoji: '🌑',
-        color: 'from-purple-600 to-indigo-800',
-        description: '你表面不声不响内心野心勃勃。社恐但疯狂努力做事，理性分析每一步棋。你是那种不显山露水但最后晋升最快的人。狠起来连自己都卷。',
-        motto: '你们吵的时候我已经做完了',
-        survival: '实力是最好的反击'
+        color: 'from-purple-700 to-indigo-900',
+        description: '你表面不声不响内心野心勃勃。社恐但疯狂努力做事，理性分析每一步棋。你是那种不显山露水但最后晋升最快的人。狠起来连自己都卷，同事们都不知道你什么时候偷偷做了那么多事。',
+        motto: '你们吵的时候我已经做完了，你们睡的时候我还在做',
+        survival: '实力是最好的反击，但偶尔也要让别人知道你有多强'
       },
       'ACRF': {
         name: '佛系小天使',
         emoji: '😇',
-        color: 'from-green-400 to-emerald-600',
-        description: '你是公司里最温暖的存在。默默忍耐社恐但努力工作，还特别会照顾别人的感受。你虽然不爱说话但你的行动力让人感动。你是团队的隐形守护者。',
-        motto: '大家都开心就好',
-        survival: '善良需要带点锋芒'
+        color: 'from-green-400 to-emerald-700',
+        description: '你是公司里最温暖的存在。默默忍耐社恐但努力工作，还特别会照顾别人的感受。你虽然不爱说话但你的行动力让人感动。你是团队的隐形守护者，所有人都离不开你但所有人都会忽略你。',
+        motto: '大家都开心就好（除了我自己）',
+        survival: '善良需要带点锋芒，不然就是懦弱'
       },
       'BSPD': {
         name: '双面打工人',
         emoji: '🎪',
-        color: 'from-teal-500 to-cyan-600',
-        description: '你表面乖巧内心暴躁。社交达人但爱摆烂，处理问题理性客观。你是那种当面说"好的"背后翻白眼的高手。职场双面人，演得一手好戏。',
-        motto: '表面笑嘻嘻心里MMP',
-        survival: '演技也是职场技能'
+        color: 'from-teal-500 to-cyan-700',
+        description: '你表面乖巧内心暴躁。社交达人但爱摆烂，处理问题理性客观。你是那种当面说"好的收到"背后翻白眼的高手。职场双面人，演得一手好戏，奥斯卡欠你一座小金人。',
+        motto: '表面笑嘻嘻心里MMP，我演技太好了',
+        survival: '演技也是职场技能，但别把自己骗了'
       },
       'BSPF': {
         name: '气氛组组长',
         emoji: '🎉',
-        color: 'from-yellow-400 to-orange-500',
-        description: '你表面忍耐但社交能力一流。爱摆烂但特别会照顾人。你是团队的气氛组担当，虽然心里吐槽但总能把大家哄开心。有你在的地方就有笑声。',
-        motto: '开心是一天不开心也是一天',
-        survival: '快乐是你最大的武器'
+        color: 'from-yellow-400 to-orange-600',
+        description: '你表面忍耐但社交能力一流。爱摆烂但特别会照顾人。你是团队的气氛组担当，虽然心里吐槽但总能把大家哄开心。有你在的地方就有笑声，但没人知道你私下哭过多少次。',
+        motto: '开心是一天不开心也是一天，那我选开心',
+        survival: '快乐是你最大的武器，但别让快乐掩盖了委屈'
       },
       'BSRD': {
         name: '隐忍实干家',
         emoji: '💪',
-        color: 'from-blue-600 to-indigo-700',
-        description: '你表面乖巧实则拼命三郎。社交不错做事更拼，理性分析是你的强项。你是那种被领导夸"踏实可靠"的人。你的忍耐和执行力是你最大的优势。',
-        motto: '做就做到最好',
-        survival: '执行力决定你的上限'
+        color: 'from-blue-600 to-indigo-800',
+        description: '你表面乖巧实则拼命三郎。社交不错做事更拼，理性分析是你的强项。你是那种被领导夸"踏实可靠"的人。你的忍耐和执行力是你最大的优势，但你也最容易被人当工具人使。',
+        motto: '做就做到最好，做不好就做到最好',
+        survival: '执行力决定你的上限，但要学会拒绝'
       },
       'BSRF': {
         name: '职场暖男/暖女',
         emoji: '☀️',
-        color: 'from-amber-400 to-yellow-600',
-        description: '你表面忍耐但社交能力在线，努力工作还特别体贴。你是团队里最受欢迎的存在。虽然不会拒绝别人让人心疼，但你的善良感染了身边的每一个人。',
+        color: 'from-amber-400 to-yellow-700',
+        description: '你表面忍耐但社交能力在线，努力工作还特别体贴。你是团队里最受欢迎的存在。虽然不会拒绝别人让人心疼，但你的善良感染了身边的每一个人。你就是行走的小太阳。',
         motto: '温暖他人也别忘了温暖自己',
-        survival: '你的善良自带光芒'
+        survival: '你的善良自带光芒，但别被善良绑架'
       },
       'BCPD': {
         name: '内心戏之王',
         emoji: '🎬',
-        color: 'from-violet-500 to-purple-700',
-        description: '你表面乖巧社恐爱摆烂但内心理性分析一切。你每天在心里上演八百集职场连续剧。虽然不说但你看得比谁都清楚。你是被低估的聪明人。',
-        motto: '我心里跟明镜似的',
-        survival: '看透不说透也是一种智慧'
+        color: 'from-violet-500 to-purple-800',
+        description: '你表面乖巧社恐爱摆烂但内心理性分析一切。你每天在心里上演八百集职场连续剧。虽然不说但你看得比谁都清楚。你是被低估的聪明人，所有事你都知道只是不说。',
+        motto: '我心里跟明镜似的，你们那点小心思',
+        survival: '看透不说透也是一种智慧，但偶尔也要说出来'
       },
       'BCPF': {
         name: '小透明打工人',
         emoji: '🫥',
-        color: 'from-gray-400 to-gray-600',
-        description: '你是公司里最没有存在感的老实人。忍耐社恐摆烂还心软。你总是被忽略被忽视，但你的默默付出其实很重要。请相信自己，你比你想象的更有价值。',
-        motto: '我只是不爱说话不是没想法',
-        survival: '存在感需要主动刷'
+        color: 'from-gray-400 to-gray-700',
+        description: '你是公司里最没有存在感的老实人。忍耐社恐摆烂还心软。你总是被忽略被忽视被甩锅，但你的默默付出其实很重要。请相信自己，你比你想象的更有价值，只是你太不爱表现了。',
+        motto: '我只是不爱说话不是没想法（虽然没人听）',
+        survival: '存在感需要主动刷，不然你就真透明了'
       },
       'BCRD': {
         name: '低调实力派',
         emoji: '🏆',
-        color: 'from-emerald-500 to-teal-700',
-        description: '你表面乖巧社恐但暗自努力，理性分析能力强。你是那种不声不响就做出成绩的人。不张扬但有实力，不张扬但有追求。你用行动证明一切。',
-        motto: '实力会替我说话',
-        survival: '低调但有底线'
+        color: 'from-emerald-500 to-teal-800',
+        description: '你表面乖巧社恐但暗自努力，理性分析能力强。你是那种不声不响就做出成绩的人。不张扬但有实力，不说话但有追求。你用行动证明一切，最后所有人都被你的实力震惊。',
+        motto: '实力会替我说话，我只是懒得解释',
+        survival: '低调但有底线，触碰底线就炸'
       },
       'BCRF': {
         name: '忍辱负重者',
         emoji: '🐢',
-        color: 'from-cyan-500 to-blue-600',
-        description: '你是公司里最能忍的人。乖巧社恐努力做事还照顾别人感受。你把所有委屈都吞进肚子里，但正是你的忍耐和善良支撑着整个团队。你辛苦了。',
-        motto: '忍一时风平浪静',
-        survival: '委屈自己要有度'
+        color: 'from-cyan-500 to-blue-700',
+        description: '你是公司里最能忍的人。乖巧社恐努力做事还照顾别人感受。你把所有委屈都吞进肚子里，加班到凌晨5点第二天照样微笑打卡上班。正是你的忍耐和善良支撑着整个团队。你辛苦了，真的。',
+        motto: '忍一时风平浪静，退一步越想越气',
+        survival: '委屈自己要有度，过了这个度就翻脸'
       },
-      // Additional 4 types for more variety
-      'ASPF2': {
+      'BSPF2': {
         name: '耿直打工人',
         emoji: '💬',
-        color: 'from-red-400 to-pink-600',
-        description: '你心直口快，社交能力强但有自己的节奏。感性而真实，摆烂但有底线。你是团队里最真实的聲音，有什么说什么，从不藏着掖着。',
-        motto: '有话直说不憋着',
-        survival: '直率但要注意方式'
+        color: 'from-red-400 to-pink-700',
+        description: '你表面忍耐但心直口快，社交能力强但有自己的节奏。感性而真实，摆烂但有底线。你是团队里最真实的声音，有什么说什么，从不藏着掖着。你最大的优点和缺点都是太真实了。',
+        motto: '有话直说不憋着，憋着伤身体',
+        survival: '直率但要注意方式，不然容易没朋友'
       },
       'BCPD2': {
         name: '摸鱼哲学家',
         emoji: '🐟',
-        color: 'from-blue-400 to-teal-600',
-        description: '你表面乖巧内心有自己的小世界。社恐但理性，善于摸鱼但不误事。你是职场里的生活家，知道工作与生活的平衡之道。',
-        motto: '摸鱼也是一门艺术',
-        survival: '摸鱼不误砍柴工'
+        color: 'from-blue-400 to-teal-700',
+        description: '你表面乖巧内心有自己的小世界。社恐但理性，善于摸鱼但不误事。你是职场里的生活家，知道工作与生活的平衡之道。你能在摸鱼的同时把活干得漂漂亮亮，这才是真本事。',
+        motto: '摸鱼也是一门艺术，我是一级摸鱼大师',
+        survival: '摸鱼不误砍柴工，关键是摸完鱼还能干活'
       },
       'BSRD2': {
         name: '靠谱工具人',
         emoji: '🔨',
-        color: 'from-orange-500 to-red-500',
-        description: '你乖巧能忍，社交适中，疯狂输出理性分析。你是领导最好用的工具人，什么事交给你都放心。但请记得，工具人也需要被珍惜。',
-        motto: '交给我你放心',
-        survival: '靠谱但不卑微'
+        color: 'from-orange-500 to-red-600',
+        description: '你表面忍耐但能社交，疯狂输出理性分析。你是领导最好用的工具人，什么事交给你都放心。你加班到凌晨6点第二天照样精神抖擞。但请记得，工具人也需要被珍惜，要学会要价。',
+        motto: '交给我你放心，但加钱的事也可以谈',
+        survival: '靠谱但不卑微，好用但要加价'
       },
       'ACPF2': {
         name: '心软打工人',
         emoji: '💔',
-        color: 'from-rose-400 to-pink-600',
-        description: '你内心暴躁但表面忍耐，社恐感性摆烂。你最大的弱点就是心太软，别人一说好话你就答应了。请学会保护自己，你的善良很珍贵。',
-        motto: '我不是好欺负我只是善良',
-        survival: '善良要有锋芒'
+        color: 'from-rose-400 to-pink-700',
+        description: '你表面忍耐内心暴躁但就是爆发不出来，社恐感性摆烂。你最大的弱点就是心太软，别人一说好话你就答应了，帮别人干活还倒贴。请学会保护自己，你的善良很珍贵，不是每个人都配得上。',
+        motto: '我不是好欺负我只是善良（但快被逼疯了）',
+        survival: '善良要有锋芒，不然就是好欺负'
       }
     };
 
-    // Fix: remap keys for the extra 4 types
-    // We use a scoring system that maps to these 20 types
+    // 20 types mapping
     const typeKeys = [
       'ASPD', 'ASPF', 'ASRD', 'ASRF',
       'ACPD', 'ACPF', 'ACRD', 'ACRF',
@@ -313,7 +311,6 @@
       'BSPF2', 'BCPD2', 'BSRD2', 'ACPF2'
     ];
 
-    // Map each key to the correct type data
     const typeDataMap = {
       'ASPD': workerTypes['ASPD'],
       'ASPF': workerTypes['ASPF'],
@@ -570,22 +567,17 @@
         'BCPD', 'BCPF', 'BCRD', 'BCRF'
       ];
       
-      // If it's a base type, use it directly
+      // Remap some edge cases to the extra 4 types
       if (baseTypes.includes(typeKey)) {
-        // For the 4 extra types, we remap some edge cases
-        // BSPF -> sometimes BSPF2 (when S=5, P=5, F=5 exact match)
         if (typeKey === 'BSPF' && scores.S === 5 && scores.P === 5) {
           typeKey = 'BSPF2';
         }
-        // BCPD -> sometimes BCPD2
         else if (typeKey === 'BCPD' && scores.C === 5 && scores.P === 5) {
           typeKey = 'BCPD2';
         }
-        // BSRD -> sometimes BSRD2
         else if (typeKey === 'BSRD' && scores.S === 5 && scores.R === 5) {
           typeKey = 'BSRD2';
         }
-        // ACPF -> sometimes ACPF2
         else if (typeKey === 'ACPF' && scores.A >= 3 && scores.C === 5 && scores.P >= 3 && scores.F === 5) {
           typeKey = 'ACPF2';
         }
