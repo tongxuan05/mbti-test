@@ -215,14 +215,25 @@
       document.getElementById('pkSection').classList.remove('hidden');
       var r = calc();
       var t = workers[r.typeKey];
-      var data = { typeKey: r.typeKey, n: t.n, e: t.e, c: t.c, m: t.m, sc: { A: r.A, B: r.B, S: r.S, C: r.C, P: r.P, R: r.R, D: r.D, F: r.F } };
-      document.getElementById('pkLink').value = window.location.origin + window.location.pathname + '?pk=' + btoa(unescape(encodeURIComponent(JSON.stringify(data))));
+      var data = { t: r.typeKey, s: [r.A, r.B, r.S, r.C, r.P, r.R, r.D, r.F] };
+      var b64 = btoa(JSON.stringify(data));
+      var safe = b64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      document.getElementById('pkLink').value = window.location.origin + window.location.pathname + '?pk=' + safe;
     }
     function copyPK() {
       var input = document.getElementById('pkLink');
       input.select();
       document.execCommand('copy');
       alert('链接已复制！发给朋友让他也测测');
+    }
+    function decodePK(s) {
+      s = s.replace(/-/g, '+').replace(/_/g, '/');
+      while (s.length % 4) s += '=';
+      var obj = JSON.parse(atob(s));
+      var tk = obj.t;
+      var sc = obj.s;
+      var t = workers[tk];
+      return { typeKey: tk, n: t.n, e: t.e, c: t.c, m: t.m, sc: { A: sc[0], B: sc[1], S: sc[2], C: sc[3], P: sc[4], R: sc[5], D: sc[6], F: sc[7] } };
     }
     function startPKTest() { pkMode = 'testing'; curQ = 0; ans = {}; render(); window.scrollTo(0, 0); }
 
@@ -444,9 +455,14 @@
     var pkParam = urlParams.get('pk');
     if (pkParam) {
       try {
-        pkData = JSON.parse(decodeURIComponent(escape(atob(pkParam))));
+        pkData = decodePK(pkParam);
         pkMode = 'challenge';
-      } catch(e) {}
+      } catch(e) {
+        try {
+          pkData = JSON.parse(decodeURIComponent(escape(atob(pkParam))));
+          pkMode = 'challenge';
+        } catch(e2) {}
+      }
     }
     render();
   </script>
