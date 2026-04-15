@@ -126,6 +126,12 @@
       }
       if (curQ === -1) { app.innerHTML = renderWelcome(); }
       else if (curQ < questions.length) { app.innerHTML = renderQuestion(); }
+      else if (pkMode === 'testing') {
+        pkMode = 'result';
+        var r = calc();
+        var p2 = { typeKey: r.typeKey, n: workers[r.typeKey].n, e: workers[r.typeKey].e, c: workers[r.typeKey].c, m: workers[r.typeKey].m, sc: { A: r.A, B: r.B, S: r.S, C: r.C, P: r.P, R: r.R, D: r.D, F: r.F } };
+        app.innerHTML = renderPK(pkData, p2);
+      }
       else { app.innerHTML = renderResult(); }
     }
 
